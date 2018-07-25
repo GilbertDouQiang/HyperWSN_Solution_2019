@@ -1,0 +1,84 @@
+﻿<Window xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"  
+        xmlns:telerikDocking="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Docking" 
+        x:Class="DeviceConfigTools.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DeviceConfigTools"
+        mc:Ignorable="d"
+        Title="HyperWSN Device Config Tools" Height="700" Width="1300"
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Grid>
+        <telerikDocking:RadDocking HasDocumentHost="True" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
+            <telerikDocking:RadSplitContainer>
+                <telerikDocking:RadPaneGroup HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <telerikDocking:RadPane Header="Device Status">
+                        <Border Padding="5">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                     
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Gateway Type:" Grid.Column="0"/>
+                                    <TextBlock x:Name="txtGatewayType" Text="" Grid.Column="1"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </telerikDocking:RadPane>
+                </telerikDocking:RadPaneGroup>
+            </telerikDocking:RadSplitContainer>
+            <telerik:RadDocking.DocumentHost>
+                <telerik:RadPaneGroup>
+                    <telerik:RadDocumentPane Title="HyperWSN Device ">
+                        <Border Padding="5">
+                            <StackPanel x:Name="StackM1">
+                                <Grid Margin="0 10 0 5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--串口列表-->
+                                    <TextBlock Text="Device List:  " Grid.Column="0" HorizontalAlignment="Right" Margin="10 0" VerticalAlignment="Center"/>
+                                    <telerik:RadComboBox x:Name="cbDeviceList"  Grid.Column="1" Margin="10 0"/>
+                                    
+
+                                    <telerik:RadButton x:Name="btnConnectDevice" Click="btnConnectDevice_Click" Grid.Column="2" Content="Connect..."  Margin="10 0" Height="21" VerticalAlignment="Top" />
+                                    <telerik:RadButton x:Name="btnRefersh"  Grid.Column="3" Content="Refersh" Click="btnRefersh_Click"  Margin="10 0"  />
+
+
+
+                                </Grid>
+
+                                <Grid Name="grid">
+                                    <telerik:RadTabControl Margin="0,0,0,-140">
+                                        <telerik:RadTabItem Header=" SG5 ">
+
+                                        </telerik:RadTabItem>
+                                        <telerik:RadTabItem Header=" SG1 ">
+
+                                        </telerik:RadTabItem>
+                                    </telerik:RadTabControl>
+                                </Grid>
+                                
+                            </StackPanel>
+                           
+                        </Border>
+
+                    </telerik:RadDocumentPane>
+                </telerik:RadPaneGroup>
+            </telerik:RadDocking.DocumentHost>
+        </telerikDocking:RadDocking>
+
+    </Grid>
+</Window>

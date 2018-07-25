@@ -3,7 +3,43 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceConfigTools", "DeviceConfigTools\DeviceConfigTools.csproj", "{ED0EE0ED-F3F4-4940-B111-19B2A6B00EBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperwsn.SerialPortLibrary", "Hyperwsn.SerialPortLibrary\Hyperwsn.SerialPortLibrary.csproj", "{FC3816FE-B12E-4AF0-BBEF-BAA7B80E6632}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperwsn.SerialPortLibraryTests", "Hyperwsn.SerialPortLibraryTests\Hyperwsn.SerialPortLibraryTests.csproj", "{ADB3B21E-D12C-43FA-AB5F-DF5DEF1286FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperwsn.Comm", "Hyperwsn.Comm\Hyperwsn.Comm.csproj", "{C9CDBEF5-6A4F-4352-B275-A3B7E8B49517}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperwsn.Protocol", "Hyperwsn.Protocol\Hyperwsn.Protocol.csproj", "{761C123A-2601-462D-AE0D-FACEA330BCA8}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED0EE0ED-F3F4-4940-B111-19B2A6B00EBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED0EE0ED-F3F4-4940-B111-19B2A6B00EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED0EE0ED-F3F4-4940-B111-19B2A6B00EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED0EE0ED-F3F4-4940-B111-19B2A6B00EBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC3816FE-B12E-4AF0-BBEF-BAA7B80E6632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC3816FE-B12E-4AF0-BBEF-BAA7B80E6632}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC3816FE-B12E-4AF0-BBEF-BAA7B80E6632}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC3816FE-B12E-4AF0-BBEF-BAA7B80E6632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADB3B21E-D12C-43FA-AB5F-DF5DEF1286FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADB3B21E-D12C-43FA-AB5F-DF5DEF1286FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADB3B21E-D12C-43FA-AB5F-DF5DEF1286FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADB3B21E-D12C-43FA-AB5F-DF5DEF1286FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9CDBEF5-6A4F-4352-B275-A3B7E8B49517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9CDBEF5-6A4F-4352-B275-A3B7E8B49517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9CDBEF5-6A4F-4352-B275-A3B7E8B49517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9CDBEF5-6A4F-4352-B275-A3B7E8B49517}.Release|Any CPU.Build.0 = Release|Any CPU
+		{761C123A-2601-462D-AE0D-FACEA330BCA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{761C123A-2601-462D-AE0D-FACEA330BCA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{761C123A-2601-462D-AE0D-FACEA330BCA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{761C123A-2601-462D-AE0D-FACEA330BCA8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
