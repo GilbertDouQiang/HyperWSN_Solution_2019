@@ -19,6 +19,43 @@ namespace Hyperwsn.Comm
             return (actrueFreq - exceptRreq) / exceptRreq * 1000000;
         }
 
+        public static Int32 Bytes2Int(byte[] source)
+        {
+            if (source == null)
+            {
+                return 0;
+            }
+            if (source.Length==1)
+            {
+                return source[0];
+            }
+            if (source.Length == 2)
+            {
+                return source[0] * 256 + source[1];
+            }
+            if (source.Length == 3)
+            {
+                return source[0] * 65536 + source[1] * 256+ source[2];
+            }
+
+            return 0;
+        }
+
+        public static Int32 Bytes2Int(byte[] source,int Start,int Length)
+        {
+            if (Length==2)
+            {
+                return source[Start] * 256 + source[Start + 1];
+            }
+            if (Length==3)
+            {
+                return source[Start] * 65536 + source[Start + 1] * 256 + source[Start + 2]; 
+            }
+
+            return 0;
+
+        }
+
 
         public static string IntToHexString(int source)
         {
@@ -431,6 +468,29 @@ namespace Hyperwsn.Comm
             }
             return r;
         }
+
+
+        /// <summary>
+        /// 将2个字节的数字转换成字节数组</br>
+        /// 适用于Interval的结算
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static string DecodeByte2String(byte[] source,int start,int length)
+        {
+
+            byte[] byteArray = new byte[length];
+            for (int i = 0; i < length; i++)
+            {
+                byteArray[i] = source[start + i];
+            }
+            string str = System.Text.Encoding.UTF8.GetString(byteArray);
+
+
+            return str;
+        }
+
+
 
 
     }

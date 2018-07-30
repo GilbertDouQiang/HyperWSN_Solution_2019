@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Hyperwsn.SerialPortLibrary;
 using Hyperwsn.Comm;
+using Hyperwsn.Protocol;
 
 namespace DeviceConfigTools
 {
@@ -22,6 +23,9 @@ namespace DeviceConfigTools
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        Gateway gateway;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -63,17 +67,34 @@ namespace DeviceConfigTools
                 //helper.InitCOM("Silicon Labs CP210x USB to UART Bridge (COM11)");
                 helper.InitCOM(cbDeviceList.Text);
                 helper.OpenPort();
-                string command = "CB CB 02 01 01 00 00 BC BC";
-                byte[] commandBytes = CommArithmetic.HexStringToByteArray(command);
+                DeviceHelper deviceHelper = new Hyperwsn.Protocol.DeviceHelper();
+                //读取网关基本信息
+                byte[] commandBytes = deviceHelper.ReadGatewayBasic();
                 byte[] result = helper.Send(commandBytes, 500);
-                
-                if (result!=null && result.Length >5)
-                {
-                    txtGatewayType.Text = result[5].ToString("X2");
+
+                gateway = deviceHelper.GatewayInit(result);
+                BindingDevice.DataContext = gateway;
+
+                System.Threading.Thread.Sleep(200);
+                //读取网关基本信息结束
 
 
-                }
- 
+                //读取网关详细信息
+                commandBytes = deviceHelper.CMDGatewayConfig();
+                result = helper.Send(commandBytes, 500);
+                gateway = deviceHelper.GatewayConfig(result);
+
+                //读取网关详细信息结束
+                GatewayDetail.DataContext = gateway;
+
+
+                //读取传感器信息
+
+
+
+
+
+
                 helper.Close();
             }
         }

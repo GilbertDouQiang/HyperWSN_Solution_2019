@@ -177,6 +177,7 @@ namespace Hyperwsn.SerialPortLibrary
             timer.Interval = Timeout;
             timer.Enabled = true;
             timer.Elapsed += Timer_Elapsed;
+            receivedBytes = null;  //测试用
 
             port.Write(request, 0, request.Length); //发送数据
 
@@ -201,6 +202,12 @@ namespace Hyperwsn.SerialPortLibrary
 
                     }
                     */
+                    isGetResult = 0;
+                    isTimeout = false;
+                    timer.Enabled = false;
+                    timer.Stop();
+                    timer.Dispose();
+
                     return receivedBytes;
                 }
 
@@ -208,10 +215,12 @@ namespace Hyperwsn.SerialPortLibrary
 
 
             }
-            isTimeout = true;
+            isGetResult = 0;
+            isTimeout = false;
             timer.Enabled = false;
             timer.Stop();
             timer.Dispose();
+
             return null;
 
         }
@@ -230,7 +239,7 @@ namespace Hyperwsn.SerialPortLibrary
             //分为不同的状态，包括
             //1：发送Request 后的Response 信息
             StringBuilder currentline = new StringBuilder();
-            System.Threading.Thread.Sleep(50); //尝试不要断开接收数据，在SurfaceBook 上，断开的时间大约为22ms
+            System.Threading.Thread.Sleep(70); //尝试不要断开接收数据，在SurfaceBook 上，断开的时间大约为22ms
 
             //20180418 非常重要  isOpen的判断是临时的
             while (port.IsOpen && port.BytesToRead > 0)

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperwsn.Comm", "Hyperwsn.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperwsn.Protocol", "Hyperwsn.Protocol\Hyperwsn.Protocol.csproj", "{761C123A-2601-462D-AE0D-FACEA330BCA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperwsn.CommTests", "Hyperwsn.CommTests\Hyperwsn.CommTests.csproj", "{F2080513-7A48-4A09-9F44-2FC296565888}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{761C123A-2601-462D-AE0D-FACEA330BCA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{761C123A-2601-462D-AE0D-FACEA330BCA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{761C123A-2601-462D-AE0D-FACEA330BCA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2080513-7A48-4A09-9F44-2FC296565888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2080513-7A48-4A09-9F44-2FC296565888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2080513-7A48-4A09-9F44-2FC296565888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2080513-7A48-4A09-9F44-2FC296565888}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

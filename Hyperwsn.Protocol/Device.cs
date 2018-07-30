@@ -63,7 +63,7 @@ namespace Hyperwsn.Protocol
 
         public string SoftwareVersion { get; set; }
 
-        public byte[] Debug { get; set; }
+        public string Debug { get; set; }
 
         public byte Category { get; set; }
 
@@ -87,8 +87,10 @@ namespace Hyperwsn.Protocol
         /// </summary>
         public DateTime LastTransforDate { get; set; }
 
-
-
+        /// <summary>
+        /// 传输频率
+        /// </summary>
+        public byte Frequency { get; set; }
 
 
 

@@ -123,6 +123,10 @@
       <Project>{c9cdbef5-6a4f-4352-b275-a3b7e8b49517}</Project>
       <Name>Hyperwsn.Comm</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Hyperwsn.Protocol\Hyperwsn.Protocol.csproj">
+      <Project>{761c123a-2601-462d-ae0d-facea330bca8}</Project>
+      <Name>Hyperwsn.Protocol</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Hyperwsn.SerialPortLibrary\Hyperwsn.SerialPortLibrary.csproj">
       <Project>{fc3816fe-b12e-4af0-bbef-baa7b80e6632}</Project>
       <Name>Hyperwsn.SerialPortLibrary</Name>
