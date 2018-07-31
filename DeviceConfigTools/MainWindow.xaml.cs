@@ -66,7 +66,18 @@ namespace DeviceConfigTools
                 //helper.Name = "COM11"; //TDD, 这里输入的可能是完整的名称
                 //helper.InitCOM("Silicon Labs CP210x USB to UART Bridge (COM11)");
                 helper.InitCOM(cbDeviceList.Text);
-                helper.OpenPort();
+                try
+                {
+                    helper.OpenPort();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show("错误：" + ex.Message);
+
+                    return;
+                }
+                
                 DeviceHelper deviceHelper = new Hyperwsn.Protocol.DeviceHelper();
                 //读取网关基本信息
                 byte[] commandBytes = deviceHelper.ReadGatewayBasic();
@@ -88,15 +99,29 @@ namespace DeviceConfigTools
                 GatewayDetail.DataContext = gateway;
 
 
+                //读取1号传感器信息
+                commandBytes = deviceHelper.CMDGatewaySensorConfig(0);
+                result = helper.Send(commandBytes, 500);
+
+                InternalSensor it1 = deviceHelper.GatewaySensorConfig(result);
+
+                InternalSernsor1.DataContext = it1;
+
+
+
                 //读取传感器信息
-
-
-
-
 
 
                 helper.Close();
             }
+        }
+
+        private void btnClearAll_Click(object sender, RoutedEventArgs e)
+        {
+            //清除显示
+            InternalSernsor1.DataContext = null;
+            GatewayDetail.DataContext = null;
+
         }
     }
 }

@@ -169,11 +169,56 @@ namespace Hyperwsn.Protocol
         }
 
 
-        public Gateway GatewaySensorConfig(byte[] requestBytes)
+        public InternalSensor GatewaySensorConfig(byte[] requestBytes)
         {
+            InternalSensor it1 = new InternalSensor();
+            it1.DeviceMac = CommArithmetic.DecodeMAC(requestBytes, 7); //read only
+            it1.SensorType = requestBytes[11]; //read only
+            it1.SensorOnline = requestBytes[12]; //read only
+            it1.Debug = CommArithmetic.DecodeClientID(requestBytes, 13);
+            it1.Category = requestBytes[15];
+            it1.WorkFunction = requestBytes[16];
+            it1.MaxLength = requestBytes[17];
+            it1.TXTimers = requestBytes[18];
+
+            it1.Interval = CommArithmetic.Bytes2Int(requestBytes, 19, 2);
+            it1.IntervalNormal = CommArithmetic.Bytes2Int(requestBytes, 21, 2);
+            it1.IntervalWarning= CommArithmetic.Bytes2Int(requestBytes, 23, 2);
+            it1.IntervalAlarm = CommArithmetic.Bytes2Int(requestBytes, 25, 2);
+            //温湿度补偿
+            it1.TemperatureCompensation = CommArithmetic.DecodeTemperature(requestBytes,27);
+            it1.HumidityCompensation = CommArithmetic.DecodeHumidity(requestBytes, 29);
+            //预警值设置
+            it1.TemperatureInfoHigh = CommArithmetic.DecodeTemperature(requestBytes, 31);
+            it1.TemperatureInfoLow = CommArithmetic.DecodeTemperature(requestBytes, 33);
+            it1.HumidityInfoHigh = CommArithmetic.DecodeHumidity(requestBytes, 35);
+            it1.HumidityInfoLow = CommArithmetic.DecodeHumidity(requestBytes, 37);
+            //报警值设置
+            it1.TemperatureWarnHigh = CommArithmetic.DecodeTemperature(requestBytes, 39);
+            it1.TemperatureWarnLow = CommArithmetic.DecodeTemperature(requestBytes, 41);
+            it1.HumidityWarnHigh = CommArithmetic.DecodeHumidity(requestBytes, 43);
+            it1.HumidityWarnLow = CommArithmetic.DecodeHumidity(requestBytes, 45);
 
 
-            return null;
+            it1.ICTemperature = requestBytes[51]; //read only
+            it1.Volt = CommArithmetic.DecodeVoltage(requestBytes, 52); //read only
+            it1.FlashFront = CommArithmetic.Bytes2Int(requestBytes, 54, 3); //read only
+            it1.FlashRear = CommArithmetic.Bytes2Int(requestBytes, 57, 3); //read only
+            it1.FlashQueueLength = CommArithmetic.Bytes2Int(requestBytes, 60, 3); //read only
+            it1.Temperature = CommArithmetic.DecodeTemperature(requestBytes, 63); //read only
+            it1.Humidity = CommArithmetic.DecodeHumidity(requestBytes, 65); //read only
+
+
+
+
+
+
+
+
+
+
+
+            return it1;
         }
 
 
