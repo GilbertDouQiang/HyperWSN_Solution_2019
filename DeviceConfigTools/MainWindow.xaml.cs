@@ -107,6 +107,14 @@ namespace DeviceConfigTools
 
                 InternalSernsor1.DataContext = it1;
 
+                //读取2号传感器信息
+                commandBytes = deviceHelper.CMDGatewaySensorConfig(1);
+                result = helper.Send(commandBytes, 500);
+
+                InternalSensor it2 = deviceHelper.GatewaySensorConfig(result);
+
+                InternalSernsor2.DataContext = it2;
+
 
 
                 //读取传感器信息
