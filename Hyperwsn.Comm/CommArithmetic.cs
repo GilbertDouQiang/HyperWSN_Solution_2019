@@ -490,6 +490,34 @@ namespace Hyperwsn.Comm
             return str;
         }
 
+        /// <summary>
+        /// 将温度转换为2个字节的数组
+        /// </summary>
+        /// <param name="temperature"></param>
+        /// <returns></returns>
+        public static byte[] EncodeTemperature(double temperature)
+        {
+
+           
+
+
+            return null;
+        }
+
+        /// <summary>
+        /// 将湿度转换为2个字节的数组
+        /// </summary>
+        /// <param name="temperature"></param>
+        /// <returns></returns>
+        public static byte[] EncodeHumidity(double temperature)
+        {
+
+
+
+
+            return null;
+        }
+
 
 
 

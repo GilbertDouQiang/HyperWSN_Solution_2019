@@ -25,10 +25,12 @@ namespace Hyperwsn.SerialPortLibrary
         byte[] receivedBytes;  //从串口接收到的数据字节数组
 
 
+
         private int _BaudRate = 115200; //通信速率初始值
         private int _ReadBufferSize = 8192; //写缓冲器大小
         private int _WriteBufferSize = 8192; //读缓冲器大小
 
+        public bool IsLogger { get; set; }
        
         public string Name { get; set; }
         /// <summary>
@@ -180,7 +182,11 @@ namespace Hyperwsn.SerialPortLibrary
             receivedBytes = null;  //测试用
 
             port.Write(request, 0, request.Length); //发送数据
-
+            //是否需要日志控制
+            if (IsLogger==true)
+            {
+                Logger.AddLogAutoTime("\tSend:\t" + CommArithmetic.ByteArrayToHexString(request));
+            }
 
             while (!isTimeout)
             {
@@ -207,6 +213,11 @@ namespace Hyperwsn.SerialPortLibrary
                     timer.Enabled = false;
                     timer.Stop();
                     timer.Dispose();
+
+                    if (IsLogger==true)
+                    {
+                        Logger.AddLogAutoTime("\tReceive:\t" + CommArithmetic.ByteArrayToHexString(receivedBytes));
+                    }
 
                     return receivedBytes;
                 }

@@ -202,16 +202,17 @@
 
                                                     </Grid.ColumnDefinitions>
                                                     <TextBlock  Grid.Column="0" Text=" 客户码:" Margin="0,0,9.5,0" HorizontalAlignment="Right"/>
-                                                    <TextBlock Text="{Binding ClientID}"   Grid.Column="1" Margin="0.5,0,10,0"/>
-                                                    <TextBox x:Name="txtClientID"   Grid.Column="2"  Margin="0.5,0,10,0"/>
+                                                    <TextBlock Text="{Binding ClientID ,Mode=OneTime}"   Grid.Column="1" Margin="0.5,0,10,0"/>
+                                                    <TextBox x:Name="txtClientID" Text="{Binding ClientID}"  Grid.Column="2"  Margin="0.5,0,10,0"/>
                                                     
                                                     <TextBlock   Grid.Column="3" Text="Debug:" Margin="0,0,9.5,0" HorizontalAlignment="Right" />
-                                                    <TextBlock  Text="{Binding Debug}" Margin="0,0,9.5,0" Grid.Column="4" />
-                                                    <TextBox x:Name="txtNewDebug"   Margin="0,0,9.5,0" Grid.Column="5" />
+                                                    <TextBlock  Text="{Binding Debug ,Mode=OneTime }" Margin="0,0,9.5,0" Grid.Column="4" />
+                                                    <TextBox x:Name="txtNewDebug" Text="{Binding Debug}"  Margin="0,0,9.5,0" Grid.Column="5" />
                                                     
                                                     <TextBlock  Grid.Column="6" Text=" 分类码:" Margin="0,0,9.5,0" HorizontalAlignment="Right"/>
-                                                    <TextBlock Text="{Binding Category}"  Grid.Column="7"  Margin="0.5,0,10,0"   />
-                                                    <TextBox x:Name="txtNewCategory"   Grid.Column="8"  Margin="0.5,0,10,0"   />
+                                                    <TextBlock Text="{Binding Category ,Mode=OneTime}"  Grid.Column="7"  Margin="0.5,0,10,0"   />
+                                                    <TextBox x:Name="txtNewCategory" Text="{Binding Category}"   Grid.Column="8"  Margin="0.5,0,10,0"   />
+                                                    <Button x:Name="btnUpdateGateway" Content="Update Factory" Grid.Column="10" Click="btnUpdateGateway_Click"  Grid.ColumnSpan="2"  Margin="0,0,10,0"/>
                                                    
 
 
@@ -378,8 +379,20 @@
                                                     <Grid Margin="0 5 0 5" Grid.Row="0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
                                                         </Grid.ColumnDefinitions>
                                                         <TextBlock   Grid.Column="0" Text="内置传感器1 " Margin="0,0,10,0" FontWeight="Bold" />
+                                                        <Button x:Name="btnUpdateSensor1" Content="Update Sensor 1" Grid.Column="10" Click="btnUpdateSensor1_Click" Grid.ColumnSpan="2"  Margin="0,0,10,0"/>
                                                     </Grid>
                                                     <Grid Margin="0 5 0 0" Grid.Row="1">
                                                         <Grid.ColumnDefinitions>
@@ -508,17 +521,17 @@
                                                         </Grid.ColumnDefinitions>
 
                                                         <TextBlock   Grid.Column="0" Text="Debug:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding Debug}"  Grid.Column="1"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1Debug"   Grid.Column="2"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding Debug }"  Grid.Column="1"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1Debug" Text="{Binding Debug}"  Grid.Column="2"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="3" Text="Category:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock  Text="{Binding Category}"  Grid.Column="4"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1Category"   Grid.Column="5"  Margin="0 0 10 0"/>
+                                                        <TextBlock  Text="{Binding Category,Mode=OneTime}"  Grid.Column="4"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1Category"  Text="{Binding Category}"   Grid.Column="5"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="6" Text="工作模式:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding WorkFunction}"  Grid.Column="7"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1WorkFunction"  Grid.Column="8"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding WorkFunction,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1WorkFunction" Text="{Binding WorkFunction}"  Grid.Column="8"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="9" Text="存储容量:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding MaxLength}"  Grid.Column="10"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1MaxLength"  Grid.Column="11"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding MaxLength,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1MaxLength"  Text="{Binding MaxLength}" Grid.Column="11"  Margin="0 0 10 0"/>
 
 
 
@@ -541,17 +554,17 @@
                                                         </Grid.ColumnDefinitions>
 
                                                         <TextBlock   Grid.Column="0" Text="采集间隔:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding Interval}"  Grid.Column="1"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1Interval"   Grid.Column="2"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding Interval ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1Interval" Text="{Binding Interval}"   Grid.Column="2"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="3" Text="传输间隔:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock  Text="{Binding IntervalNormal}"  Grid.Column="4"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1IntervalNormal"   Grid.Column="5"  Margin="0 0 10 0"/>
+                                                        <TextBlock  Text="{Binding IntervalNormal,Mode=OneTime}"  Grid.Column="4"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1IntervalNormal" Text="{Binding IntervalNormal}"  Grid.Column="5"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="6" Text="预警间隔:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding IntervalWarning}"  Grid.Column="7"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1IntervalWarning"  Grid.Column="8"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding IntervalWarning,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1IntervalWarning" Text="{Binding IntervalWarning}"  Grid.Column="8"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="9" Text="报警间隔:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding IntervalAlarm}"  Grid.Column="10"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1IntervalAlarm"  Grid.Column="11"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding IntervalAlarm,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1IntervalAlarm" Text="{Binding IntervalAlarm}" Grid.Column="11"  Margin="0 0 10 0"/>
 
 
 
@@ -574,17 +587,17 @@
                                                         </Grid.ColumnDefinitions>
 
                                                         <TextBlock   Grid.Column="0" Text="预警温度高:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding TemperatureInfoHigh}"  Grid.Column="1"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1TemperatureInfoHigh"   Grid.Column="2"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding TemperatureInfoHigh ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1TemperatureInfoHigh" Text="{Binding TemperatureInfoHigh}"  Grid.Column="2"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="3" Text="预警温度低:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock  Text="{Binding TemperatureInfoLow}"  Grid.Column="4"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1TemperatureInfoLow"   Grid.Column="5"  Margin="0 0 10 0"/>
+                                                        <TextBlock  Text="{Binding TemperatureInfoLow,Mode=OneTime}"  Grid.Column="4"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1TemperatureInfoLow" Text="{Binding TemperatureInfoLow}"   Grid.Column="5"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="6" Text="报警温度高:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding TemperatureWarnHigh}"  Grid.Column="7"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1TemperatureWarnHigh"  Grid.Column="8"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding TemperatureWarnHigh,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1TemperatureWarnHigh" Text="{Binding TemperatureWarnHigh}" Grid.Column="8"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="9" Text="报警温度低:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding TemperatureWarnLow}"  Grid.Column="10"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1TemperatureWarnLow"  Grid.Column="11"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding TemperatureWarnLow,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1TemperatureWarnLow" Text="{Binding TemperatureWarnLow}"  Grid.Column="11"  Margin="0 0 10 0"/>
 
 
 
@@ -608,17 +621,17 @@
                                                         </Grid.ColumnDefinitions>
 
                                                         <TextBlock   Grid.Column="0" Text="预警湿度高:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding HumidityInfoHigh}"  Grid.Column="1"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1HumidityInfoHigh"   Grid.Column="2"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding HumidityInfoHigh ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1HumidityInfoHigh" Text="{Binding HumidityInfoHigh}"   Grid.Column="2"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="3" Text="预警湿度低:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock  Text="{Binding HumidityInfoLow}"  Grid.Column="4"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1HumidityInfoLow"   Grid.Column="5"  Margin="0 0 10 0"/>
+                                                        <TextBlock  Text="{Binding HumidityInfoLow,Mode=OneTime}"  Grid.Column="4"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1HumidityInfoLow"  Text="{Binding HumidityInfoLow}"   Grid.Column="5"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="6" Text="报警湿度高:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding HumidityWarnHigh}"  Grid.Column="7"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1HumidityWarnHigh"  Grid.Column="8"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding HumidityWarnHigh,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1HumidityWarnHigh"  Text="{Binding HumidityWarnHigh}" Grid.Column="8"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="9" Text="报警湿度低:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding HumidityWarnLow}"  Grid.Column="10"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1HumidityWarnLow"  Grid.Column="11"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding HumidityWarnLow,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1HumidityWarnLow" Text="{Binding HumidityWarnLow}"  Grid.Column="11"  Margin="0 0 10 0"/>
 
 
 
@@ -641,11 +654,11 @@
                                                         </Grid.ColumnDefinitions>
 
                                                         <TextBlock   Grid.Column="0" Text="温度补偿:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding TemperatureCompensation}"  Grid.Column="1"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1TemperatureCompensation"   Grid.Column="2"  Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding TemperatureCompensation ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1TemperatureCompensation" Text="{Binding TemperatureCompensation}"  Grid.Column="2"  Margin="0 0 10 0"/>
                                                         <TextBlock   Grid.Column="3" Text="湿度补偿:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock  Text="{Binding HumidityCompensation}"  Grid.Column="4"  Margin="0 0 10 0"/>
-                                                        <TextBox x:Name="txtIt1HumidityCompensation"   Grid.Column="5"  Margin="0 0 10 0"/>
+                                                        <TextBlock  Text="{Binding HumidityCompensation ,Mode=OneTime}"  Grid.Column="4"  Margin="0 0 10 0"/>
+                                                        <TextBox x:Name="txtIt1HumidityCompensation" Text="{Binding HumidityCompensation}"  Grid.Column="5"  Margin="0 0 10 0"/>
                                                         
 
 

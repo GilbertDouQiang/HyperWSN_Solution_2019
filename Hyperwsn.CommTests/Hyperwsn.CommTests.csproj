@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Base64Tests.cs" />
     <Compile Include="CommArithmeticTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

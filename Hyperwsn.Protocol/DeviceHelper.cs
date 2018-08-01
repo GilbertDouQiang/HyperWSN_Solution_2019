@@ -221,6 +221,108 @@ namespace Hyperwsn.Protocol
             return it1;
         }
 
+        public byte[] UpdateInternalSersor(InternalSensor sensor,byte SensorNo)
+        {
+            byte[] response = new byte[52];
+            response[0] = 0xCB;
+            response[1] = 0xCB;
+            response[2] = 0x2D;
+            response[3] = 0x67;
+            response[4] = 0x01;
+            response[5] = SensorNo;
+            //devicemac 
+            byte[] temp = CommArithmetic.HexStringToByteArray(sensor.DeviceMac);
+            response[6] = temp[0];
+            response[7] = temp[1];
+            response[8] = temp[2];
+            response[9] = temp[3];
+            //debug
+            temp = CommArithmetic.HexStringToByteArray(sensor.Debug);
+            response[10] = temp[0];
+            response[11] = temp[1];
+            //category
+            response[12] = sensor.Category;
+            response[13] = sensor.WorkFunction;
+            response[14] = sensor.MaxLength;
+            response[15] = 0x00;//采集 发送 倍数 保留
+            //采集时间
+            temp = CommArithmetic.Int16_2Bytes(sensor.Interval);
+            response[16] = temp[0];
+            response[17] = temp[1];
+            //正常间隔
+            temp = CommArithmetic.Int16_2Bytes(sensor.IntervalNormal);
+            response[18] = temp[0];
+            response[19] = temp[1];
+            //预警间隔
+            temp = CommArithmetic.Int16_2Bytes(sensor.IntervalWarning);
+            response[20] = temp[0];
+            response[21] = temp[1];
+            //报警间隔
+            temp = CommArithmetic.Int16_2Bytes(sensor.IntervalAlarm);
+            response[22] = temp[0];
+            response[23] = temp[1];
+            //温度补偿
+            temp = CommArithmetic.Double_2Bytes(sensor.TemperatureCompensation);
+            response[24] = temp[0];
+            response[25] = temp[1];
+
+            //湿度补偿
+            temp = CommArithmetic.Double_2Bytes(sensor.HumidityCompensation);
+            response[26] = temp[0];
+            response[27] = temp[1];
+
+            //温度预警
+            temp = CommArithmetic.Double_2Bytes(sensor.TemperatureInfoHigh);
+            response[28] = temp[0];
+            response[29] = temp[1];
+            temp = CommArithmetic.Double_2Bytes(sensor.TemperatureInfoLow);
+            response[30] = temp[0];
+            response[31] = temp[1];
+
+            //湿度预警
+            temp = CommArithmetic.Double_2Bytes(sensor.HumidityInfoHigh);
+            response[32] = temp[0];
+            response[33] = temp[1];
+            temp = CommArithmetic.Double_2Bytes(sensor.HumidityInfoLow);
+            response[34] = temp[0];
+            response[35] = temp[1];
+
+            //温度报警
+            temp = CommArithmetic.Double_2Bytes(sensor.TemperatureWarnHigh);
+            response[36] = temp[0];
+            response[37] = temp[1];
+            temp = CommArithmetic.Double_2Bytes(sensor.TemperatureWarnLow);
+            response[38] = temp[0];
+            response[39] = temp[1];
+
+            //湿度报警
+            temp = CommArithmetic.Double_2Bytes(sensor.HumidityWarnHigh);
+            response[40] = temp[0];
+            response[41] = temp[1];
+            temp = CommArithmetic.Double_2Bytes(sensor.HumidityWarnLow);
+            response[42] = temp[0];
+            response[43] = temp[1];
+
+            //保留
+            response[44] = 0;
+            response[45] = 0;
+            response[46] = 0;
+            response[47] = 0;
+
+            //crc
+            response[48] = 0;
+            response[49] = 0;
+
+            //结束位
+            response[50] = 0xBC;
+            response[51] = 0xBC;
+
+
+
+            return response;
+
+        }
+
 
     }
 }

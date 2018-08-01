@@ -25,6 +25,9 @@ namespace DeviceConfigTools
     {
 
         Gateway gateway;
+        //public InternalSensor interSensor1 { get; set; }
+        
+        InternalSensor it1;
 
         public MainWindow()
         {
@@ -63,8 +66,7 @@ namespace DeviceConfigTools
             {
                 //目标：测试串口的打开，发送数据，在超时时间内接收数据
                 SerialPortHelper helper = new SerialPortHelper();
-                //helper.Name = "COM11"; //TDD, 这里输入的可能是完整的名称
-                //helper.InitCOM("Silicon Labs CP210x USB to UART Bridge (COM11)");
+                helper.IsLogger = true;
                 helper.InitCOM(cbDeviceList.Text);
                 try
                 {
@@ -103,9 +105,13 @@ namespace DeviceConfigTools
                 commandBytes = deviceHelper.CMDGatewaySensorConfig(0);
                 result = helper.Send(commandBytes, 500);
 
-                InternalSensor it1 = deviceHelper.GatewaySensorConfig(result);
+                it1 = deviceHelper.GatewaySensorConfig(result);
 
                 InternalSernsor1.DataContext = it1;
+
+                //MessageBox.Show(it1.DeviceMac);
+                
+                
 
                 //读取2号传感器信息
                 commandBytes = deviceHelper.CMDGatewaySensorConfig(1);
@@ -114,10 +120,7 @@ namespace DeviceConfigTools
                 InternalSensor it2 = deviceHelper.GatewaySensorConfig(result);
 
                 InternalSernsor2.DataContext = it2;
-
-
-
-                //读取传感器信息
+               
 
 
                 helper.Close();
@@ -130,6 +133,50 @@ namespace DeviceConfigTools
             InternalSernsor1.DataContext = null;
             GatewayDetail.DataContext = null;
 
+        }
+
+        private void btnUpdateGateway_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(it1.ClientID);
+
+
+          
+
+        }
+
+        private void btnUpdateSensor1_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbDeviceList.SelectedIndex >= 0)
+            {
+                //目标：测试串口的打开，发送数据，在超时时间内接收数据
+                SerialPortHelper helper = new SerialPortHelper();
+                helper.IsLogger = true;
+                helper.InitCOM(cbDeviceList.Text);
+                try
+                {
+                    helper.OpenPort();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show("错误：" + ex.Message);
+
+                    return;
+                }
+
+                DeviceHelper deviceHelper = new Hyperwsn.Protocol.DeviceHelper();
+                //配置1号传感器
+                byte[] commandBytes = deviceHelper.UpdateInternalSersor(it1, 0x00);
+                byte[] result = helper.Send(commandBytes, 500);
+
+
+
+                System.Threading.Thread.Sleep(200);
+
+
+
+                helper.Close();
+            }
         }
     }
 }
