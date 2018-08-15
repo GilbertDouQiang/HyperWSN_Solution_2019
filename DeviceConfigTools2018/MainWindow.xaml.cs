@@ -17,6 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
 
 namespace DeviceConfigTools2018
 {
@@ -491,10 +493,152 @@ namespace DeviceConfigTools2018
         private void ReadGatewayBinding_Click(object sender, RoutedEventArgs e)
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("c1");
 
-            //GridViewBinding.ItemsSource = dt;
 
+            if (cbDeviceList.SelectedIndex >= 0)
+            {
+                //目标：测试串口的打开，发送数据，在超时时间内接收数据
+                SerialPortHelper helper = new SerialPortHelper();
+                helper.IsLogger = true;
+                helper.InitCOM(cbDeviceList.Text);
+                try
+                {
+                    helper.OpenPort();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show("错误：" + ex.Message);
+
+                    return;
+                }
+
+                DeviceHelper deviceHelper = new Hyperwsn.Protocol.DeviceHelper();
+                byte[] commandBytes;
+                byte[] result;
+                //读取网关基本信息
+                try
+                {
+                    commandBytes = deviceHelper.CMDGatewayReadBinding();
+                    result = helper.SendContinueReceive(commandBytes, 400);
+
+                    BindingAnalyse analyse = new BindingAnalyse();
+                    dt = analyse.GatewayBinding(result);
+
+                    //gateway = deviceHelper.GatewayInit(result);
+                    //BindingDevice.DataContext = gateway;
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show("读取网关基础配置失败！" + ex.Message);
+                    helper.Close();
+                    return;
+                }
+
+
+
+                helper.Close();
+                btnClearAll_Click(this, null);
+                btnConnectDevice_Click(this, null);
+
+            }
+
+
+            RadGridView1.ItemsSource = dt;
+
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DeleteGatewayBinding_Click(object sender, RoutedEventArgs e)
+        {
+            if (RadGridView1.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("请选择需要解除绑定的数据");
+                return;
+            }
+            DeviceHelper helper = new DeviceHelper();
+
+
+            //MessageBox.Show("Delete Items" + RadGridView1.SelectedItems.Count);
+            if (RadGridView1.SelectedItems.Count == RadGridView1.Items.Count)
+            {
+                if (MessageBox.Show("解除所有绑定信息  ?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+
+                    //删除所有绑定信息
+                    byte[] command= helper.RemoveBinding("00 00 00 00");
+                    SendCommand(command);
+
+                }
+
+                return;
+            }
+
+            if (MessageBox.Show("解除 " + RadGridView1.SelectedItems.Count + " 个绑定信息  ?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+
+                foreach (var item in RadGridView1.SelectedItems)
+                {
+                    GridViewRow row = RadGridView1.ItemContainerGenerator.ContainerFromItem(item) as GridViewRow;
+                    //MessageBox.Show(row.Cells[1].ToString());
+                    var cell = row.Cells[1] as GridViewCell;
+                    //删除所有绑定信息
+                    byte[] command = helper.RemoveBinding(cell.Value.ToString());
+                    SendCommand(command);
+
+                }
+
+            }
+
+        }
+
+
+        private void SendCommand(byte[] command)
+        {
+            if (cbDeviceList.SelectedIndex >= 0)
+            {
+                //目标：测试串口的打开，发送数据，在超时时间内接收数据
+                SerialPortHelper helper = new SerialPortHelper();
+                helper.IsLogger = true;
+                helper.InitCOM(cbDeviceList.Text);
+                try
+                {
+                    helper.OpenPort();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show("错误：" + ex.Message);
+
+                    return;
+                }
+
+                DeviceHelper deviceHelper = new Hyperwsn.Protocol.DeviceHelper();
+                byte[] commandBytes;
+                byte[] result;
+                //读取网关基本信息
+                try
+                {
+                    commandBytes = command;
+                    result = helper.Send(commandBytes, 400);
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show("执行串口命令失败！" + ex.Message);
+                    helper.Close();
+                    return;
+                }
+
+
+
+                helper.Close();
+            }
         }
     }
 }

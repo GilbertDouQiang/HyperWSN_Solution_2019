@@ -130,6 +130,27 @@ namespace Hyperwsn.Comm
 
         }
 
+        /// <summary>
+        /// 将字节数组转换为GB2312 编码
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static string DecodeGB2312(byte[] source, int start,int length)
+        {
+            byte[] gbString = new byte[length];
+            for (int i = 0; i < length; i++)
+            {
+                gbString[i] = source[start + i];
+
+            }
+            
+
+            return Encoding.GetEncoding("GB18030").GetString(gbString);
+
+
+        }
+
         public static string DecodeClientID(byte[] source, int start)
         {
             byte[] clientID = new byte[2];

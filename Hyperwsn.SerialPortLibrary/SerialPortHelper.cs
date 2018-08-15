@@ -197,10 +197,10 @@ namespace Hyperwsn.SerialPortLibrary
                 //TODO 这里有可能>1 , 存在风险
                 if (isGetResult == 1)
                 {
-                    isTimeout = true;
+                    isGetResult = 0;
+                    isTimeout = false;
                     timer.Enabled = false;
-                    timer.Stop();
-                    timer.Dispose();
+
                     //return commandResult;
                     //返回收到的字节数组
                     //isGetResult = 0;
@@ -212,16 +212,9 @@ namespace Hyperwsn.SerialPortLibrary
 
                     }
                     */
-                    isGetResult = 0;
-                    isTimeout = false;
-                    timer.Enabled = false;
-                    timer.Stop();
-                    timer.Dispose();
 
-                    if (IsLogger == true)
-                    {
-                        Logger.AddLogAutoTime("\tReceive:\t" + CommArithmetic.ByteArrayToHexString(receivedBytes));
-                    }
+
+                  
 
 
 
@@ -231,9 +224,7 @@ namespace Hyperwsn.SerialPortLibrary
                         multiReceiveString.Append(receivedBytes[i].ToString("X2"));
                     }
 
-                    isGetResult = 0;
-                    isTimeout = false;
-                    timer.Enabled = false;
+                    
                     timer.Enabled = true;  //重新启动Timer
                 }
 
@@ -252,6 +243,10 @@ namespace Hyperwsn.SerialPortLibrary
 
             if (multiReceiveResult!=null)
             {
+                if (IsLogger == true)
+                {
+                    Logger.AddLogAutoTime("\tReceive:\t" + CommArithmetic.ByteArrayToHexString(multiReceiveResult));
+                }
                 return multiReceiveResult;
             }
 

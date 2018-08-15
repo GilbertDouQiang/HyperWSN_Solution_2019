@@ -64,6 +64,21 @@ namespace Hyperwsn.Protocol
 
         }
 
+
+        public byte[] RemoveBinding(string mac)
+        {
+            string command = "CB CB 06 6B 01 00 00 00 00 00 00 BC BC";
+            byte[] commandBytes = CommArithmetic.HexStringToByteArray(command);
+
+            byte[] macBytes = CommArithmetic.HexStringToByteArray(mac);
+            commandBytes[5] = macBytes[0];
+            commandBytes[6] = macBytes[1];
+            commandBytes[7] = macBytes[2];
+            commandBytes[8] = macBytes[3];
+
+            return commandBytes;
+
+        }
         /// <summary>
         /// 删除队列中的信息
         /// </summary>

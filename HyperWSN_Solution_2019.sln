@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiceseTools", "LiceseTools\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceConfigTools2018", "DeviceConfigTools2018\DeviceConfigTools2018.csproj", "{FD01BF06-6917-4F66-AAF5-D951BBF53442}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperwsn.ProtocolTests", "Hyperwsn.ProtocolTests\Hyperwsn.ProtocolTests.csproj", "{58713725-AB08-4DE8-A0B4-BE21FDE01DF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{FD01BF06-6917-4F66-AAF5-D951BBF53442}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD01BF06-6917-4F66-AAF5-D951BBF53442}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD01BF06-6917-4F66-AAF5-D951BBF53442}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58713725-AB08-4DE8-A0B4-BE21FDE01DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58713725-AB08-4DE8-A0B4-BE21FDE01DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58713725-AB08-4DE8-A0B4-BE21FDE01DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58713725-AB08-4DE8-A0B4-BE21FDE01DF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

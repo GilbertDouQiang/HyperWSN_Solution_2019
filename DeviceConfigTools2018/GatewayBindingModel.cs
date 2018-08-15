@@ -27,7 +27,8 @@ namespace DeviceConfigTools2018
 
         private object GetData()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return null;
         }
 
 

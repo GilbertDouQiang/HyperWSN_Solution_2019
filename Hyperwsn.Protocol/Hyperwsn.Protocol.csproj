@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingAnalyse.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DeviceHelper.cs" />
     <Compile Include="Gateway.cs" />
