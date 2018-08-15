@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Hyperwsn.Comm;
 
 namespace LiceseTools
 {
@@ -15,6 +16,12 @@ namespace LiceseTools
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            txtKey.Text = Base64.base64encode(txtSource.Text);
+
         }
     }
 }

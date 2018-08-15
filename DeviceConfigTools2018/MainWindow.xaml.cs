@@ -54,7 +54,16 @@ namespace DeviceConfigTools2018
             config.AppSettings.Settings["LiceseName"].Value = userAuth;
 
             string liceseKey = Base64.base64encode(userAuth);
+            string liceseKeyApp = ConfigurationManager.AppSettings["LiceseKey"];
 
+            if (liceseKeyApp.Length>10 && liceseKey==liceseKeyApp)
+            {
+                btnUpdateFactory.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnUpdateFactory.Visibility = Visibility.Hidden;
+            }
 
             //一定要记得保存，写不带参数的config.Save()也可以
             config.Save(ConfigurationSaveMode.Modified);

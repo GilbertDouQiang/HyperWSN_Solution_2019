@@ -50,7 +50,7 @@
 
                                     </Grid>
 
-                                    <Grid>
+                                    <Grid  Margin="0 5 0 0">
                                         <telerik:RadTabControl Height="700" >
                                             <telerik:RadTabItem Header=" SG5 Config ">
                                                 <StackPanel x:Name="GatewayDetail">
