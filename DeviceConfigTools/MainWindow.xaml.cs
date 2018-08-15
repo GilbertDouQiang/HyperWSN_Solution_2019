@@ -496,7 +496,7 @@ namespace DeviceConfigTools
             DataTable dt = new DataTable();
             dt.Columns.Add("c1");
             
-            GridViewBinding.ItemsSource = dt;
+            //GridViewBinding.ItemsSource = dt;
 
         }
     }

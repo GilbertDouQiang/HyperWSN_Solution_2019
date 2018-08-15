@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Window.Resources>
         <local:HyperMultiValueConverter x:Key="HyperMultiValueConverter" />
-        <local:GatewayBindingModel x:Key="GatewayBindingModel" />
+        <local:GatewayBindingModel x:Key="model" />
     </Window.Resources>
     <Grid>
         <telerikDocking:RadDocking HasDocumentHost="True" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
@@ -1037,13 +1037,14 @@
                                                     </Grid.ColumnDefinitions>
                                                     <Button x:Name="ReadGatewayBinding" Content="Read Binding" Click="ReadGatewayBinding_Click"/>
                                                 </Grid>
-                                                <telerik:RadGridView x:Name="GridViewBinding" GroupRenderMode="Flat"  RowIndicatorVisibility="Collapsed" CanUserFreezeColumns="False"  ShowSearchPanel="True"  ShowGroupPanel="False"  />
+                                               
                                             </StackPanel>
 
                                         </telerik:RadTabItem>
                                     </telerik:RadTabControl>
                                 </Grid>
-                                
+
+                              
                             </StackPanel>
                            
                         </Border>

@@ -165,6 +165,100 @@ namespace Hyperwsn.SerialPortLibrary
                 port.Close();
             }
         }
+        /// <summary>
+        /// 适用于需要持续接收的场合，超时后认为接收完成，如果收到数据，重新开始超时的计时
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="Timeout"></param>
+        /// <returns></returns>
+        public byte[] SendContinueReceive(byte[] request, int Timeout)
+        {
+            isTimeout = false;
+            timer = new System.Timers.Timer();
+            timer.Interval = Timeout;
+            timer.Enabled = true;
+            timer.Elapsed += Timer_Elapsed;
+            receivedBytes = null;  //测试用
+
+
+            //多次接收的合并，作为最终的输出
+            byte[] multiReceiveResult; // 长度不确定
+            StringBuilder multiReceiveString = new StringBuilder(); //中转变量
+
+            port.Write(request, 0, request.Length); //发送数据
+            //是否需要日志控制
+            if (IsLogger == true)
+            {
+                Logger.AddLogAutoTime("\tSend:\t" + CommArithmetic.ByteArrayToHexString(request));
+            }
+
+            while (!isTimeout)
+            {
+                //TODO 这里有可能>1 , 存在风险
+                if (isGetResult == 1)
+                {
+                    isTimeout = true;
+                    timer.Enabled = false;
+                    timer.Stop();
+                    timer.Dispose();
+                    //return commandResult;
+                    //返回收到的字节数组
+                    //isGetResult = 0;
+                    /*
+                    if(initStatus ==1)
+                    {
+                        //port.Close();
+                        initStatus = 0;
+
+                    }
+                    */
+                    isGetResult = 0;
+                    isTimeout = false;
+                    timer.Enabled = false;
+                    timer.Stop();
+                    timer.Dispose();
+
+                    if (IsLogger == true)
+                    {
+                        Logger.AddLogAutoTime("\tReceive:\t" + CommArithmetic.ByteArrayToHexString(receivedBytes));
+                    }
+
+
+
+                    //return receivedBytes; 不要直接返回
+                    for (int i = 0; i < receivedBytes.Length; i++)
+                    {
+                        multiReceiveString.Append(receivedBytes[i].ToString("X2"));
+                    }
+
+                    isGetResult = 0;
+                    isTimeout = false;
+                    timer.Enabled = false;
+                    timer.Enabled = true;  //重新启动Timer
+                }
+
+                System.Threading.Thread.Sleep(25);
+
+
+            }
+            
+            isGetResult = 0;
+            isTimeout = false;
+            timer.Enabled = false;
+            timer.Stop();
+            timer.Dispose();
+
+            multiReceiveResult = CommArithmetic.HexStringToByteArray(multiReceiveString.ToString());
+
+            if (multiReceiveResult!=null)
+            {
+                return multiReceiveResult;
+            }
+
+            return null;
+
+
+        }
 
         /// <summary>
         /// 在规定超时时间内，获得反馈，否则返回null

@@ -496,6 +496,20 @@ namespace Hyperwsn.Protocol
             return response;
         }
 
+        /// <summary>
+        /// 查询网关的绑定信息
+        /// </summary>
+        /// <returns></returns>
+        public byte[] CMDGatewayReadBinding()
+        {
+            string command;
+            
+            command = "CB CB 06 6A 01 00 00 00 00 00 00 BC BC";
+         
+
+            return CommArithmetic.HexStringToByteArray(command);
+        }
+
 
     }
 }
