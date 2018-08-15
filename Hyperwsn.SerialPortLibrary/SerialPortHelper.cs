@@ -27,8 +27,8 @@ namespace Hyperwsn.SerialPortLibrary
 
 
         private int _BaudRate = 115200; //通信速率初始值
-        private int _ReadBufferSize = 8192; //写缓冲器大小
-        private int _WriteBufferSize = 8192; //读缓冲器大小
+        private int _ReadBufferSize = 16384; //写缓冲器大小
+        private int _WriteBufferSize = 16384; //读缓冲器大小
 
         public bool IsLogger { get; set; }
        

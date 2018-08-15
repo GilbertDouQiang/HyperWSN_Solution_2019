@@ -54,11 +54,16 @@
     <Compile Include="Base64Tests.cs" />
     <Compile Include="CommArithmeticTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaveObject2FileTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Hyperwsn.Comm\Hyperwsn.Comm.csproj">
       <Project>{C9CDBEF5-6A4F-4352-B275-A3B7E8B49517}</Project>
       <Name>Hyperwsn.Comm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hyperwsn.Protocol\Hyperwsn.Protocol.csproj">
+      <Project>{761c123a-2601-462d-ae0d-facea330bca8}</Project>
+      <Name>Hyperwsn.Protocol</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

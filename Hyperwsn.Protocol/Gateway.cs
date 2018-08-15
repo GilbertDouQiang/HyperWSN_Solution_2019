@@ -90,6 +90,21 @@ namespace Hyperwsn.Protocol
         /// </summary>
         public int TargetPort { get; set; }
 
+        /// <summary>
+        /// 系统RTC时间
+        /// </summary>
+        public DateTime RTC { get; set; }
+
+        /// <summary>
+        /// 亮屏策略
+        /// </summary>
+        public byte BackgroundLight { get; set; }
+
+        /// <summary>
+        /// 是否启用GPS
+        /// </summary>
+        public byte GPSStart { get; set; }
+
 
         
 

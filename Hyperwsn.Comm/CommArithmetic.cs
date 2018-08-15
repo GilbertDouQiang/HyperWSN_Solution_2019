@@ -491,6 +491,21 @@ namespace Hyperwsn.Comm
         }
 
         /// <summary>
+        /// 将2个字节的数字转换成字节数组</br>
+        /// 适用于Interval的结算
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static byte[] EncodeByte2String(string source)
+        {
+            byte[] strToBytes1 = System.Text.Encoding.UTF8.GetBytes(source);
+
+
+
+            return strToBytes1;
+        }
+
+        /// <summary>
         /// 将温度转换为2个字节的数组
         /// </summary>
         /// <param name="temperature"></param>

@@ -72,5 +72,7 @@ namespace Hyperwsn.Protocol
         /// </summary>
         public double HumidityCompensation { get; set; }
 
+        public byte Status { get; set; }
+
     }
 }
