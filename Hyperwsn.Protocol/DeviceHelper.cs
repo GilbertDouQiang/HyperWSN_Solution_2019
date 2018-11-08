@@ -35,6 +35,20 @@ namespace Hyperwsn.Protocol
                     gate.DeviceMac = CommArithmetic.DecodeMAC(requestBytes, 10);
                     gate.HardwareVersion = CommArithmetic.DecodeMAC(requestBytes, 14);
                     gate.SoftwareVersion = CommArithmetic.DecodeClientID(requestBytes, 18);
+                    //gate.SoftwareVersion2 = CommArithmetic.DecodeClientID(requestBytes, 18);
+
+                    //判断协议版本号
+                    byte[] protVersion = CommArithmetic.HexStringToByteArray(gate.SoftwareVersion);
+                    if (protVersion[1] >=0x25)
+                    {
+                        gate.ProtocolVersion = 2;
+                    }
+                    else
+                    {
+                        gate.ProtocolVersion = 1;
+                    }
+ 
+                    //if (gate.SoftwareVersion.Substring(3,2) )
 
 
 
@@ -99,6 +113,12 @@ namespace Hyperwsn.Protocol
         public byte[] CMDGatewayConfig()
         {
             string command = "CB CB 02 64 01 00 00 BC BC";
+            return CommArithmetic.HexStringToByteArray(command);
+        }
+
+        public byte[] CMDGatewayConfigV2()
+        {
+            string command = "CB CB 02 64 02 00 00 BC BC";
             return CommArithmetic.HexStringToByteArray(command);
         }
 
@@ -170,6 +190,99 @@ namespace Hyperwsn.Protocol
 
 
 
+
+
+
+
+
+
+
+            return gateway;
+
+        }
+
+
+        public Gateway GatewayConfigV2(byte[] requestBytes)
+        {
+            //有效性验证
+            if (requestBytes == null)
+            {
+                return null;
+            }
+
+            if (requestBytes.Length < 5)
+            {
+                return null;
+            }
+
+            int length = requestBytes[2] + 7;
+
+            if (requestBytes.Length != length)
+            {
+                return null;
+            }
+
+            Gateway gateway = new Gateway();
+            gateway.ProtocolVersion = requestBytes[4];
+
+
+            if (requestBytes[5] == 0x60)
+            {
+                gateway.DeviceID = "SG5";
+            }
+
+            gateway.DeviceMac = CommArithmetic.DecodeMAC(requestBytes, 10);
+            gateway.PrimaryMAC = CommArithmetic.DecodeMAC(requestBytes, 6);
+            gateway.HardwareVersion = CommArithmetic.DecodeMAC(requestBytes, 14);
+            gateway.SoftwareVersion = CommArithmetic.DecodeClientID(requestBytes, 18);
+            gateway.SoftwareVersion2 = CommArithmetic.DecodeClientID(requestBytes, 20);
+            gateway.ClientID = CommArithmetic.DecodeClientID(requestBytes, 22);
+            gateway.Debug = CommArithmetic.DecodeClientID(requestBytes, 24);
+            gateway.Category = requestBytes[26];
+            gateway.Interval = CommArithmetic.Bytes2Int(requestBytes, 27, 2);
+            //20181102 新增 GPS采集间隔
+
+            gateway.GPSInterval = CommArithmetic.Bytes2Int(requestBytes, 29, 2);
+            //v3.0从这里开始改变
+            gateway.RTC = CommArithmetic.DecodeDateTime(requestBytes, 31);
+
+            gateway.WorkFunction = requestBytes[37];
+            gateway.SymbolRate = requestBytes[38];
+            gateway.Frequency = requestBytes[39];
+            //20181102 新增 网关发射功率
+            gateway.TXPower = requestBytes[40];
+
+            gateway.DisplayInterval = CommArithmetic.Bytes2Int(requestBytes, 41, 2);
+            gateway.AlarmInterval = CommArithmetic.Bytes2Int(requestBytes, 43, 2);
+            gateway.TransStrategy = requestBytes[45];
+            gateway.DateTimeStrategy = requestBytes[46];
+            gateway.AlarmStyle = requestBytes[47];
+            gateway.AlarmSource = requestBytes[48];
+            gateway.DisplayStyle = requestBytes[49];
+            gateway.BackgroundLight = requestBytes[50];
+            gateway.GPSStart = requestBytes[51];
+
+            //gateway.LasRestart = requestBytes[49];
+            //gateway.RAMCountHigh = requestBytes[50];
+            //gateway.RAMCountLow = requestBytes[51];
+            //gateway.FlashCountHigh = CommArithmetic.Bytes2Int(requestBytes, 52, 3);
+            //gateway.FlashCountLow = CommArithmetic.Bytes2Int(requestBytes, 55, 3);
+
+            byte domainLength = requestBytes[56];
+
+            gateway.TargetDomain = CommArithmetic.DecodeByte2String(requestBytes, 57, domainLength);
+            gateway.TargetPort = CommArithmetic.Bytes2Int(requestBytes, 57 + domainLength, 2);
+
+
+            //备用域名
+            byte domainLength2 = requestBytes[59 + domainLength];
+            if (domainLength2>0)
+            {
+                gateway.TargetDomain2 = CommArithmetic.DecodeByte2String(requestBytes, 60 + domainLength, domainLength2);
+                gateway.TargetPort2 = CommArithmetic.Bytes2Int(requestBytes, 60 + domainLength+domainLength2, 2);
+            }
+
+           
 
 
 
@@ -458,6 +571,152 @@ namespace Hyperwsn.Protocol
             //结束位
             response[41 + domainBytes.Length] = 0xBC;
             response[42 + domainBytes.Length] = 0xBC;
+
+
+
+
+
+
+            return response;
+        }
+
+        byte[] domainBytes2;
+        public byte[] UpdateGatewayV2(Gateway gateway)
+        {
+            byte[] domainBytes = CommArithmetic.EncodeByte2String(gateway.TargetDomain);
+            
+
+            if (gateway.TargetDomain2!=null && gateway.TargetDomain2.Length>3)
+            {
+                domainBytes2 = CommArithmetic.EncodeByte2String(gateway.TargetDomain2);
+            }
+
+            int hasDomain2;
+            if (domainBytes2==null)
+            {
+                hasDomain2 = 0;
+            }
+            else
+            {
+                hasDomain2 = domainBytes2.Length;
+            }
+
+            byte[] response = new byte[49 + domainBytes.Length+hasDomain2];
+            response[0] = 0xCB;
+            response[1] = 0xCB;
+            response[2] = (byte)(response.Length - 7); //长度不确定，需要根据域名进行计算,总长度-7
+            response[3] = 0x65;
+            response[4] = 0x02;
+
+
+            //Clientid
+            byte[] temp = CommArithmetic.HexStringToByteArray(gateway.ClientID);
+            response[5] = temp[0];
+            response[6] = temp[1];
+
+            //debug
+            temp = CommArithmetic.HexStringToByteArray(gateway.Debug);
+            response[7] = temp[0];
+            response[8] = temp[1];
+
+            //cagtegory
+            response[9] = gateway.Category;
+
+            //采集时间
+            temp = CommArithmetic.Int16_2Bytes(gateway.Interval);
+            response[10] = temp[0];
+            response[11] = temp[1];
+
+            temp = CommArithmetic.Int16_2Bytes(gateway.GPSInterval);
+            response[12] = temp[0];
+            response[13] = temp[1];
+
+            //加入当前时间的改变，注意UI要输入当前时间
+            temp = CommArithmetic.EncodeDateTime(System.DateTime.Now);
+            response[14] = temp[0];
+            response[15] = temp[1];
+            response[16] = temp[2];
+            response[17] = temp[3];
+            response[18] = temp[4];
+            response[19] = temp[5];
+
+
+
+            response[20] = gateway.WorkFunction;
+            response[21] = gateway.SymbolRate;
+            response[22] = gateway.Frequency;
+
+            //20181102 增加 网关的发射功率
+            response[23] = gateway.TXPower;
+
+            //轮播间隔
+            temp = CommArithmetic.Int16_2Bytes(gateway.DisplayInterval);
+            response[24] = temp[0];
+            response[25] = temp[1];
+
+            //报警间隔
+            temp = CommArithmetic.Int16_2Bytes(gateway.AlarmInterval);
+            response[26] = temp[0];
+            response[27] = temp[1];
+
+            //TransStrategy
+            response[28] = gateway.TransStrategy;
+            //
+            response[29] = gateway.DateTimeStrategy;
+            response[30] = gateway.AlarmStyle;
+            response[31] = gateway.AlarmSource;
+            response[32] = gateway.DisplayStyle;
+            response[33] = gateway.BackgroundLight;
+            response[34] = gateway.GPSStart;
+
+            //保留位
+            response[35] = 0;
+            response[36] = 0;
+            response[37] = 0;
+            response[38] = 0;
+
+            //域名
+            response[39] = (byte)gateway.TargetDomain.Length;
+
+            for (int i = 0; i < domainBytes.Length; i++)
+            {
+                response[40 + i] = domainBytes[i];
+
+            }
+
+            //端口
+            temp = CommArithmetic.Int16_2Bytes(gateway.TargetPort);
+            response[40 + domainBytes.Length] = temp[0];
+            response[41 + domainBytes.Length] = temp[1];
+
+            //第二域名长度
+            if(hasDomain2 !=0)
+            {
+                response[42 + domainBytes.Length] =(byte) hasDomain2;
+                for (int i = 0; i <hasDomain2; i++)
+                {
+                    response[43+ domainBytes.Length + i] = domainBytes2[i];
+
+                }
+            }
+            else
+            {
+                response[42 + domainBytes.Length] = 0;
+            }
+
+            //第二域名端口
+            //端口
+            temp = CommArithmetic.Int16_2Bytes(gateway.TargetPort2);
+            response[43 + domainBytes.Length + hasDomain2] = temp[0];
+            response[44 + domainBytes.Length + hasDomain2] = temp[1];
+
+
+            //crc
+            response[45 + domainBytes.Length + hasDomain2] = 0;
+            response[46 + domainBytes.Length + hasDomain2] = 0;
+            //结束位
+            response[47 + domainBytes.Length+ hasDomain2] = 0xBC;
+            response[48 + domainBytes.Length + hasDomain2] = 0xBC;
 
 
 

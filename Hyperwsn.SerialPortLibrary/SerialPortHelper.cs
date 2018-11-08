@@ -282,10 +282,7 @@ namespace Hyperwsn.SerialPortLibrary
                 //TODO 这里有可能>1 , 存在风险
                 if (isGetResult == 1)
                 {
-                    isTimeout = true;
-                    timer.Enabled = false;
-                    timer.Stop();
-                    timer.Dispose();
+                    
                     //return commandResult;
                     //返回收到的字节数组
                     //isGetResult = 0;

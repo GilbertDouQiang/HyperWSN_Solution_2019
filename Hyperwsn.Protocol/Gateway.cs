@@ -90,6 +90,17 @@ namespace Hyperwsn.Protocol
         /// </summary>
         public int TargetPort { get; set; }
 
+
+        /// <summary>
+        /// 目标域名或IP地址
+        /// </summary>
+        public string TargetDomain2 { get; set; }
+
+        /// <summary>
+        /// 目标端口
+        /// </summary>
+        public int TargetPort2 { get; set; }
+
         /// <summary>
         /// 系统RTC时间
         /// </summary>
@@ -106,7 +117,20 @@ namespace Hyperwsn.Protocol
         public byte GPSStart { get; set; }
 
 
-        
+        //public byte ProtocolVersion { get; set; }
+
+
+
+        /// <summary>
+        /// GPS 采集间隔
+        /// </summary>
+        public int GPSInterval { get; set; }
+
+        public byte TXPower { get; set; }
+
+
+
+
 
 
 

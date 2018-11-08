@@ -147,9 +147,26 @@ namespace DeviceConfigTools2018
 
                 try
                 {
-                    commandBytes = deviceHelper.CMDGatewayConfig();
+                    if (gateway.ProtocolVersion==1)
+                    {
+                        commandBytes = deviceHelper.CMDGatewayConfig();
+                    }
+                    else
+                    {
+                        commandBytes = deviceHelper.CMDGatewayConfigV2();
+                    }
+
+                    
                     result = helper.Send(commandBytes, 500);
-                    gateway = deviceHelper.GatewayConfig(result);
+
+                    if (gateway.ProtocolVersion == 1)
+                    { 
+                        gateway = deviceHelper.GatewayConfig(result);
+                    }
+                    else
+                    {
+                        gateway = deviceHelper.GatewayConfigV2(result);
+                    }
                     gateway.PrimaryMAC = gatewayFactoryID;
                     //读取网关详细信息结束
                     GatewayDetail.DataContext = gateway;
@@ -253,8 +270,26 @@ namespace DeviceConfigTools2018
 
                 try
                 {
-                    byte[] commandBytes = deviceHelper.UpdateGateway(gateway);
-                    byte[] result = helper.Send(commandBytes, 500);
+                    byte[] commandBytes;
+                    byte[] result;
+
+                    if (gateway==null)
+                    {
+                        helper.Close();
+                        return;
+                    }
+
+                    if (gateway.ProtocolVersion==1)
+                    {
+                        commandBytes = deviceHelper.UpdateGateway(gateway);
+                        result = helper.Send(commandBytes, 500);
+                    }
+                    else
+                    {
+                        commandBytes = deviceHelper.UpdateGatewayV2(gateway);
+                        result = helper.Send(commandBytes, 500);
+                    }
+                    
                 }
                 catch (Exception)
                 {
