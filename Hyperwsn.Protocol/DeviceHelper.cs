@@ -31,6 +31,10 @@ namespace Hyperwsn.Protocol
                     {
                         gate.DeviceID = "SG5";
                     }
+                    else if (requestBytes[5] == 0x68)
+                    {
+                        gate.DeviceID = "SG6";
+                    }
                     gate.PrimaryMAC = CommArithmetic.DecodeMAC(requestBytes, 6);
                     gate.DeviceMac = CommArithmetic.DecodeMAC(requestBytes, 10);
                     gate.HardwareVersion = CommArithmetic.DecodeMAC(requestBytes, 14);
@@ -39,15 +43,30 @@ namespace Hyperwsn.Protocol
 
                     //判断协议版本号
                     byte[] protVersion = CommArithmetic.HexStringToByteArray(gate.SoftwareVersion);
-                    if (protVersion[1] >=0x25)
+                    if (gate.DeviceID == "SG5")
                     {
-                        gate.ProtocolVersion = 2;
+                        if (protVersion[1] >= 0x27)
+                        {
+                            gate.ProtocolVersion = 2;
+                        }
+                        else
+                        {
+                            gate.ProtocolVersion = 1;
+                        }
                     }
-                    else
+
+                    if (gate.DeviceID == "SG6")
                     {
-                        gate.ProtocolVersion = 1;
+                        if (protVersion[1] >= 0x0A)
+                        {
+                            gate.ProtocolVersion = 2;
+                        }
+                        else
+                        {
+                            gate.ProtocolVersion = 1;
+                        }
                     }
- 
+
                     //if (gate.SoftwareVersion.Substring(3,2) )
 
 
@@ -99,7 +118,7 @@ namespace Hyperwsn.Protocol
         /// <returns></returns>
         public byte[] DeleteQueue(int QueueNumber)
         {
-            string command = "CB CB 06 6A 01 00 00 00 00 00 00 BC BC";
+            string command = "CB CB 06 69 01 00 00 00 00 00 00 BC BC";
             return CommArithmetic.HexStringToByteArray(command);
 
         }
@@ -268,21 +287,50 @@ namespace Hyperwsn.Protocol
             //gateway.FlashCountHigh = CommArithmetic.Bytes2Int(requestBytes, 52, 3);
             //gateway.FlashCountLow = CommArithmetic.Bytes2Int(requestBytes, 55, 3);
 
-            byte domainLength = requestBytes[56];
 
-            gateway.TargetDomain = CommArithmetic.DecodeByte2String(requestBytes, 57, domainLength);
-            gateway.TargetPort = CommArithmetic.Bytes2Int(requestBytes, 57 + domainLength, 2);
+            gateway.LasRestart = requestBytes[56];
+            gateway.RAMCountHigh = requestBytes[57];
+            gateway.RAMCountLow = requestBytes[58];
+            //主服务器存储情况
+            gateway.FlashCountHigh = CommArithmetic.Bytes2Int(requestBytes, 59, 3);
+            gateway.FlashCountLow = CommArithmetic.Bytes2Int(requestBytes, 62, 3);
+
+            gateway.FlashCountStatus = CommArithmetic.Bytes2Int(requestBytes, 65, 3);
+            gateway.FlashCountGPS = CommArithmetic.Bytes2Int(requestBytes, 68, 3);
+
+            //第二服务器存储情况
+            gateway.FlashCountHigh2 = CommArithmetic.Bytes2Int(requestBytes, 71, 3);
+            gateway.FlashCountLow2 = CommArithmetic.Bytes2Int(requestBytes, 74, 3);
+
+            gateway.FlashCountStatus2 = CommArithmetic.Bytes2Int(requestBytes, 77, 3);
+            gateway.FlashCountGPS2 = CommArithmetic.Bytes2Int(requestBytes, 80, 3);
+
+
+
+            byte domainLength = requestBytes[83];
+
+            gateway.TargetDomain = CommArithmetic.DecodeByte2String(requestBytes, 84, domainLength);
+            gateway.TargetPort = CommArithmetic.Bytes2Int(requestBytes,84 + domainLength, 2);
 
 
             //备用域名
-            byte domainLength2 = requestBytes[59 + domainLength];
+            byte domainLength2 = requestBytes[86 + domainLength];
             if (domainLength2>0)
             {
-                gateway.TargetDomain2 = CommArithmetic.DecodeByte2String(requestBytes, 60 + domainLength, domainLength2);
-                gateway.TargetPort2 = CommArithmetic.Bytes2Int(requestBytes, 60 + domainLength+domainLength2, 2);
+                gateway.TargetDomain2 = CommArithmetic.DecodeByte2String(requestBytes, 87 + domainLength, domainLength2);
+                gateway.TargetPort2 = CommArithmetic.Bytes2Int(requestBytes, 87 + domainLength+domainLength2, 2);
             }
 
-           
+
+            byte[] reserve = new byte[3];
+            reserve[0] = requestBytes[53];
+            reserve[1] = requestBytes[54];
+            reserve[2] = requestBytes[55];
+            //reserve[3] = requestBytes[requestBytes.Length - 5];
+
+            gateway.ReserveBytes = reserve;
+            gateway.ReserveString = CommArithmetic.ByteArrayToHexString(reserve);
+
 
 
 
@@ -340,7 +388,7 @@ namespace Hyperwsn.Protocol
             it1.IntervalAlarm = CommArithmetic.Bytes2Int(requestBytes, 26, 2);
             //温湿度补偿
             it1.TemperatureCompensation = CommArithmetic.DecodeTemperature(requestBytes, 28);
-            it1.HumidityCompensation = CommArithmetic.DecodeHumidity(requestBytes, 30);
+            it1.HumidityCompensation = CommArithmetic.DecodeTemperature(requestBytes, 30);
             //预警值设置
             it1.TemperatureInfoHigh = CommArithmetic.DecodeTemperature(requestBytes, 32);
             it1.TemperatureInfoLow = CommArithmetic.DecodeTemperature(requestBytes, 34);
@@ -710,6 +758,24 @@ namespace Hyperwsn.Protocol
             response[43 + domainBytes.Length + hasDomain2] = temp[0];
             response[44 + domainBytes.Length + hasDomain2] = temp[1];
 
+
+            //处理保留位
+            byte[] reserve = CommArithmetic.HexStringToByteArray(gateway.ReserveString);
+            try
+            {
+                //response[response.Length - 8] = reserve[0];
+                response[36] = reserve[0];
+                response[37] = reserve[1];
+                response[38] = reserve[2];
+
+            }
+            catch
+            {
+                //response[response.Length - 8] = 0;
+                response[response.Length - 7] = 0;
+                response[response.Length - 6] = 0;
+                response[response.Length - 5] = 0;
+            }
 
             //crc
             response[45 + domainBytes.Length + hasDomain2] = 0;

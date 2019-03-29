@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DeviceConfigTools2018"
         mc:Ignorable="d"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-        Title="HyperWSN Device Config Tools" Height="800" Width="1300"
+        Title="HyperWSN Device Config Tools" Height="680" Width="1200"
         WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Window.Resources>
         <local:HyperMultiValueConverter x:Key="HyperMultiValueConverter" />
@@ -128,9 +128,36 @@
                                                         <TextBlock   Grid.Column="0" Text="上次重启原因:" Margin="0,0,9.5,0" HorizontalAlignment="Right" />
                                                         <TextBlock  Text="{Binding LasRestart}" Grid.Column="1"  Margin="0,0,9.5,0"/>
 
-                                                        <TextBlock  Grid.Column="2"  Text=" RAM 数量:"  Margin="0,0,9,0" HorizontalAlignment="Right"/>
+                                                       
 
-                                                        <TextBlock  Grid.Column="3"  Margin="0,0,9.5,0" >
+
+
+
+                                                       
+                                                      
+
+
+
+
+
+                                                    </Grid>
+                                                    <Grid Margin="0 5 0 0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock  Grid.Column="0"  Text=" RAM 数量:"  Margin="0,0,9,0" HorizontalAlignment="Right"/>
+
+                                                        <TextBlock  Grid.Column="1"  Margin="0,0,9.5,0" >
                                                             <TextBlock.Text>
                                                                 <MultiBinding Converter="{StaticResource HyperMultiValueConverter}">
                                                                     <Binding Path="RAMCountHigh"/>
@@ -138,25 +165,31 @@
                                                                 </MultiBinding>
                                                             </TextBlock.Text>
                                                         </TextBlock>
-
-
-
-
-                                                        <TextBlock  Grid.Column="4" Text=" Flash 数量:"  Margin="0,0,9,0" HorizontalAlignment="Right"/>
-                                                        <TextBlock  Grid.Column="5"  Margin="0,0,9.5,0">
+                                                        <TextBlock  Grid.Column="2" Text=" 服务器1 Flash"  Margin="0,0,9,0" HorizontalAlignment="Right"/>
+                                                        <TextBlock  Grid.Column="3"  Margin="0,0,9.5,0">
                                                             <TextBlock.Text>
                                                                 <MultiBinding Converter="{StaticResource HyperMultiValueConverter}">
                                                                     <Binding Path="FlashCountHigh"/>
                                                                     <Binding Path="FlashCountLow"/>
+                                                                    <Binding Path="FlashCountStatus"/>
+                                                                    <Binding Path="FlashCountGPS"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+
+                                                        <TextBlock  Grid.Column="4" Text=" 服务器2 Flash"  Margin="0,0,9,0" HorizontalAlignment="Right"/>
+                                                        <TextBlock  Grid.Column="5"  Margin="0,0,9.5,0">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding Converter="{StaticResource HyperMultiValueConverter}">
+                                                                    <Binding Path="FlashCountHigh2"/>
+                                                                    <Binding Path="FlashCountLow2"/>
+                                                                    <Binding Path="FlashCountStatus2"/>
+                                                                    <Binding Path="FlashCountGPS2"/>
                                                                 </MultiBinding>
                                                             </TextBlock.Text>
                                                         </TextBlock>
 
                                                         <Button x:Name="btnDeleteFlash" Content="Delete Flash" Grid.Column="6" Click="btnDeleteFlash_Click"    Margin="0,0,10,0"/>
-
-
-
-
 
                                                     </Grid>
                                                     <Grid Margin="0 5 0 0">
@@ -331,7 +364,7 @@
                                                             <ColumnDefinition Width="*"/>
 
                                                         </Grid.ColumnDefinitions>
-                                                        <TextBlock   Grid.Column="0" Text="启用GPS:" Margin="0,0,10,0" HorizontalAlignment="Right" />
+                                                        <TextBlock   Grid.Column="0" Text="启用功能:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                         <TextBlock  Text="{Binding GPSStart,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0"/>
                                                         <TextBox  Text="{Binding GPSStart}" Grid.Column="2"  Margin="0 0 10 0"/>
 
@@ -402,6 +435,38 @@
 
 
                                                     </Grid>
+                                                    <Grid Margin="0 5 0 0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock   Grid.Column="0" Text="配置保留位:" Margin="0,0,10,0" HorizontalAlignment="Right" />
+                                                        <TextBlock Text="{Binding ReserveString ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0" Grid.ColumnSpan="2"/>
+                                                        <TextBox Text="{Binding ReserveString}"   Grid.Column="3"  Margin="0 0 10 0" Grid.ColumnSpan="2"/>
+                                                       
+
+
+                                                    </Grid>
+                                                   
+                                                    
+
+                                                </StackPanel>
+
+                                            </telerik:RadTabItem>
+                                            <telerik:RadTabItem Header=" SG5/6 Internal Sensor ">
+                                                <StackPanel>
                                                     <Grid x:Name="InternalSernsor1">
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="*"/>
@@ -508,7 +573,7 @@
 
 
                                                         </Grid>
-                                                   
+
 
                                                         <Grid Margin="0 5 0 0" Grid.Row="3">
                                                             <Grid.ColumnDefinitions>
@@ -637,7 +702,7 @@
 
 
                                                         </Grid>
-                                                        
+
 
 
 
@@ -748,7 +813,7 @@
 
 
                                                         </Grid>
-                                                        
+
 
                                                         <Grid Margin="0 5 0 0" Grid.Row="3">
                                                             <Grid.ColumnDefinitions>
@@ -876,16 +941,15 @@
 
 
                                                         </Grid>
-                                                        
+
 
 
 
 
                                                     </Grid>
-
                                                 </StackPanel>
-
                                             </telerik:RadTabItem>
+                                            
                                             <telerik:RadTabItem Header=" SG5 Binding ">
                                                 <StackPanel x:Name="GatewayBinding">
                                                     <Grid Margin="5 5 0 5">

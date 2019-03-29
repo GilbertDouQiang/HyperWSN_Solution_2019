@@ -79,7 +79,7 @@ namespace Hyperwsn.Protocol
                 HumidityWarnLow = CommArithmetic.DecodeHumidity(SourceData, 52);
 
                 TemperatureCompensation = CommArithmetic.DecodeTemperature(SourceData, 54);
-                HumidityCompensation = CommArithmetic.DecodeHumidity(SourceData, 56);
+                HumidityCompensation = CommArithmetic.DecodeTemperature(SourceData, 56);
 
                 ICTemperature = SourceData[58];
                 Volt = Math.Round(Convert.ToDouble((SourceData[59] * 256 + SourceData[60])) / 1000, 2);
@@ -621,7 +621,7 @@ namespace Hyperwsn.Protocol
             HumidityWarnLow = CommArithmetic.DecodeHumidity(response, 51);
 
             TemperatureCompensation = CommArithmetic.DecodeTemperature(response, 53);
-            HumidityCompensation = CommArithmetic.DecodeHumidity(response, 55);
+            HumidityCompensation = CommArithmetic.DecodeTemperature(response, 55);
 
             MaxLength = response[62];
 
@@ -705,7 +705,7 @@ namespace Hyperwsn.Protocol
             HumidityWarnLow = CommArithmetic.DecodeHumidity(response, 51);
 
             TemperatureCompensation = CommArithmetic.DecodeTemperature(response, 53);
-            HumidityCompensation = CommArithmetic.DecodeHumidity(response, 55);
+            HumidityCompensation = CommArithmetic.DecodeTemperature(response, 55);
 
             MaxLength = response[62];
 

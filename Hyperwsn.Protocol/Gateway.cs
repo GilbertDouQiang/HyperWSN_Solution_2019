@@ -74,6 +74,27 @@ namespace Hyperwsn.Protocol
         /// </summary>
         public int FlashCountLow { get; set; }
 
+        //主服务器 状态信息
+        public int FlashCountStatus{ get; set; }
+
+        //主服务器 状态信息
+        public int FlashCountGPS { get; set; }
+
+
+        public int FlashCountHigh2 { get; set; }
+
+
+        /// <summary>
+        /// Flash High Low
+        /// </summary>
+        public int FlashCountLow2 { get; set; }
+
+        //主服务器 状态信息
+        public int FlashCountStatus2 { get; set; }
+
+        //主服务器 状态信息
+        public int FlashCountGPS2 { get; set; }
+
 
         /// <summary>
         /// 最后一次重启的原因
@@ -127,6 +148,10 @@ namespace Hyperwsn.Protocol
         public int GPSInterval { get; set; }
 
         public byte TXPower { get; set; }
+
+
+        public byte[] ReserveBytes { get; set; }
+        public string ReserveString { get; set; }
 
 
 
