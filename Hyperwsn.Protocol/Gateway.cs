@@ -137,11 +137,6 @@ namespace Hyperwsn.Protocol
         /// </summary>
         public byte GPSStart { get; set; }
 
-
-        //public byte ProtocolVersion { get; set; }
-
-
-
         /// <summary>
         /// GPS 采集间隔
         /// </summary>
@@ -149,22 +144,7 @@ namespace Hyperwsn.Protocol
 
         public byte TXPower { get; set; }
 
-
         public byte[] ReserveBytes { get; set; }
         public string ReserveString { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

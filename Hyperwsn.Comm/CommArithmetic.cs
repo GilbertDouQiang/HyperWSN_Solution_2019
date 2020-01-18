@@ -59,20 +59,19 @@ namespace Hyperwsn.Comm
 
         public static string IntToHexString(int source)
         {
-
             string s = source.ToString("X2");
             if (s.Length%2==1)
             {
                 s = "0" + s;
             }
+
             string result="";
             for (int i = 0; i < s.Length/2; i++)
             {
                 result = result+ s.Substring(i*2,2) +" ";
             }
-            result = result.Trim();
 
-                
+            result = result.Trim();                
 
             return result;
         }
@@ -89,10 +88,8 @@ namespace Hyperwsn.Comm
             }
             catch (Exception)
             {
-
                 return null;
             }
-
         }
 
         public static string ByteArrayToHexString(byte[] bytes)
@@ -108,8 +105,27 @@ namespace Hyperwsn.Comm
                 }
                 hexString = strB.ToString();
             }
-            return hexString;
 
+            return hexString;
+        }
+
+        public static string ByteArrayToHexString(byte[] Buf, UInt16 IndexOfStart, UInt16 Len)
+        {
+            string hexString = string.Empty;
+
+            if (Buf != null)
+            {
+                StringBuilder strB = new StringBuilder();
+
+                for (UInt16 i = 0; i < Len; i++)
+                {
+                    strB.Append(Buf[IndexOfStart + i].ToString("X2") + " ");
+                }
+
+                hexString = strB.ToString();
+            }
+
+            return hexString;
         }
 
         public static string DecodeMAC(byte[] source, int start)
@@ -122,12 +138,9 @@ namespace Hyperwsn.Comm
                 mac[2] = source[start + 2];
                 mac[3] = source[start + 3];
                 return ByteArrayToHexString(mac);
-
             }
 
             return null;
-
-
         }
 
         /// <summary>
@@ -142,13 +155,9 @@ namespace Hyperwsn.Comm
             for (int i = 0; i < length; i++)
             {
                 gbString[i] = source[start + i];
-
-            }
-            
+            }            
 
             return Encoding.GetEncoding("GB18030").GetString(gbString);
-
-
         }
 
         public static string DecodeClientID(byte[] source, int start)
@@ -160,12 +169,9 @@ namespace Hyperwsn.Comm
                 clientID[1] = source[start + 1];
 
                 return ByteArrayToHexString(clientID);
-
             }
 
             return null;
-
-
         }
 
         public static DateTime DecodeDateTime(byte[] source, int start)
@@ -183,25 +189,18 @@ namespace Hyperwsn.Comm
                 tempDate[5] = source[start + 5];
             }
 
-
             string strDate = ByteArrayToHexString(tempDate);
-
-
-
 
             try
             {
                 dt = DateTime.ParseExact(strDate, "yy MM dd HH mm ss ", System.Globalization.CultureInfo.CurrentCulture);
-
             }
             catch (Exception)
             {
                 dt = DateTime.ParseExact("20010101", "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
             }
 
-
             return dt;
-
         }
 
         /// <summary>
@@ -214,9 +213,11 @@ namespace Hyperwsn.Comm
         {
             int tempCalc = SourceData[Start] * 256 + SourceData[Start + 1];
             if (tempCalc >= 0x8000)
+            {
                 tempCalc -= 65536;
-            return Math.Round((Convert.ToDouble(tempCalc) / 100), 2);
+            }
 
+            return Math.Round((Convert.ToDouble(tempCalc) / 100), 2);
         }
 
         public static double DecodeHumidity(byte[] SourceData, int Start)
@@ -499,14 +500,13 @@ namespace Hyperwsn.Comm
         /// <returns></returns>
         public static string DecodeByte2String(byte[] source,int start,int length)
         {
-
             byte[] byteArray = new byte[length];
             for (int i = 0; i < length; i++)
             {
                 byteArray[i] = source[start + i];
             }
-            string str = System.Text.Encoding.UTF8.GetString(byteArray);
 
+            string str = System.Text.Encoding.UTF8.GetString(byteArray);
 
             return str;
         }

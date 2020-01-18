@@ -9,8 +9,6 @@ namespace Hyperwsn.Protocol
 {
     public class DeviceHelper
     {
-
-
         /// <summary>
         /// 查询网关基本信息
         /// </summary>
@@ -18,15 +16,19 @@ namespace Hyperwsn.Protocol
         /// <returns></returns>
         public Gateway GatewayInit(byte[] requestBytes)
         {
+            if(requestBytes == null)
+            {
+                return null;
+            }
 
             //BC BC 15 01 01 60 40 00 02 80 FF FF FF FF B8 0F 00 00 00 00 00 00 00 00 18 4C CB CB 
+
             Gateway gate = new Gateway();
             if (requestBytes != null && requestBytes.Length == 32)
             {
                 //发现SG5
                 try
                 {
-
                     if (requestBytes[5] == 0x60)
                     {
                         gate.DeviceID = "SG5";
@@ -35,11 +37,14 @@ namespace Hyperwsn.Protocol
                     {
                         gate.DeviceID = "SG6";
                     }
-                    gate.PrimaryMAC = CommArithmetic.DecodeMAC(requestBytes, 6);
-                    gate.DeviceMac = CommArithmetic.DecodeMAC(requestBytes, 10);
+
+                    gate.SetDevicePrimaryMac(requestBytes, 6);
+                    gate.SetDeviceMac(requestBytes, 10);
+
                     gate.HardwareVersion = CommArithmetic.DecodeMAC(requestBytes, 14);
                     gate.SoftwareVersion = CommArithmetic.DecodeClientID(requestBytes, 18);
-                    //gate.SoftwareVersion2 = CommArithmetic.DecodeClientID(requestBytes, 18);
+                    
+                    
 
                     //判断协议版本号
                     byte[] protVersion = CommArithmetic.HexStringToByteArray(gate.SoftwareVersion);
@@ -66,19 +71,12 @@ namespace Hyperwsn.Protocol
                             gate.ProtocolVersion = 1;
                         }
                     }
-
-                    //if (gate.SoftwareVersion.Substring(3,2) )
-
-
-
                 }
                 catch (Exception)
                 {
-
                     return null;
                 }
             }
-
 
             return gate;
         }
@@ -94,7 +92,6 @@ namespace Hyperwsn.Protocol
         {
             string command = "CB CB 02 01 01 00 00 BC BC";
             return CommArithmetic.HexStringToByteArray(command);
-
         }
 
 
@@ -110,8 +107,8 @@ namespace Hyperwsn.Protocol
             commandBytes[8] = macBytes[3];
 
             return commandBytes;
-
         }
+
         /// <summary>
         /// 删除队列中的信息
         /// </summary>
@@ -120,10 +117,7 @@ namespace Hyperwsn.Protocol
         {
             string command = "CB CB 06 69 01 00 00 00 00 00 00 BC BC";
             return CommArithmetic.HexStringToByteArray(command);
-
         }
-
-
 
         /// <summary>
         /// 查询网关的配置，详细配置
@@ -170,7 +164,8 @@ namespace Hyperwsn.Protocol
             {
                 gateway.DeviceID = "SG5";
             }
-            gateway.DeviceMac = CommArithmetic.DecodeMAC(requestBytes, 6);
+
+            gateway.SetDeviceMac(requestBytes, 6);
             gateway.HardwareVersion = CommArithmetic.DecodeMAC(requestBytes, 10);
             gateway.SoftwareVersion = CommArithmetic.DecodeClientID(requestBytes, 14);
             gateway.SoftwareVersion2 = CommArithmetic.DecodeClientID(requestBytes, 16);
@@ -205,19 +200,7 @@ namespace Hyperwsn.Protocol
             gateway.TargetDomain = CommArithmetic.DecodeByte2String(requestBytes, 59, domainLength);
             gateway.TargetPort = CommArithmetic.Bytes2Int(requestBytes, 59+domainLength, 2);
 
-
-
-
-
-
-
-
-
-
-
-
             return gateway;
-
         }
 
 
@@ -250,8 +233,8 @@ namespace Hyperwsn.Protocol
                 gateway.DeviceID = "SG5";
             }
 
-            gateway.DeviceMac = CommArithmetic.DecodeMAC(requestBytes, 10);
-            gateway.PrimaryMAC = CommArithmetic.DecodeMAC(requestBytes, 6);
+            gateway.SetDevicePrimaryMac(requestBytes, 6);
+            gateway.SetDeviceMac(requestBytes, 10);
             gateway.HardwareVersion = CommArithmetic.DecodeMAC(requestBytes, 14);
             gateway.SoftwareVersion = CommArithmetic.DecodeClientID(requestBytes, 18);
             gateway.SoftwareVersion2 = CommArithmetic.DecodeClientID(requestBytes, 20);
@@ -305,13 +288,10 @@ namespace Hyperwsn.Protocol
             gateway.FlashCountStatus2 = CommArithmetic.Bytes2Int(requestBytes, 77, 3);
             gateway.FlashCountGPS2 = CommArithmetic.Bytes2Int(requestBytes, 80, 3);
 
-
-
             byte domainLength = requestBytes[83];
 
             gateway.TargetDomain = CommArithmetic.DecodeByte2String(requestBytes, 84, domainLength);
             gateway.TargetPort = CommArithmetic.Bytes2Int(requestBytes,84 + domainLength, 2);
-
 
             //备用域名
             byte domainLength2 = requestBytes[86 + domainLength];
@@ -320,7 +300,6 @@ namespace Hyperwsn.Protocol
                 gateway.TargetDomain2 = CommArithmetic.DecodeByte2String(requestBytes, 87 + domainLength, domainLength2);
                 gateway.TargetPort2 = CommArithmetic.Bytes2Int(requestBytes, 87 + domainLength+domainLength2, 2);
             }
-
 
             byte[] reserve = new byte[3];
             reserve[0] = requestBytes[53];
@@ -331,15 +310,7 @@ namespace Hyperwsn.Protocol
             gateway.ReserveBytes = reserve;
             gateway.ReserveString = CommArithmetic.ByteArrayToHexString(reserve);
 
-
-
-
-
-
-
-
             return gateway;
-
         }
 
         /// <summary>
@@ -368,9 +339,8 @@ namespace Hyperwsn.Protocol
 
         public InternalSensor GatewaySensorConfig(byte[] requestBytes)
         {
-
             InternalSensor it1 = new InternalSensor();
-            it1.DeviceMac = CommArithmetic.DecodeMAC(requestBytes, 7); //read only
+            it1.SetDeviceMac(requestBytes, 7);
             it1.SensorType = requestBytes[11]; //read only
             it1.SensorOnline = requestBytes[12]; //read only
             //是否启用
@@ -409,16 +379,6 @@ namespace Hyperwsn.Protocol
             it1.Temperature = CommArithmetic.DecodeTemperature(requestBytes, 64); //read only
             it1.Humidity = CommArithmetic.DecodeHumidity(requestBytes, 66); //read only
 
-
-
-
-
-
-
-
-
-
-
             return it1;
         }
 
@@ -432,7 +392,7 @@ namespace Hyperwsn.Protocol
             response[4] = 0x01;
             response[5] = SensorNo;
             //devicemac 
-            byte[] temp = CommArithmetic.HexStringToByteArray(sensor.DeviceMac);
+            byte[] temp = CommArithmetic.HexStringToByteArray(sensor.DeviceMacS);
             response[6] = temp[0];
             response[7] = temp[1];
             response[8] = temp[2];
@@ -521,8 +481,6 @@ namespace Hyperwsn.Protocol
             response[51] = 0xBC;
             response[52] = 0xBC;
 
-
-
             return response;
 
         }
@@ -536,8 +494,7 @@ namespace Hyperwsn.Protocol
             response[1] = 0xCB;
             response[2] = (byte)(response.Length-7); //长度不确定，需要根据域名进行计算,总长度-7
             response[3] = 0x65;
-            response[4] = 0x01;
-            
+            response[4] = 0x01;            
 
             //Clientid
             byte[]  temp = CommArithmetic.HexStringToByteArray(gateway.ClientID);
@@ -566,8 +523,6 @@ namespace Hyperwsn.Protocol
             response[16] = temp[4];
             response[17] = temp[5];
 
-
-
             response[18] = gateway.WorkFunction;
             response[19] = gateway.SymbolRate;
             response[20] = gateway.Frequency;
@@ -584,7 +539,6 @@ namespace Hyperwsn.Protocol
 
             //TransStrategy
             response[25] = gateway.TransStrategy;
-            //
             response[26] = gateway.DateTimeStrategy;
             response[27] = gateway.AlarmStyle;
             response[28] = gateway.AlarmSource;
@@ -604,14 +558,12 @@ namespace Hyperwsn.Protocol
             for (int i = 0; i < domainBytes.Length; i++)
             {
                 response[37 + i] = domainBytes[i];
-
             }
 
             //端口
             temp = CommArithmetic.Int16_2Bytes(gateway.TargetPort);
             response[37 + domainBytes.Length] = temp[0];
             response[38 + domainBytes.Length] = temp[1];
-
 
             //crc
             response[39 + domainBytes.Length] = 0;
@@ -620,19 +572,14 @@ namespace Hyperwsn.Protocol
             response[41 + domainBytes.Length] = 0xBC;
             response[42 + domainBytes.Length] = 0xBC;
 
-
-
-
-
-
             return response;
         }
 
         byte[] domainBytes2;
+
         public byte[] UpdateGatewayV2(Gateway gateway)
         {
-            byte[] domainBytes = CommArithmetic.EncodeByte2String(gateway.TargetDomain);
-            
+            byte[] domainBytes = CommArithmetic.EncodeByte2String(gateway.TargetDomain);            
 
             if (gateway.TargetDomain2!=null && gateway.TargetDomain2.Length>3)
             {
@@ -655,7 +602,6 @@ namespace Hyperwsn.Protocol
             response[2] = (byte)(response.Length - 7); //长度不确定，需要根据域名进行计算,总长度-7
             response[3] = 0x65;
             response[4] = 0x02;
-
 
             //Clientid
             byte[] temp = CommArithmetic.HexStringToByteArray(gateway.ClientID);
@@ -687,8 +633,6 @@ namespace Hyperwsn.Protocol
             response[17] = temp[3];
             response[18] = temp[4];
             response[19] = temp[5];
-
-
 
             response[20] = gateway.WorkFunction;
             response[21] = gateway.SymbolRate;
@@ -729,7 +673,6 @@ namespace Hyperwsn.Protocol
             for (int i = 0; i < domainBytes.Length; i++)
             {
                 response[40 + i] = domainBytes[i];
-
             }
 
             //端口
@@ -744,7 +687,6 @@ namespace Hyperwsn.Protocol
                 for (int i = 0; i <hasDomain2; i++)
                 {
                     response[43+ domainBytes.Length + i] = domainBytes2[i];
-
                 }
             }
             else
@@ -767,7 +709,6 @@ namespace Hyperwsn.Protocol
                 response[36] = reserve[0];
                 response[37] = reserve[1];
                 response[38] = reserve[2];
-
             }
             catch
             {
@@ -784,19 +725,12 @@ namespace Hyperwsn.Protocol
             response[47 + domainBytes.Length+ hasDomain2] = 0xBC;
             response[48 + domainBytes.Length + hasDomain2] = 0xBC;
 
-
-
-
-
-
             return response;
         }
 
 
         public byte[] UpdateGatewayFactory(Gateway gateway)
-        {
-           
-
+        {         
             byte[] response = new byte[17];
             response[0] = 0xCB;
             response[1] = 0xCB;
@@ -804,7 +738,7 @@ namespace Hyperwsn.Protocol
             response[3] = 0x68;
             response[4] = 0x01;
             //devicemac 
-            byte[] temp = CommArithmetic.HexStringToByteArray(gateway.DeviceMac);
+            byte[] temp = CommArithmetic.HexStringToByteArray(gateway.DeviceMacS);
             response[5] = temp[0];
             response[6] = temp[1];
             response[7] = temp[2];
@@ -818,8 +752,6 @@ namespace Hyperwsn.Protocol
             response[12] = temp[3];
 
             //Clientid
-          
-
 
             //crc
             response[13] = 0;
@@ -827,11 +759,6 @@ namespace Hyperwsn.Protocol
             //结束位
             response[15] = 0xBC;
             response[16] = 0xBC;
-
-
-
-
-
 
             return response;
         }
@@ -845,11 +772,58 @@ namespace Hyperwsn.Protocol
             string command;
             
             command = "CB CB 06 6A 01 00 00 00 00 00 00 BC BC";
-         
 
             return CommArithmetic.HexStringToByteArray(command);
         }
 
+        /// <summary>
+        /// 读取APN
+        /// </summary>
+        /// <returns></returns>
+        public byte[] ReadApn()
+        {
+            byte[] TxBuf = new byte[13];
+            UInt16 TxLen = 0;
+
+            // 起始位
+            TxBuf[TxLen++] = 0xCB;
+            TxBuf[TxLen++] = 0xCB;
+
+            // 长度位
+            TxBuf[TxLen++] = 0x00;
+
+            // 功能位
+            TxBuf[TxLen++] = 0x72;
+
+            // 协议版本
+            TxBuf[TxLen++] = 0x01;
+
+            // 保留位
+            TxBuf[TxLen++] = 0x00;
+            TxBuf[TxLen++] = 0x00;
+            TxBuf[TxLen++] = 0x00;
+            TxBuf[TxLen++] = 0x00;
+
+            // CRC16
+            UInt16 crc = MyCustomFxn.CRC16(MyCustomFxn.GetItuPolynomialOfCrc16(), 0, TxBuf, 3, (UInt16)(TxLen - 3));
+            TxBuf[TxLen++] = (byte)((crc & 0xFF00) >> 8);
+            TxBuf[TxLen++] = (byte)((crc & 0x00FF) >> 0);
+
+            // 结束位
+            TxBuf[TxLen++] = 0xBC;
+            TxBuf[TxLen++] = 0xBC;
+
+            // 重写长度位
+            TxBuf[2] = (byte)(TxLen - 7);
+
+            // 判断长度是否正确
+            if(TxBuf.Length != TxLen)
+            {
+                while (true) ;
+            }
+
+            return TxBuf;
+        }
 
     }
 }

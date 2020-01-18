@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DeviceConfigTools2018"
         mc:Ignorable="d"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-        Title="HyperWSN Device Config Tools" Height="680" Width="1200"
+        Title="HyperWSN Device Config Tools" Height="680" Width="1258"
         WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Window.Resources>
         <local:HyperMultiValueConverter x:Key="HyperMultiValueConverter" />
@@ -15,7 +15,7 @@
     <Grid>
         <Grid>
             <telerik:RadDocking HasDocumentHost="True" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
-                <telerik:RadSplitContainer>
+                <telerik:RadSplitContainer Width="174">
                     <telerik:RadPaneGroup HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <telerik:RadPane Header="Device Status">
                         </telerik:RadPane>
@@ -24,8 +24,11 @@
                 <telerik:RadDocking.DocumentHost>
                     <telerik:RadPaneGroup>
                         <telerik:RadDocumentPane Title="HyperWSN Device ">
-                            <Border Padding="5">
-                                <StackPanel x:Name="StackM1">
+
+                            <Border Padding="5 5 5 5">
+
+                                <StackPanel x:Name="StackM1" Margin="0 0 0 0">
+
                                     <Grid Margin="0 5 0 0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -33,28 +36,23 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
-
-
                                         </Grid.ColumnDefinitions>
 
-                                        <!--串口列表-->
                                         <TextBlock Text="Device List:  " Grid.Column="0" HorizontalAlignment="Right" Margin="10 0" VerticalAlignment="Center"/>
                                         <telerik:RadComboBox x:Name="cbDeviceList"  Grid.Column="1" Margin="10 0"/>
-
-
-                                        <telerik:RadButton x:Name="btnConnectDevice" Click="btnConnectDevice_Click" Grid.Column="2" Content="Connect..."  Margin="10 0" Height="21" VerticalAlignment="Top" />
+                                        <telerik:RadButton x:Name="btnConnectDevice" Click="btnConnectDevice_Click" Grid.Column="2" Content="Connect..."  Margin="10,0,10,1" />
                                         <telerik:RadButton x:Name="btnRefersh"  Grid.Column="3" Content="Refersh" Click="btnRefersh_Click"  Margin="10 0"  />
                                         <telerik:RadButton x:Name="btnClearAll"  Grid.Column="4" Content="Clear" Click="btnClearAll_Click" Margin="10 0"  />
-
-
-
                                     </Grid>
 
-                                    <Grid  Margin="0 5 0 0">
-                                        <telerik:RadTabControl Height="700" >
-                                            <telerik:RadTabItem Header=" SG5 Config ">
+                                    <Grid Margin="0 5 0 0" Height="561" >
+
+                                        <telerik:RadTabControl SelectedIndex="0" >
+
+                                            <telerik:RadTabItem x:Name="RadTabItemOfCfg" Header=" Config ">
                                                 <StackPanel x:Name="GatewayDetail">
-                                                    <Grid Margin="0 5 0 0">
+
+                                                    <Grid Margin="0 15 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
@@ -65,24 +63,27 @@
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="1.4*"/>
 
                                                         </Grid.ColumnDefinitions>
                                                         <TextBlock  Grid.Column="0" Text="Device Type:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                         <TextBlock  Text="{Binding DeviceID}" Grid.Column="1"  Margin="0 0 10 0"/>
 
-                                                        <TextBlock  Grid.Column="2" Text="Primary MAC:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding PrimaryMAC}" Grid.Column="3"  Margin="0 0 10 0"/>
+                                                        <TextBlock   Grid.Column="2" Text="重启原因:" Margin="0,0,10,0" HorizontalAlignment="Right" />
+                                                        <TextBlock  Text="{Binding LasRestart}" Grid.Column="3"  Margin="0,0,10,0"/>
+
+                                                        <TextBlock  Grid.Column="4" Text="Primary MAC:" Margin="0,0,10,0" HorizontalAlignment="Right" />
+                                                        <TextBlock Text="{Binding PrimaryMacS}" Grid.Column="5"  Margin="0 0 10 0"/>
+
                                                         <TextBlock  Grid.Column="6" Text=" Device MAC:" Margin="0,0,10,0" HorizontalAlignment="Right"/>
-                                                        <TextBlock Text="{Binding DeviceMac,Mode=OneTime}" Grid.Column="7"  Margin="0 0 10 0"/>
-                                                        <TextBox Text="{Binding DeviceMac}" Grid.Column="8" Margin="0 0 10 0"/>
+                                                        <TextBlock Text="{Binding DeviceMacS}" Grid.Column="7"  Margin="0 0 10 0"/>
+                                                        <TextBox Text="{Binding DeviceMacS}" Grid.Column="8" Margin="0 0 10 0"/>
 
 
                                                         <Button x:Name="btnUpdateFactory" Content="Update Factory" Grid.Column="9"  Click="btnUpdateFactory_Click"    Margin="0,0,10,0"/>
-
                                                     </Grid>
 
-                                                    <Grid Margin="0 5 0 0">
+                                                    <Grid Margin="0 5 0 10">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
@@ -93,9 +94,9 @@
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
-
+                                                            <ColumnDefinition Width="1.4*"/>
                                                         </Grid.ColumnDefinitions>
+
                                                         <TextBlock  Grid.Column="0" Text=" 协议版本号:"  Margin="0,0,9,0" HorizontalAlignment="Right"/>
                                                         <TextBlock  Text="{Binding ProtocolVersion}" Grid.Column="1"  Margin="0,0,9.5,0"/>
 
@@ -109,38 +110,8 @@
 
                                                         <TextBlock  Text="{Binding HardwareVersion,Mode=OneTime}"  Grid.Column="7"  Margin="0,0,10,0"/>
                                                         <TextBox   Text="{Binding HardwareVersion}" Margin="0,0,10,0" Grid.Column="8"/>
-
                                                     </Grid>
-                                                    <Grid Margin="0 5 0 0">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="*"/>
 
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock   Grid.Column="0" Text="上次重启原因:" Margin="0,0,9.5,0" HorizontalAlignment="Right" />
-                                                        <TextBlock  Text="{Binding LasRestart}" Grid.Column="1"  Margin="0,0,9.5,0"/>
-
-                                                       
-
-
-
-
-                                                       
-                                                      
-
-
-
-
-
-                                                    </Grid>
                                                     <Grid Margin="0 5 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
@@ -189,9 +160,9 @@
                                                             </TextBlock.Text>
                                                         </TextBlock>
 
-                                                        <Button x:Name="btnDeleteFlash" Content="Delete Flash" Grid.Column="6" Click="btnDeleteFlash_Click"    Margin="0,0,10,0"/>
-
+                                                        <Button x:Name="btnDeleteFlash" Content="Delete Flash" Grid.Column="7" Click="btnDeleteFlash_Click"    Margin="0,0,10,0"/>
                                                     </Grid>
+
                                                     <Grid Margin="0 5 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
@@ -206,8 +177,8 @@
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
-
                                                         </Grid.ColumnDefinitions>
+
                                                         <TextBlock  Grid.Column="0" Text=" 客户码:" Margin="0,0,9.5,0" HorizontalAlignment="Right"/>
                                                         <TextBlock Text="{Binding ClientID ,Mode=OneTime}"   Grid.Column="1" Margin="0.5,0,10,0"/>
                                                         <TextBox  Text="{Binding ClientID}"  Grid.Column="2"  Margin="0.5,0,10,0"/>
@@ -221,10 +192,8 @@
                                                         <TextBox Text="{Binding Category}"   Grid.Column="8"  Margin="0.5,0,10,0"   />
                                                         <TextBlock   Grid.Column="9" Text="系统时间:" Margin="0,0,9.5,0" HorizontalAlignment="Right" />
                                                         <TextBlock  Text="{Binding RTC , StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" Grid.Column="10"  Margin="0,0,9.5,0"  Grid.ColumnSpan="2" />
-
-
-
                                                     </Grid>
+
                                                     <Grid Margin="0 5 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
@@ -239,7 +208,6 @@
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
-
                                                         </Grid.ColumnDefinitions>
 
                                                         <TextBlock   Grid.Column="0" Text="工作模式:" Margin="0,0,10,0" HorizontalAlignment="Right" />
@@ -252,9 +220,8 @@
                                                         <TextBlock Text="{Binding Frequency ,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
                                                         <TextBox  Text="{Binding Frequency}" Grid.Column="8" Margin="0 0 10 0"/>
                                                         <Button x:Name="btnUpdateGateway" Content="Update Gateway" Grid.Column="10" Click="btnUpdateGateway_Click"  Grid.ColumnSpan="2"  Margin="0,0,10,0"/>
-
-
                                                     </Grid>
+
                                                     <Grid Margin="0 5 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
@@ -285,6 +252,7 @@
 
 
                                                     </Grid>
+
                                                     <Grid Margin="0 5 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
@@ -299,7 +267,6 @@
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
-
                                                         </Grid.ColumnDefinitions>
 
                                                         <TextBlock   Grid.Column="0" Text="转发策略:" Margin="0,0,10,0" HorizontalAlignment="Right" />
@@ -311,12 +278,8 @@
                                                         <TextBlock   Grid.Column="6" Text="报警方式:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                         <TextBlock Text="{Binding AlarmStyle,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
                                                         <TextBox Text="{Binding AlarmStyle}" Grid.Column="8" Margin="0 0 10 0"/>
-                                                        <Button x:Name="btnSaveGateway" Content="Save" Grid.Column="10" Click="btnSaveGateway_Click" Margin="0 0 10 0"/>
-                                                        <Button x:Name="btnLoadGateway" Content="Load" Grid.Column="11" Click="btnLoadGateway_Click"  Margin="0 0 10 0"/>
-
-
-
                                                     </Grid>
+
                                                     <Grid Margin="0 5 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
@@ -374,7 +337,7 @@
                                                         <TextBlock   Grid.Column="6" Text="射频功率:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                         <TextBlock  Text="{Binding TXPower,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
                                                         <TextBox  Text="{Binding TXPower}" Grid.Column="8"  Margin="0 0 10 0"/>
-                                                       
+
 
 
 
@@ -435,6 +398,74 @@
 
 
                                                     </Grid>
+
+                                                    <Grid Margin="0 5 0 10">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock   Grid.Column="0" Text="配置保留位:" Margin="0,0,10,0" HorizontalAlignment="Right" />
+                                                        <TextBlock Text="{Binding ReserveString ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0" Grid.ColumnSpan="2"/>
+                                                        <TextBox Text="{Binding ReserveString}"   Grid.Column="3"  Margin="0 0 10 0" Grid.ColumnSpan="2"/>
+                                                    </Grid>
+
+                                                    <Grid Margin="0 5 0 10">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock  x:Name="tbkLabelOfDeptCode" Grid.Column="0" Text="DeptCode:" Margin="0,0,10,0" HorizontalAlignment="Right" Height="22" VerticalAlignment="Bottom" Visibility="Hidden" />
+                                                        <TextBlock x:Name="tbkDeptCode" Text=""  Grid.Column="1"  Margin="0 0 10 0" Grid.ColumnSpan="2" Visibility="Hidden"/>
+                                                        <TextBox x:Name="tbxNewDeptCode" Text=""   Grid.Column="3"  Margin="0 0 10 0" Grid.ColumnSpan="2" MaxLines="1" MaxLength="10" Visibility="Hidden"/>
+
+                                                        <Button x:Name="btnReadDeptCode" Content="Read DeptCode" Grid.Column="8" Click="btnReadDeptCode_Click"  Grid.ColumnSpan="2"  Margin="0,0,20,0" Visibility="Hidden"/>
+
+                                                        <Button x:Name="btnUpdateDeptCode" Content="Update DeptCode" Grid.Column="10" Click="btnUpdateDeptCode_Click"  Grid.ColumnSpan="2"  Margin="0,0,10,0" Visibility="Hidden"/>
+                                                    </Grid>
+
+                                                    <Grid Margin="0 10 0 0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock   Grid.Column="0" Text="APN:" Margin="0,0,10,0" HorizontalAlignment="Right" />
+                                                        <TextBlock x:Name="tbkApn" Text=""  Grid.Column="1"  Margin="0 0 10 0" Grid.ColumnSpan="2"/>
+                                                        <TextBox x:Name="tbxNewApn" Text=""   Grid.Column="3"  Margin="0 0 10 0" Grid.ColumnSpan="4" MaxLines="1" MaxLength="63"/>
+                                                    </Grid>
+
                                                     <Grid Margin="0 5 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
@@ -449,25 +480,45 @@
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
-
                                                         </Grid.ColumnDefinitions>
 
-                                                        <TextBlock   Grid.Column="0" Text="配置保留位:" Margin="0,0,10,0" HorizontalAlignment="Right" />
-                                                        <TextBlock Text="{Binding ReserveString ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0" Grid.ColumnSpan="2"/>
-                                                        <TextBox Text="{Binding ReserveString}"   Grid.Column="3"  Margin="0 0 10 0" Grid.ColumnSpan="2"/>
-                                                       
+                                                        <TextBlock   Grid.Column="0" Text="用户名:" Margin="0,0,10,0" HorizontalAlignment="Right" />
+                                                        <TextBlock x:Name="tbkUserName" Text=""  Grid.Column="1"  Margin="0 0 10 0" Grid.ColumnSpan="2"/>
+                                                        <TextBox x:Name="tbxNewUserName" Text=""   Grid.Column="3"  Margin="0 0 10 0" Grid.ColumnSpan="4" MaxLines="1" MaxLength="63"/>
 
+                                                        <Button x:Name="btnReadApn" Content="Read APN" Grid.Column="8" Click="btnReadApn_Click"  Grid.ColumnSpan="2"  Margin="0,0,20,0"/>
 
+                                                        <Button x:Name="btnSetApn" Content="Update APN" Grid.Column="10" Click="btnSetApn_Click"  Grid.ColumnSpan="2"  Margin="0,0,10,0"/>
                                                     </Grid>
-                                                   
-                                                    
+
+                                                    <Grid Margin="0 5 0 10">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock   Grid.Column="0" Text="密码:" Margin="0,0,10,0" HorizontalAlignment="Right" />
+                                                        <TextBlock x:Name="tbkPassword" Text=""  Grid.Column="1"  Margin="0 0 10 0" Grid.ColumnSpan="2"/>
+                                                        <TextBox x:Name="tbxNewPassword" Text=""   Grid.Column="3"  Margin="0 0 10 0" Grid.ColumnSpan="4" MaxLines="1" MaxLength="63"/>
+                                                    </Grid>
 
                                                 </StackPanel>
-
                                             </telerik:RadTabItem>
-                                            <telerik:RadTabItem Header=" SG5/6 Internal Sensor ">
+
+                                            <telerik:RadTabItem x:Name="RadTabItemOfInternalSensor" Header=" Internal Sensor ">
                                                 <StackPanel>
                                                     <Grid x:Name="InternalSernsor1">
+
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="*"/>
                                                             <RowDefinition Height="*"/>
@@ -494,6 +545,7 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                             </Grid.ColumnDefinitions>
+
                                                             <TextBlock   Grid.Column="0" Text="内置传感器1 " Margin="0,0,10,0" FontWeight="Bold" />
                                                             <TextBlock   Grid.Column="3" Text="启用:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding Status , Mode=OneTime}"  Grid.Column="4"  Margin="0 0 10 0"/>
@@ -501,6 +553,7 @@
 
                                                             <Button x:Name="btnUpdateSensor1" Content="Update Sensor 1" Grid.Column="10" Click="btnUpdateSensor1_Click" Grid.ColumnSpan="2"  Margin="0,0,10,0"/>
                                                         </Grid>
+
                                                         <Grid Margin="0 5 0 0" Grid.Row="1">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
@@ -515,7 +568,6 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
 
                                                             <TextBlock   Grid.Column="0" Text="Sensor MAC:" Margin="0,0,10,0" HorizontalAlignment="Right" />
@@ -532,11 +584,8 @@
 
                                                             <TextBlock   Grid.Column="8" Text="湿度:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding Humidity}"  Grid.Column="9"  Margin="0 0 10 0"/>
-
-
-
-
                                                         </Grid>
+
                                                         <Grid Margin="0 5 0 0" Grid.Row="1">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
@@ -551,7 +600,6 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
 
                                                             <TextBlock   Grid.Column="0" Text="Sensor MAC:" Margin="0,0,10,0" HorizontalAlignment="Right" />
@@ -568,12 +616,7 @@
 
                                                             <TextBlock   Grid.Column="8" Text="湿度:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding Humidity}"  Grid.Column="9"  Margin="0 0 10 0"/>
-
-
-
-
                                                         </Grid>
-
 
                                                         <Grid Margin="0 5 0 0" Grid.Row="3">
                                                             <Grid.ColumnDefinitions>
@@ -589,7 +632,6 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
 
                                                             <TextBlock   Grid.Column="0" Text="Debug:" Margin="0,0,10,0" HorizontalAlignment="Right" />
@@ -604,10 +646,8 @@
                                                             <TextBlock   Grid.Column="9" Text="存储容量:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding MaxLength,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
                                                             <TextBox   Text="{Binding MaxLength}" Grid.Column="11"  Margin="0 0 10 0"/>
-
-
-
                                                         </Grid>
+
                                                         <Grid Margin="0 5 0 0" Grid.Row="4">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
@@ -622,7 +662,6 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
 
                                                             <TextBlock   Grid.Column="0" Text="采集间隔:" Margin="0,0,10,0" HorizontalAlignment="Right" />
@@ -637,10 +676,8 @@
                                                             <TextBlock   Grid.Column="9" Text="报警间隔:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding IntervalAlarm,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding IntervalAlarm}" Grid.Column="11"  Margin="0 0 10 0"/>
-
-
-
                                                         </Grid>
+
                                                         <Grid Margin="0 5 0 0" Grid.Row="5">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
@@ -655,8 +692,8 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
+
                                                             <TextBlock   Grid.Column="0" Text="温度补偿:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding TemperatureCompensation ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding TemperatureCompensation}"  Grid.Column="2"  Margin="0 0 10 0"/>
@@ -664,16 +701,12 @@
                                                             <TextBlock  Text="{Binding HumidityCompensation ,Mode=OneTime}"  Grid.Column="4"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding HumidityCompensation}"  Grid.Column="5"  Margin="0 0 10 0"/>
 
-
                                                             <TextBlock   Grid.Column="6" Text="报警温度高:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding TemperatureWarnHigh,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding TemperatureWarnHigh}" Grid.Column="8"  Margin="0 0 10 0"/>
                                                             <TextBlock   Grid.Column="9" Text="报警温度低:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding TemperatureWarnLow,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding TemperatureWarnLow}"  Grid.Column="11"  Margin="0 0 10 0"/>
-
-
-
                                                         </Grid>
 
                                                         <Grid Margin="0 5 0 0" Grid.Row="6">
@@ -690,7 +723,6 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
                                                             <TextBlock   Grid.Column="6" Text="报警湿度高:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding HumidityWarnHigh,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
@@ -698,17 +730,11 @@
                                                             <TextBlock   Grid.Column="9" Text="报警湿度低:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding HumidityWarnLow,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding HumidityWarnLow}"  Grid.Column="11"  Margin="0 0 10 0"/>
-
-
-
                                                         </Grid>
-
-
-
-
-
                                                     </Grid>
+
                                                     <Grid x:Name="InternalSernsor2">
+
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="*"/>
                                                             <RowDefinition Height="*"/>
@@ -741,6 +767,7 @@
                                                             <TextBox  Text="{Binding Status}"  Grid.Column="5"  Margin="0 0 10 0"/>
                                                             <Button x:Name="btnUpdateSensor2" Content="Update Sensor 2" Grid.Column="10" Click="btnUpdateSensor2_Click" Grid.ColumnSpan="2"  Margin="0,0,10,0"/>
                                                         </Grid>
+
                                                         <Grid Margin="0 5 0 0" Grid.Row="1">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
@@ -755,7 +782,6 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
 
                                                             <TextBlock   Grid.Column="0" Text="Sensor MAC:" Margin="0,0,10,0" HorizontalAlignment="Right" />
@@ -772,11 +798,8 @@
 
                                                             <TextBlock   Grid.Column="8" Text="湿度:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding Humidity}"  Grid.Column="9"  Margin="0 0 10 0"/>
-
-
-
-
                                                         </Grid>
+
                                                         <Grid Margin="0 5 0 0" Grid.Row="1">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
@@ -791,7 +814,6 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
 
                                                             <TextBlock   Grid.Column="0" Text="Sensor MAC:" Margin="0,0,10,0" HorizontalAlignment="Right" />
@@ -808,12 +830,7 @@
 
                                                             <TextBlock   Grid.Column="8" Text="湿度:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding Humidity}"  Grid.Column="9"  Margin="0 0 10 0"/>
-
-
-
-
                                                         </Grid>
-
 
                                                         <Grid Margin="0 5 0 0" Grid.Row="3">
                                                             <Grid.ColumnDefinitions>
@@ -829,9 +846,7 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
-
                                                             <TextBlock   Grid.Column="0" Text="Debug:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding Debug ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding Debug}"  Grid.Column="2"  Margin="0 0 10 0"/>
@@ -844,10 +859,8 @@
                                                             <TextBlock   Grid.Column="9" Text="存储容量:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding MaxLength,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
                                                             <TextBox   Text="{Binding MaxLength}" Grid.Column="11"  Margin="0 0 10 0"/>
-
-
-
                                                         </Grid>
+
                                                         <Grid Margin="0 5 0 0" Grid.Row="4">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
@@ -877,10 +890,8 @@
                                                             <TextBlock   Grid.Column="9" Text="报警间隔:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding IntervalAlarm,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding IntervalAlarm}" Grid.Column="11"  Margin="0 0 10 0"/>
-
-
-
                                                         </Grid>
+
                                                         <Grid Margin="0 5 0 0" Grid.Row="5">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
@@ -895,7 +906,6 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
                                                             <TextBlock   Grid.Column="0" Text="温度补偿:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding TemperatureCompensation ,Mode=OneTime}"  Grid.Column="1"  Margin="0 0 10 0"/>
@@ -903,16 +913,12 @@
                                                             <TextBlock   Grid.Column="3" Text="湿度补偿:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock  Text="{Binding HumidityCompensation ,Mode=OneTime}"  Grid.Column="4"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding HumidityCompensation}"  Grid.Column="5"  Margin="0 0 10 0"/>
-
                                                             <TextBlock   Grid.Column="6" Text="报警温度高:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding TemperatureWarnHigh,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding TemperatureWarnHigh}" Grid.Column="8"  Margin="0 0 10 0"/>
                                                             <TextBlock   Grid.Column="9" Text="报警温度低:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding TemperatureWarnLow,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding TemperatureWarnLow}"  Grid.Column="11"  Margin="0 0 10 0"/>
-
-
-
                                                         </Grid>
 
                                                         <Grid Margin="0 5 0 0" Grid.Row="6">
@@ -929,7 +935,6 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="*"/>
-
                                                             </Grid.ColumnDefinitions>
                                                             <TextBlock   Grid.Column="6" Text="报警湿度高:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding HumidityWarnHigh,Mode=OneTime}"  Grid.Column="7"  Margin="0 0 10 0"/>
@@ -937,22 +942,14 @@
                                                             <TextBlock   Grid.Column="9" Text="报警湿度低:" Margin="0,0,10,0" HorizontalAlignment="Right" />
                                                             <TextBlock Text="{Binding HumidityWarnLow,Mode=OneTime}"  Grid.Column="10"  Margin="0 0 10 0"/>
                                                             <TextBox  Text="{Binding HumidityWarnLow}"  Grid.Column="11"  Margin="0 0 10 0"/>
-
-
-
                                                         </Grid>
-
-
-
-
-
                                                     </Grid>
                                                 </StackPanel>
                                             </telerik:RadTabItem>
-                                            
-                                            <telerik:RadTabItem Header=" SG5 Binding ">
-                                                <StackPanel x:Name="GatewayBinding">
-                                                    <Grid Margin="5 5 0 5">
+
+                                            <telerik:RadTabItem x:Name="RadTabItemOfSG6XCC1101" Header=" SG6X CC1101 " >
+                                                <StackPanel x:Name="SG6X1101">
+                                                    <Grid Margin="0,50,0,0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
@@ -964,10 +961,164 @@
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="*"/>
-
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
                                                         </Grid.ColumnDefinitions>
-                                                        <Button x:Name="ReadGatewayBinding" Content="Read Binding" Click="ReadGatewayBinding_Click" Grid.Column="1" Height="22"  VerticalAlignment="Top"/>
-                                                        <Button x:Name="DeleteGatewayBinding" Content="Delete Binding" Click="DeleteGatewayBinding_Click"  Grid.Column="3" Height="22"  VerticalAlignment="Top"/>
+
+                                                        <TextBlock  Grid.Column="1" Text="启用" Margin="0,0,4,0" HorizontalAlignment="Right" Padding="0,3,0,0" />
+                                                        <TextBox Grid.Column="2" x:Name="tbxOnOff" Margin="0,0,5,0" IsReadOnly="True" MaxLength="3" MaxLines="1"/>
+                                                        <TextBox Grid.Column="3" x:Name="tbxOnOffNew"  Margin="5,0,0,0" MaxLength="3" MaxLines="1"/>
+                                                        <TextBlock Grid.Column="4" Text="传输速率" Margin="0,0,4,0" HorizontalAlignment="Right" Padding="0,3,0,0" />
+                                                        <TextBox Grid.Column="5" x:Name="tbxBpsOfCC1101"    Margin="0,0,5,0" IsReadOnly="True" MaxLength="2" MaxLines="1"/>
+                                                        <TextBox Grid.Column="6" x:Name="tbxBpsOfCC1101New"    Margin="5,0,0,0" MaxLength="2" MaxLines="1"/>
+                                                        <TextBlock Grid.Column="7" Text="发射功率" Margin="0,0,4,0" HorizontalAlignment="Right" Padding="0,3,0,0" />
+                                                        <TextBox Grid.Column="8" x:Name="tbxTxPowerOfCC1101"   Margin="0,0,5,0" IsReadOnly="True" MaxLength="4" MaxLines="1"/>
+                                                        <TextBox Grid.Column="9" x:Name="tbxTxPowerOfCC1101New"  Margin="5,0,0,0" MaxLength="4" MaxLines="1"/>
+                                                        <Button Grid.Column="11" x:Name="btnReadCfgOfCC1101" Content="查询"  Click="btnReadCfgOfCC1101_Click"  Margin="0"/>
+                                                    </Grid>
+
+                                                    <Grid Margin="0,10,0,0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="0.4*"/>
+                                                            <ColumnDefinition Width="0.9*"/>
+                                                            <ColumnDefinition Width="0.4*"/>
+                                                            <ColumnDefinition Width="0.9*"/>
+                                                            <ColumnDefinition Width="0.4*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock  Grid.Column="1" Text="客户码" Margin="0,0,4,0" HorizontalAlignment="Right" Padding="0,3,0,0" />
+                                                        <TextBox Grid.Column="2" x:Name="tbxCustomer" Margin="0,0,5,0" IsReadOnly="True" MaxLength="5" MaxLines="1"/>
+                                                        <TextBox Grid.Column="3" x:Name="tbxCustomerNew"  Margin="5,0,0,0" MaxLength="5" MaxLines="1"/>
+                                                        <TextBlock Grid.Column="4" Text="传输频段" Margin="0,0,4,0" HorizontalAlignment="Right" Padding="0,3,0,0" />
+                                                        <TextBox Grid.Column="5" x:Name="tbxFreqOfCC1101"    Margin="0,0,5,0" MaxLength="9" MaxLines="1" IsReadOnly="True" Padding="0,2" FontSize="11"/>
+                                                        <TextBox Grid.Column="6" x:Name="tbxFreqOfCC1101New"    Margin="5,0,0,0" MaxLength="9" MaxLines="1" Padding="0,2" FontSize="11"/>
+                                                        <TextBlock Grid.Column="7" Text="GDO2 XT" Margin="0,0,4,0" HorizontalAlignment="Right" Padding="0,3,0,0" />
+                                                        <TextBox Grid.Column="8" x:Name="tbxXtOfCC1101"   Margin="0,0,5,0" IsReadOnly="True" MaxLength="3" MaxLines="1"/>
+                                                        <TextBox Grid.Column="9" x:Name="tbxXtOfCC1101New"  Margin="5,0,0,0" MaxLength="3" MaxLines="1"/>
+                                                        <Button Grid.Column="11" x:Name="btnCopyCfg" Content="复制"  Click="btnCopyCfg_Click"  Margin="0"/>
+                                                        <Button Grid.Column="13" x:Name="btnClearCfg" Content="清空"  Click="btnClearCfg_Click"  Margin="0"/>
+                                                    </Grid>
+
+                                                    <Grid Margin="0,10,0,0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock  Grid.Column="1" Text="保留" Margin="0,0,4,0" HorizontalAlignment="Right" Padding="0,3,0,0" />
+                                                        <TextBox Grid.Column="2" x:Name="tbxReserved" Margin="0,0,5,0" IsReadOnly="True" MaxLength="5" MaxLines="1"/>
+                                                        <TextBox Grid.Column="3" x:Name="tbxReservedNew"  Margin="5,0,0,0" MaxLength="5" MaxLines="1"/>
+                                                        <Button Grid.Column="11" x:Name="btnSetCfgOfCC1101" Content="修改"  Click="btnSetCfgOfCC1101_Click"  Margin="0"/>
+                                                    </Grid>
+
+                                                </StackPanel>
+                                            </telerik:RadTabItem>
+
+                                            <telerik:RadTabItem x:Name="RadTabItemOfBsl" Header=" 升级固件 " >
+                                                <StackPanel x:Name="BSL">
+
+                                                    <Grid Margin="0,30,0,0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="5*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="0.8*"/>
+                                                            <ColumnDefinition Width="0.6*"/>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Button Grid.Column="1" x:Name="btnClearLoadStatus" Margin="0,0,5,0" Content="Clear Status"  Click="btnClearLoadStatus_Click" />
+                                                        <TextBlock  Grid.Column="2" Text="Flash Image" Margin="0,3,4,0" HorizontalAlignment="Right" Padding="0,0,0,0" />
+                                                        <TextBox Grid.Column="3" x:Name="tbxLoadImage"  Margin="0,0,0,0" MaxLines="1" IsReadOnly="True" />
+                                                        <Button Grid.Column="4" x:Name="btnBrowse" Margin="10,0,5,0" Content="Browse"  Click="btnBrowse_Click"  />
+                                                        <Button Grid.Column="5" x:Name="btnLoadImage" Margin="5,0,10,0" Content="Load Image"  Click="btnLoadImage_Click" />
+                                                        <CheckBox Grid.Column="6" x:Name="cbxOnlyLoadImage" Content="跳过查询" Margin="8,0,0,0"/>
+                                                        <TextBlock  Grid.Column="7" x:Name="tbkCount" Text="0" Margin="0,1,4,0" HorizontalAlignment="Right" Padding="0,0,0,0" FontSize="16" />                    
+                                                    </Grid>
+
+                                                    <Grid Margin="0,20,0,0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="5*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="0.8*"/>
+                                                            <ColumnDefinition Width="0.6*"/>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBox Grid.Column="1" x:Name="tbxLoadStatus"  Margin="0,0,0,-80" Grid.ColumnSpan="7" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="False" IsReadOnly="True" MaxLines="6" HorizontalScrollBarVisibility="Auto"/>
+                                                    </Grid>
+
+                                                    <Grid Margin="0,90,0,0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="5*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="0.8*"/>
+                                                            <ColumnDefinition Width="0.6*"/>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBox Grid.Column="1" x:Name="tbxLoadStatus2"  Margin="0,0,0,-240" Grid.ColumnSpan="7" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="False" IsReadOnly="True" MaxLines="16" HorizontalScrollBarVisibility="Auto" />
+                                                    </Grid>
+
+                                                </StackPanel>
+                                            </telerik:RadTabItem>
+
+                                            <telerik:RadTabItem x:Name="RadTabItemOfBind" Header=" Bind " Visibility="Hidden">
+                                                <StackPanel x:Name="Bind">
+
+                                                    <Grid Margin="3 10 3 8">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="2*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Button Grid.Column="1" x:Name="ReadGatewayBinding" Content="读取"  Click="ReadGatewayBinding_Click"  Margin="0"/>
+                                                        <Button Grid.Column="3" x:Name="btnAddBind_" Content="添加"  Click="btnAddBind_Click"  Margin="0"/>
+                                                        <Button Grid.Column="5" x:Name="DeleteGatewayBinding" Content="删除"  Click="DeleteGatewayBinding_Click"  Margin="0"/>
+                                                        <Button Grid.Column="7" x:Name="btnDeleteAllBind_" Content="删除所有"  Click="btnDeleteAllBind_Click"  Margin="0"/>
+                                                        <Button Grid.Column="9" x:Name="btnDeleteAndAddBind_" Content="删除所有再添加"  Click="btnDeleteAndAddBind_Click"  Margin="0"/>
                                                     </Grid>
 
                                                     <telerik:RadGridView x:Name="RadGridView1" GroupRenderMode="Flat" 
@@ -979,6 +1130,7 @@
                                                 </StackPanel>
 
                                             </telerik:RadTabItem>
+
                                         </telerik:RadTabControl>
                                     </Grid>
 
@@ -989,8 +1141,6 @@
                     </telerik:RadPaneGroup>
                 </telerik:RadDocking.DocumentHost>
             </telerik:RadDocking>
-
-
         </Grid>
     </Grid>
 </Window>

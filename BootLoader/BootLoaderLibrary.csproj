@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{761C123A-2601-462D-AE0D-FACEA330BCA8}</ProjectGuid>
+    <ProjectGuid>{1DE60C6F-8371-44D0-8882-E25DAF76A361}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hyperwsn.Protocol</RootNamespace>
-    <AssemblyName>Hyperwsn.Protocol</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>BootLoader</RootNamespace>
+    <AssemblyName>BootLoader</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -36,25 +36,16 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BindingAnalyse.cs" />
-    <Compile Include="Device.cs" />
-    <Compile Include="DeviceHelper.cs" />
-    <Compile Include="Gateway.cs" />
-    <Compile Include="InternalSensor.cs" />
-    <Compile Include="M1.cs" />
-    <Compile Include="MyCustomFxn.cs" />
+    <Compile Include="BootLoader.cs" />
+    <Compile Include="BootLoaderEventArgs.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sensor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Hyperwsn.Comm\Hyperwsn.Comm.csproj">
-      <Project>{c9cdbef5-6a4f-4352-b275-a3b7e8b49517}</Project>
-      <Name>Hyperwsn.Comm</Name>
-    </ProjectReference>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

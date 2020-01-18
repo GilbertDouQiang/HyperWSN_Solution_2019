@@ -60,12 +60,13 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -129,7 +130,6 @@
     </Reference>
     <Reference Include="Telerik.Windows.Themes.Office_Black">
       <HintPath>..\lib\RCWPF\2018.2.620.45.NoXaml\Telerik.Windows.Themes.Office_Black.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Telerik.Windows.Zip, Version=2018.2.619.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <HintPath>..\lib\RCWPF\2018.2.620.45.NoXaml\Telerik.Windows.Zip.dll</HintPath>
@@ -144,6 +144,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="readMultiLine.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -188,6 +189,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BootLoader\BootLoaderLibrary.csproj">
+      <Project>{1de60c6f-8371-44d0-8882-e25daf76a361}</Project>
+      <Name>BootLoaderLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Hyperwsn.Comm\Hyperwsn.Comm.csproj">
       <Project>{c9cdbef5-6a4f-4352-b275-a3b7e8b49517}</Project>
       <Name>Hyperwsn.Comm</Name>
@@ -204,7 +209,7 @@
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 和 x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

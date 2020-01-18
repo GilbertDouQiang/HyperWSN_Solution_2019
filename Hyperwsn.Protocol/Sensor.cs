@@ -57,7 +57,9 @@ namespace Hyperwsn.Protocol
         public int IntervalAlarm { get; set; }
 
 
-
-
+        /// <summary>
+        /// 系统时间
+        /// </summary>
+        public DateTime SystemTime { get; set; }
     }
 }

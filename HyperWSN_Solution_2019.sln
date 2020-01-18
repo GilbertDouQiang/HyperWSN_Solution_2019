@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyperwsn.ProtocolTests", "H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFBindingDemo", "WPFBindingDemo\WPFBindingDemo.csproj", "{7D8A37B9-7028-45CB-A067-32E827C399B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BootLoaderLibrary", "BootLoader\BootLoaderLibrary.csproj", "{1DE60C6F-8371-44D0-8882-E25DAF76A361}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{7D8A37B9-7028-45CB-A067-32E827C399B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D8A37B9-7028-45CB-A067-32E827C399B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D8A37B9-7028-45CB-A067-32E827C399B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DE60C6F-8371-44D0-8882-E25DAF76A361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DE60C6F-8371-44D0-8882-E25DAF76A361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DE60C6F-8371-44D0-8882-E25DAF76A361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DE60C6F-8371-44D0-8882-E25DAF76A361}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
