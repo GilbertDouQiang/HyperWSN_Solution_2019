@@ -253,6 +253,16 @@ namespace Hyperwsn.Protocol
             return (byte)((iValue / 10 * 0x10) + (iValue % 10));
         }
 
+        static public byte DecimalToBcd(int iValue)
+        {
+            if (iValue > 99)
+            {
+                return 0;       // 输入的数值无法转换为BCD码
+            }
+
+            return (byte)((iValue / 10 * 0x10) + (iValue % 10));
+        }
+
         /// <summary>
         /// 将输入的BCD码数值转换为Decimal数值
         /// </summary>
@@ -307,6 +317,19 @@ namespace Hyperwsn.Protocol
             hexString = strB.ToString();
 
             return hexString;
+        }
+
+        static public byte[] IpStr2ByteBuf(string ipStr)
+        {   
+            string[] ipStrCell = ipStr.Split('.');
+
+            byte[] ipByteBuf = new byte[4];
+            ipByteBuf[0] = byte.Parse(ipStrCell[0]);
+            ipByteBuf[1] = byte.Parse(ipStrCell[1]);
+            ipByteBuf[2] = byte.Parse(ipStrCell[2]);
+            ipByteBuf[3] = byte.Parse(ipStrCell[3]);
+
+            return ipByteBuf;
         }
     }
 }

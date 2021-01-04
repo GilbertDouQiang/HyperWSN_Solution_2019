@@ -32,7 +32,7 @@ namespace Hyperwsn.Protocol
             M1_Beetech = 0x5D,          // M1_Beetech:CC1310+W25Q16CL+SHT30+CP2102
             AlertCC1310 = 0x5E,         // Alert(CC1310)
             SG5CC1310 = 0x5F,           // SG5(CC1310):MSP432+CC1310+W25Q256FV+LCD+M26+泰斗+CP2102
-            SG5MSP432 = 0x60,            // SG5(MSP432):MSP432+CC1310+W25Q256FV+LCD+M26+泰斗+CP2102
+            SG5 = 0x60,                 // SG5(MSP432):MSP432+CC1310+W25Q256FV+LCD+M26+泰斗+CP2102
             SC = 0x61,                  // SC: MSP430F5529+ADG712
             TB2 = 0x62,                 // TB2: CC1310+CMT2300A
             USB2 = 0x63,                // USB2: CC1310+CP2102
@@ -40,18 +40,18 @@ namespace Hyperwsn.Protocol
             SG5CC1310SHT30 = 0x65,      // SG5_CC1310_SHT30
             SG5CC1310NTC = 0x66,        // SG5_CC1310_NTC
             SG5CC1310PT100 = 0x67,      // SG5_CC1310_PT100
-            SG6MSP432 = 0x68,           // SG6(MSP432):MSP432+CC1310+W25Q256FV+LCD+SIM7600CE+CP2102
+            SG6 = 0x68,                 // SG6(MSP432):MSP432+CC1310+W25Q256FV+LCD+SIM7600CE+CP2102
             SG6CC1310 = 0x69,           // SG6(CC1310):MSP432+CC1310+W25Q256FV+LCD+SIM7600CE+CP2102
-            SG6PMSP432 = 0x6A,          // SG6P(MSP432):MSP432+CC1310(PA)+W25Q256FV+LCD+SIM7600CE+CP2102+CC2640+ADXL362
+            SG6P = 0x6A,                // SG6P(MSP432):MSP432+CC1310(PA)+W25Q256FV+LCD+SIM7600CE+CP2102+CC2640+ADXL362
             SG6PCC1310 = 0x6B,          // SG6P(CC1310):MSP432+CC1310(PA)+W25Q256FV+LCD+SIM7600CE+CP2102+CC2640+ADXL362
             SG6PCC2640 = 0x6C,          // SG6P(CC2640):MSP432+CC1310(PA)+W25Q256FV+LCD+SIM7600CE+CP2102+CC2640+ADXL362
             M6 = 0x6D,                  // M6:CC1310(PA)+W25Q16CL+SHT30+MCP144+段码屏
             M2_PT100 = 0x6E,            // M2:CC1310+W25Q16CL+Buzzer+段码屏+ADS1220+PT100
             M2_SHT30 = 0x6F,            // M2:CC1310+W25Q16CL+Buzzer+段码屏+SHT30
             PM = 0x70,                  // PM: CC1310+SKY66115
-            LBGZ_TC04MSP432 = 0x71,     // LBGZ_TC04(MSP432):MSP432+CC1310(PA)+W25Q256FV+LCD+SIM7600CE+CP2102
+            LBGZ_TC04 = 0x71,           // LBGZ_TC04(MSP432):MSP432+CC1310(PA)+W25Q256FV+LCD+SIM7600CE+CP2102
             LBGZ_TC04CC1310 = 0x72,     // LBGZ_TC04(CC1310):MSP432+CC1310(PA)+W25Q256FV+LCD+SIM7600CE+CP2102
-            SG6XMSP432 = 0x73,          // SG6X(MSP432):MSP432+CC1310(PA)+CC1101+W25Q256FV+LCD+SIM7600CE+CP2102+CC2640+ADXL362
+            SG6XM = 0x73,               // SG6X(MSP432):MSP432+CC1310(PA)+CC1101+W25Q256FV+LCD+SIM7600CE+CP2102+CC2640+ADXL362
             SG6XCC1310 = 0x74,          // SG6X(CC1310):MSP432+CC1310(PA)+CC1101+W25Q256FV+LCD+SIM7600CE+CP2102+CC2640+ADXL362
             SG6XCC2640 = 0x75,          // SG6X(CC2640):MSP432+CC1310(PA)+CC1101+W25Q256FV+LCD+SIM7600CE+CP2102+CC2640+ADXL362
             S2 = 0x76,                  // S2: MSP430F5529+CC1101+PM25LD020+MAX31855
@@ -60,6 +60,29 @@ namespace Hyperwsn.Protocol
             M30 = 0x79,                 // M30:MSP432+CC1310+W25Q256FV+LCD+CP2102
             AO2 = 0x7A,                 // AO2:CC1310+W25Q16CL+SHT30+LMP91000+02
             RT = 0x7B,                  // RT:CC1352P+W25Q16CL+TPL5010
+            GMP = 0x7C,                 // GMP:CC1352P+GD25VQ32C+TPL5010，支持蓝牙
+            ZQM1 = 0x7D,                // ZQM1:CC1310+GD25VQ32C+SHT30
+            M5 = 0x7E,                  // M5:CC1310+GD25VQ32C+HP303S(BMP280) 
+            M40 = 0x7F,                 // （门磁）M40: CC1310+GD25VQ32C+干簧管
+            M20 = 0x80,                 // M20:M20+3SHT30
+            M1X = 0x81,                 // M1X: CC1310+W25Q16CL+SHT30+TPL5010
+            ZQSG1CC1352P = 0x82,        // ZQSG1(CC1352P)
+            ZQSG1 = 0x83,               // ZQSG1(MSP432)
+            M10 = 0x84,                 // M10
+            L1 = 0x85,                  // L1(光照传感器)
+            SG6M = 0x86,                // SG6M(MSP432)
+            ZQSG2 = 0x88,               // ZQSG2(MSP432)
+            ESK = 0x8A,                 // ESK
+            IR20 = 0x8B,                // IR20
+            M44 = 0x8C,                 // M44(MSP432)
+            WP = 0x8E,                  // WP
+            AC2 = 0x8F,                 // AC2
+            C1 = 0x92,                  // C1: 爱立信
+            SG10 = 0x93,                // SG10
+            ZQSG6M = 0x94,              // ZQSG6M
+            SG6E = 0x9A,                // SG6E
+            M60 = 0x9F,                 // M60
+            MaxValue,                   // 此枚举类型的最大值
         }
 
         /// <summary>
@@ -80,24 +103,26 @@ namespace Hyperwsn.Protocol
         ********************************************************************************************************************/
 
         public int DisplayID { get; set; }
+
         /// <summary>
         /// 如果设备包含电池，代表电池的电压
         /// </summary>
         public double Volt { get; set; }
 
         /// <summary>
-        /// 设备名称
+        /// 是否连接了充电器
         /// </summary>
-        public string Name { get; set; }
-        /// <summary>
-        /// 设备的描述
-        /// </summary>
-        public string Descript { get; set; }
+        public bool LinkCharge { get; set; }
 
         /// <summary>
         /// 设备代号，如M1 代号为51
         /// </summary>
         public String DeviceID { get; set; }
+
+        /// <summary>
+        /// 设备名称
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// 设备类型
@@ -130,27 +155,29 @@ namespace Hyperwsn.Protocol
         public String DeviceMacS { get; set; }
 
 
-        public string DeviceNewMAC { get; set; }
+        public string DeviceNewMacS { get; set; }
+
+        public UInt32 DeviceNewMacV { get; set; }
 
         /// <summary>
-        /// DQ: 硬件版本
+        /// 硬件版本
         /// </summary>
         public UInt32 HwRevisionV { get; set; }
 
         /// <summary>
         /// 硬件版本
         /// </summary>
-        public string HwVersionS { get; set; }
+        public string HwRevisionS { get; set; }
 
         /// <summary>
-        /// DQ: 软件版本
+        /// 软件版本
         /// </summary>
         public UInt16 SwRevisionV { get; set; }
 
         /// <summary>
         /// 软件版本
         /// </summary>
-        public string SwVersionS { get; set; }
+        public string SwRevisionS { get; set; }
 
         /// <summary>
         /// DQ: 客户码
@@ -178,33 +205,28 @@ namespace Hyperwsn.Protocol
         public String SourceData { get; set; }
 
         /// <summary>
-        /// 客户识别码
+        /// 协议版本
         /// </summary>
-        public String ClientID { get; set; }
-
-        public byte ProtocolVersion { get; set; }
-
-        public string HardwareVersion { get; set; }
-
-        public string SoftwareVersion { get; set; }
-
-        public string Debug { get; set; }
+        public byte Protocol { get; set; }
 
         public byte Category { get; set; }
 
-        public int Interval { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public UInt16 Interval { get; set; }
 
         public DateTime Calendar { get; set; }
 
         /// <summary>
         /// Sensor的工作模式
         /// </summary>
-        public byte WorkFunction { get; set; } //Pattern in protocol
+        public byte Pattern { get; set; } 
 
         /// <summary>
         /// 传输速率
         /// </summary>
-        public byte SymbolRate { get; set; }
+        public byte bps { get; set; }
 
         /// <summary>
         /// 设备的最后传输日期和时间
@@ -214,7 +236,7 @@ namespace Hyperwsn.Protocol
         /// <summary>
         /// 传输频率
         /// </summary>
-        public byte Frequency { get; set; }
+        public byte channel { get; set; }
 
 
         /*********************************************************************************************************************
@@ -236,199 +258,14 @@ namespace Hyperwsn.Protocol
             DeviceTypeV = deviceType;
             DeviceTypeS = deviceType.ToString("X2");
 
-            switch (deviceType)
+            if (deviceType >= (byte)DeviceType.MaxValue)
             {
-                case 0x51:
-                    {
-                        Name = "M1";
-                        break;
-                    }
-                case 0x52:
-                    {
-                        Name = "SG2";
-                        break;
-                    }
-                case 0x53:
-                    {
-                        Name = "M1P";
-                        break;
-                    }
-                case 0x54:
-                    {
-                        Name = "USB_MSP430+CC1101";
-                        break;
-                    }
-                case 0x55:
-                    {
-                        Name = "GM";
-                        break;
-                    }
-                case 0x56:
-                    {
-                        Name = "USB_MSP430+CC1310";
-                        break;
-                    }
-                case 0x57:
-                    {
-                        Name = "M2";
-                        break;
-                    }
-                case 0x58:
-                    {
-                        Name = "M4(SK)";
-                        break;
-                    }
-                case 0x59:
-                    {
-                        Name = "Alert";
-                        break;
-                    }
-                case 0x5A:
-                    {
-                        Name = "S1";
-                        break;
-                    }
-                case 0x5B:
-                    {
-                        Name = "SGA3";
-                        break;
-                    }
-                case 0x5C:
-                    {
-                        Name = "M1_NTC";
-                        break;
-                    }
-                case 0x5D:
-                    {
-                        Name = "M1_Beetech";
-                        break;
-                    }
-                case 0x60:
-                    {
-                        Name = "SG5";
-                        break;
-                    }
-                case 0x61:
-                    {
-                        Name = "SC";
-                        break;
-                    }
-                case 0x62:
-                    {
-                        Name = "TB2";
-                        break;
-                    }
-                case 0x63:
-                    {
-                        Name = "USB_CC1310+CP2102";
-                        break;
-                    }
-                case 0x64:
-                    {
-                        Name = "BB";
-                        break;
-                    }
-                case 0x65:
-                    {
-                        Name = "SGX_SHT30";
-                        break;
-                    }
-                case 0x66:
-                    {
-                        Name = "SGX_NTC";
-                        break;
-                    }
-                case 0x67:
-                    {
-                        Name = "SGX_PT100";
-                        break;
-                    }
-                case 0x68:
-                    {
-                        Name = "SG6";
-                        break;
-                    }
-                case 0x6A:
-                    {
-                        Name = "SG6P";
-                        break;
-                    }
-                case 0x6D:
-                    {
-                        Name = "M6";
-                        break;
-                    }
-                case 0x6E:
-                    {
-                        Name = "M2_PT100";
-                        break;
-                    }
-                case 0x6F:
-                    {
-                        Name = "M2_SHT30";
-                        break;
-                    }
-                case 0x70:
-                    {
-                        Name = "PM";
-                        break;
-                    }
-                case 0x77:
-                    {
-                        Name = "M9(振动)";
-                        break;
-                    }
-                case 0x7A:
-                    {
-                        Name = "AO2";
-                        break;
-                    }
-                case 0x7D:
-                    {
-                        Name = "M1_Zigin";
-                        break;
-                    }
-                case 0x7F:
-                    {
-                        Name = "M40（门磁）";
-                        break;
-                    }
-                case 0x80:
-                    {
-                        Name = "M20";
-                        break;
-                    }
-                case 0x81:
-                    {
-                        Name = "M1X";
-                        break;
-                    }
-                case 0x82:
-                    {
-                        Name = "ZQSG1CC1352P";
-                        break;
-                    }
-                case 0x83:
-                    {
-                        Name = "ZQSG1MSP432";
-                        break;
-                    }
-                case 0x84:
-                    {
-                        Name = "M10";
-                        break;
-                    }
-                case 0x85:
-                    {
-                        Name = "L1";
-                        break;
-                    }
-                default:
-                    {
-                        Name = deviceType.ToString("X2");
-                        break;
-                    }
+                Name = DeviceTypeS;
             }
+            else
+            {
+                Name = ((DeviceType)deviceType).ToString();
+            }          
 
             return Name;
         }
@@ -439,7 +276,7 @@ namespace Hyperwsn.Protocol
         /// <param name="deviceType"></param>
         public void SetDevicePrimaryMac(byte[] SrcData, UInt16 StartIndex)
         {
-            PrimaryMacS = CommArithmetic.DecodeMAC(SrcData, StartIndex);
+            PrimaryMacS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 4);
 
             PrimaryMacV = (UInt32)(SrcData[StartIndex] * 256 * 256 * 256 + SrcData[StartIndex + 1] * 256 * 256 + SrcData[StartIndex + 2] * 256 + SrcData[StartIndex + 3]);
         }
@@ -450,9 +287,33 @@ namespace Hyperwsn.Protocol
         /// <param name="deviceType"></param>
         public void SetDeviceMac(byte[] SrcData, UInt16 StartIndex)
         {
-            DeviceMacS = CommArithmetic.DecodeMAC(SrcData, StartIndex);
+            DeviceMacS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 4);
 
             DeviceMacV = (UInt32)(SrcData[StartIndex] * 256 * 256 * 256 + SrcData[StartIndex + 1] * 256 * 256 + SrcData[StartIndex + 2] * 256 + SrcData[StartIndex + 3]);
+        }
+
+        /// <summary>
+        /// 设置硬件版本
+        /// </summary>
+        /// <param name="SrcData"></param>
+        /// <param name="StartIndex"></param>
+        public void SetHardwareRevision(byte[] SrcData, UInt16 StartIndex)
+        {
+            HwRevisionS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 4);
+
+            HwRevisionV = (UInt32)(SrcData[StartIndex] * 256 * 256 * 256 + SrcData[StartIndex + 1] * 256 * 256 + SrcData[StartIndex + 2] * 256 + SrcData[StartIndex + 3]);
+        }
+
+        /// <summary>
+        /// 设置软件版本
+        /// </summary>
+        /// <param name="SrcData"></param>
+        /// <param name="StartIndex"></param>
+        public void SetSoftwareRevision(byte[] SrcData, UInt16 StartIndex)
+        {
+            SwRevisionS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 2);
+
+            SwRevisionV = (UInt16)(SrcData[StartIndex] * 256 + SrcData[StartIndex + 1]);
         }
 
         /// <summary>
@@ -461,9 +322,21 @@ namespace Hyperwsn.Protocol
         /// <param name="deviceType"></param>
         public void SetDeviceCustomer(byte[] SrcData, UInt16 StartIndex)
         {
-            CustomerS = CommArithmetic.DecodeClientID(SrcData, StartIndex);
+            CustomerS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 2);
 
             CustomerV = (UInt16)(SrcData[StartIndex] * 256 + SrcData[StartIndex + 1]);
+        }
+
+        /// <summary>
+        /// 设置Debug
+        /// </summary>
+        /// <param name="SrcData"></param>
+        /// <param name="StartIndex"></param>
+        public void SetDebug(byte[] SrcData, UInt16 StartIndex)
+        {
+            DebugS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 2);
+
+            DebugV = (UInt16)(SrcData[StartIndex] * 256 + SrcData[StartIndex + 1]);
         }
     }
 }

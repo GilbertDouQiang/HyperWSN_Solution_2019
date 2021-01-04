@@ -8,71 +8,64 @@ namespace Hyperwsn.Protocol
 {
     public class InternalSensor:Sensor
     {
-       /// <summary>
-       /// 内置传感器类型，温度，温湿度，低温
-       /// </summary>
+        /// <summary>
+        /// 传感器的编号
+        /// </summary>
+        public byte iX { get; set; }
+
+        /// <summary>
+        /// 内置传感器类型，温度，温湿度，低温
+        /// </summary>
         public byte SensorType { get; set; }
 
         /// <summary>
-        /// 内置传感器是否在线
+        /// 内置传感器是否在线：0 = 未接入传感器；未检测到传感器；不支持外接传感器；传感器类型不匹配；1 = 已检测到传感器；传感器在线；
         /// </summary>
-        public byte SensorOnline { get; set; }
-
-
-
-        public double Temperature { get; set; }
-
-        public double Humidity { get; set; }
+        public byte Online { get; set; }
 
         /// <summary>
-        /// 温度预警上限
+        /// 0 = Off； 1 = On；
         /// </summary>
-        public double TemperatureInfoHigh { get; set; }
-        /// <summary>
-        /// 温度预警下限
-        /// </summary>
-        public double TemperatureInfoLow { get; set; }
+        public byte OnOff { get; set; }
 
         /// <summary>
-        /// 温度报警上限
+        /// 温度
         /// </summary>
-        public double TemperatureWarnHigh { get; set; }
+        public double Temp { get; set; }
+
+        /// <summary>
+        /// 湿度
+        /// </summary>
+        public double Hum { get; set; }
 
         /// <summary>
         /// 温度报警下限
         /// </summary>
-        public double TemperatureWarnLow { get; set; }
+        public double TempThrLow { get; set; }
 
         /// <summary>
-        /// 湿度预警上限
+        /// 温度报警上限
         /// </summary>
-        public double HumidityInfoHigh { get; set; }
-        /// <summary>
-        /// 湿度预警下限
-        /// </summary>
-        public double HumidityInfoLow { get; set; }
-
-        /// <summary>
-        /// 湿度报警上限
-        /// </summary>有
-        public double HumidityWarnHigh { get; set; }
+        public double TempThrHigh { get; set; }
 
         /// <summary>
         /// 湿度报警下限
         /// </summary>
-        public double HumidityWarnLow { get; set; }
+        public double HumThrLow { get; set; }
+
+        /// <summary>
+        /// 湿度报警上限
+        /// </summary>
+        public double HumThrHigh { get; set; }        
 
         /// <summary>
         /// 温度补偿
         /// </summary>
-        public double TemperatureCompensation { get; set; }
+        public double TempCompensation { get; set; }
 
         /// <summary>
         /// 湿度补偿
         /// </summary>
-        public double HumidityCompensation { get; set; }
-
-        public byte Status { get; set; }
-
+        public double HumCompensation { get; set; }
     }
 }

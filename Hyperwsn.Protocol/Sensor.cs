@@ -7,33 +7,40 @@ namespace Hyperwsn.Protocol
 {
     public class Sensor:Device
     {
-        public int SensorSN { get; set; }
+        public UInt16 SensorSN { get; set; }
 
         public DateTime SensorCollectTime { get; set; }
        
         public DateTime SensorTransforTime { get; set; }
 
-        public double RSSI { get; set; }
-        public byte TXPower { get; set; }
+        public Int16 RSSI { get; set; }
+
+        public byte TxPower { get; set; }
+
+        public byte LastHistory { get; set; }
+
+        public byte AlertStatusBySs { get; set; }
+
+        /// <summary>
+        /// 报警项
+        /// </summary>
+        public byte AlertItemBySs { get; set; }
 
         /// <summary>
         /// 采集和发送的倍数，最小为1，最大为8
         /// </summary>
-        public byte TXTimers { get; set; }
-
-        
+        public byte SampleSend { get; set; }
 
         public string FlashID { get; set; }
 
         public Int32 FlashFront { get; set; }
+
         public Int32 FlashRear { get; set; }
         public Int32 FlashQueueLength { get; set; }
 
-        public string DebugString { get; set; }
-
         public byte MaxLength { get; set; }
 
-        public double ICTemperature { get; set; }
+        public Int16 ICTemperature { get; set; }
 
         /// <summary>
         /// 测量用电流
@@ -41,21 +48,21 @@ namespace Hyperwsn.Protocol
         public double MeasureDCI { get; set; }
 
         public int ErrorCode { get; set; }
-        /// <summary>
-        /// 传感器正常采集时间
-        /// </summary>
-        public int IntervalNormal { get; set; }
 
         /// <summary>
-        /// 传感器预警时采集时间
+        /// 正常状态下的传输时间
         /// </summary>
-        public int IntervalWarning { get; set; }
+        public UInt16 IntervalOfNormal { get; set; }
 
         /// <summary>
-        /// 传感器报警时采集时间
+        /// 预警状态下的传输间隔
         /// </summary>
-        public int IntervalAlarm { get; set; }
+        public UInt16 IntervalOfWarn { get; set; }
 
+        /// <summary>
+        /// 报警状态下的传输间隔
+        /// </summary>
+        public UInt16 IntervalOfAlert { get; set; }
 
         /// <summary>
         /// 系统时间

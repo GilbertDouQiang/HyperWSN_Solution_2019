@@ -16,14 +16,27 @@ namespace Hyperwsn.SerialPortLibrary
     public class SerialPortHelper
     {
         private SerialPort port;
-        bool isTimeout = false; //读写的超时控制标志位
-        System.Timers.Timer timer; // 读写超时控制的计时器
-        int isGetResult = 0;   //是否获得反馈信息的标志位
-        byte[] receivedBytes;  //从串口接收到的数据字节数组
 
-        private int _BaudRate = 115200; //通信速率初始值
-        private int _ReadBufferSize = 16384; //写缓冲器大小
-        private int _WriteBufferSize = 16384; //读缓冲器大小
+        bool isTimeout = false;                     // 读写的超时控制标志位
+        System.Timers.Timer timer;                  // 读写超时控制的计时器
+
+        bool AfterReceivedTimeout = false;          // 计时器超时标志位
+        System.Timers.Timer AfterReceivedTimer;     // 收到数据后，开始计时，若是一定时间内没有再收到新的数据，则退出接收；
+
+        bool BeforeReceivedTimeout = false;          // 计时器超时标志位
+        System.Timers.Timer BeforeReceivedTimer;     // 在进入接收后开始计时，若一段时间内没有收到任何内容，则超时退出；
+
+        int isGetResult = 0;                        // 是否获得反馈信息的标志位
+
+        string RxExpStr;                            // 接收过程中，希望收到的字符串
+        bool ReceivedExpStr = false;                // 是否已经收到了期望的字符串了
+
+        string RxByteStr;                           // 从串口接收到的数据字节数组的字符串形式，可累计
+        byte[] receivedBytes;                       // 从串口接收到的数据字节数组
+
+        private int _BaudRate = 115200;             // 通信速率初始值
+        private int _ReadBufferSize = 16384;        // 写缓冲器大小
+        private int _WriteBufferSize = 16384;       // 读缓冲器大小
 
         public bool IsLogger { get; set; }
 
@@ -79,8 +92,7 @@ namespace Hyperwsn.SerialPortLibrary
 
         public static String[] GetSerialPorts()
         {
-
-            String[] ss = MulGetHardwareInfo(HardwareEnum.Win32_SerialPort, "Name");//调用方式通过WMI获取COM端口 
+            String[] ss = MulGetHardwareInfo(HardwareEnum.Win32_SerialPort, "Name");    //调用方式通过WMI获取COM端口 
             return ss;
         }
 
@@ -114,7 +126,7 @@ namespace Hyperwsn.SerialPortLibrary
             //port1.Handshake = Handshake.RequestToSend;//控制协议
             port.ReadBufferSize = ReadBufferSize;
             port.WriteBufferSize = WriteBufferSize;
-            //port1.ReceivedBytesThreshold = 4;//设置 DataReceived 事件发生前内部输入缓冲区中的字节数
+
             port.DataReceived += Port_DataReceived; ; //Port1_DataReceived;//DataReceived事件委托
         }
 
@@ -126,7 +138,7 @@ namespace Hyperwsn.SerialPortLibrary
         {
             if (port == null)
             {
-                throw new ApplicationException("Port not initial.");
+                return false;
             }
 
             if (port.IsOpen)
@@ -135,13 +147,21 @@ namespace Hyperwsn.SerialPortLibrary
             }
 
             try
-            {            
-                port.Open(); //打开串口
+            {
+                port.Open();
+            }
+            catch 
+            {
+                return false;
+            }
+
+            if (port.IsOpen)
+            {
                 return true;
             }
-            catch (Exception ex)
+            else
             {
-                throw ex;
+                return false;
             }
         }
 
@@ -160,6 +180,33 @@ namespace Hyperwsn.SerialPortLibrary
         }
 
         /// <summary>
+        /// 记录日志
+        /// </summary>
+        /// <param name="tip"></param>
+        /// <param name="Buf"></param>
+        /// <param name="StartIndex"></param>
+        /// <param name="Len"></param>
+        private void AddLog(string tip, byte[] Buf, int StartIndex, int Len)
+        {
+            Logger.AddLogAutoTime(tip + ":\t\t" + CommArithmetic.ByteArrayToHexString(Buf, (UInt16)StartIndex, (UInt16)Len));
+        }
+
+        private void AddLog(string tip, byte[] Buf)
+        {
+            if (IsLogger == true)
+            {
+                if (Buf == null)
+                {
+                    AddLog(tip, null, 0, 0);
+                }
+                else
+                {
+                    AddLog(tip, Buf, 0, Buf.Length);
+                }
+            }
+        }
+
+        /// <summary>
         /// 在规定超时时间内，获得反馈，否则返回null
         /// </summary>
         /// <param name="request"></param>
@@ -169,19 +216,25 @@ namespace Hyperwsn.SerialPortLibrary
         {
             isTimeout = false;
             timer = new System.Timers.Timer();
-            timer.Interval = Timeout;
-            timer.Enabled = true;
+            timer.Interval = Timeout;            
             timer.Elapsed += Timer_Elapsed;
+            timer.Enabled = true;
 
-            receivedBytes = null; 
+            AfterReceivedTimeout = false;
+            AfterReceivedTimer = null;
 
-            port.Write(request, 0, request.Length); //发送数据
+            RxExpStr = null;
+            ReceivedExpStr = false;
+            RxByteStr = null;
+            receivedBytes = null;
+            isGetResult = 0;
 
-            //是否需要日志控制
-            if (IsLogger == true)
+            if (request != null)
             {
-                Logger.AddLogAutoTime("\tSend:\t" + CommArithmetic.ByteArrayToHexString(request));
-            }
+                port.Write(request, 0, request.Length); //发送数据
+
+                AddLog("TX", request);
+            }            
 
             while (isTimeout == false && isGetResult == 0)
             {
@@ -193,18 +246,7 @@ namespace Hyperwsn.SerialPortLibrary
             timer.Stop();
             timer.Dispose();
 
-            if (isGetResult == 0)
-            {
-                isGetResult = 0;
-                return null;
-            }
-
-            isGetResult = 0;
-
-            if (IsLogger == true)
-            {
-                Logger.AddLogAutoTime("\tReceive:\t" + CommArithmetic.ByteArrayToHexString(receivedBytes));
-            }
+            AddLog("RX", receivedBytes);
 
             return receivedBytes;
         }
@@ -218,23 +260,28 @@ namespace Hyperwsn.SerialPortLibrary
         /// <param name="TimeoutMs">超时时间，单位：毫秒；</param>
         /// <param name="WrLog">true = 记录日志</param>
         /// <returns></returns>
-        public byte[] Send(byte[] TxBuf, UInt16 IndexOfStart, UInt16 TxLen, UInt16 TimeoutMs, bool WrLog)
+        public byte[] Send(byte[] TxBuf, UInt16 IndexOfStart, UInt16 TxLen, UInt16 TimeoutMs)
         {
             isTimeout = false;
-
             timer = new System.Timers.Timer();
-            timer.Interval = TimeoutMs;
-            timer.Enabled = true;
+            timer.Interval = TimeoutMs;            
             timer.Elapsed += Timer_Elapsed;
+            timer.Enabled = true;
 
-            receivedBytes = null;  //测试用
+            AfterReceivedTimeout = false;
+            AfterReceivedTimer = null;
 
-            port.Write(TxBuf, IndexOfStart, TxLen); //发送数据
+            RxExpStr = null;
+            ReceivedExpStr = false;
+            RxByteStr = null;
+            receivedBytes = null;
+            isGetResult = 0;
 
-            //是否需要日志控制
-            if (WrLog == true)
+            if (TxBuf != null)
             {
-                Logger.AddLogAutoTime("\tSend:\t" + CommArithmetic.ByteArrayToHexString(TxBuf, IndexOfStart, TxLen));
+                port.Write(TxBuf, IndexOfStart, TxLen); //发送数据
+
+                AddLog("TX", TxBuf, IndexOfStart, TxLen);
             }
 
             while (isTimeout == false && isGetResult == 0)
@@ -247,24 +294,186 @@ namespace Hyperwsn.SerialPortLibrary
             timer.Stop();
             timer.Dispose();
 
-            if(isGetResult == 0)
-            {
-                isGetResult = 0;
-                return null;
-            }
-
-            isGetResult = 0;
-
-            if (WrLog == true)
-            {
-                Logger.AddLogAutoTime("\tReceive:\t" + CommArithmetic.ByteArrayToHexString(receivedBytes));
-            }
+            AddLog("RX", receivedBytes);
 
             return receivedBytes;
         }
 
         /// <summary>
-        /// 触发超时反馈
+        /// 
+        /// </summary>
+        /// <param name="TxBuf"></param>
+        /// <param name="IndexOfStart"></param>
+        /// <param name="TxLen"></param>
+        /// <param name="TimeoutMs"></param>
+        /// <param name="WrLog"></param>
+        /// <param name="ExpStr">若是存在字符串ExpStr，则退出接收</param>
+        /// <returns></returns>
+        public byte[] Send(byte[] TxBuf, UInt16 IndexOfStart, UInt16 TxLen, UInt16 TimeoutMs, string ExpStr)
+        {
+            isTimeout = false;
+            timer = new System.Timers.Timer();
+            timer.Interval = TimeoutMs;            
+            timer.Elapsed += Timer_Elapsed;
+            timer.Enabled = true;
+
+            AfterReceivedTimeout = false;
+            AfterReceivedTimer = null;
+
+            RxExpStr = ExpStr;
+            RxExpStr = RxExpStr.Replace(" ", "");
+            ReceivedExpStr = false;
+            RxByteStr = null;
+            receivedBytes = null;
+            isGetResult = 0;
+
+            if (TxBuf != null)
+            {
+                port.Write(TxBuf, IndexOfStart, TxLen);             // 发送数据
+
+                AddLog("TX", TxBuf, IndexOfStart, TxLen);
+            }
+
+            while (isTimeout == false && ReceivedExpStr == false)
+            {
+                System.Threading.Thread.Sleep(25);
+            }
+
+            isTimeout = false;
+            timer.Enabled = false;
+            timer.Stop();
+            timer.Dispose();
+
+            // 记录到日志
+            AddLog("RX", receivedBytes);
+
+            return receivedBytes;
+        }
+
+        /// <summary>
+        /// 发送数据，并接收数据；
+        /// </summary>
+        /// <param name="TxBuf"></param>
+        /// <param name="IndexOfStart"></param>
+        /// <param name="TxLen"></param>
+        /// <param name="RxTimeoutMs">整个接收过程的最大等待时间，单位：ms</param>
+        /// <param name="WrLog"></param>
+        /// <param name="AfterReceivedTimeoutMs">收到数据后，开始计时，若是一定时间内没有再收到新的数据，则退出接收；</param>
+        /// <returns></returns>
+        public byte[] Send(byte[] TxBuf, UInt16 IndexOfStart, UInt16 TxLen, UInt16 RxTimeoutMs, UInt16 AfterReceivedTimeoutMs)
+        {
+            isTimeout = false;
+            timer = new System.Timers.Timer();
+            timer.Interval = RxTimeoutMs;            
+            timer.Elapsed += Timer_Elapsed;
+            timer.Enabled = true;
+
+            AfterReceivedTimeout = false;
+            AfterReceivedTimer = new System.Timers.Timer();
+            AfterReceivedTimer.Interval = AfterReceivedTimeoutMs;
+            AfterReceivedTimer.Elapsed += AfterReceivedTimer_Elapsed;
+            AfterReceivedTimer.Enabled = true;
+
+            RxExpStr = null;
+            ReceivedExpStr = false;
+            RxByteStr = null;
+            receivedBytes = null;
+            isGetResult = 0;
+
+            if (TxBuf != null)
+            {
+                port.Write(TxBuf, IndexOfStart, TxLen);             // 发送数据
+
+                AddLog("TX", TxBuf, IndexOfStart, TxLen);
+            }
+
+            while (isTimeout == false && AfterReceivedTimeout == false)
+            {
+                System.Threading.Thread.Sleep(25);
+            }
+
+            isTimeout = false;
+            timer.Enabled = false;
+            timer.Stop();
+            timer.Dispose();
+
+            AfterReceivedTimeout = false;
+            AfterReceivedTimer.Enabled = false;
+            AfterReceivedTimer.Stop();
+            AfterReceivedTimer.Dispose();
+
+            // 记录到日志
+            AddLog("RX", receivedBytes);
+
+            return receivedBytes;
+        }
+
+        public byte[] Send(byte[] TxBuf, UInt16 IndexOfStart, UInt16 TxLen, UInt16 TotalRxTimeoutMs, UInt16 BeforeRxTimeoutMs,  UInt16 AfterReceivedTimeoutMs)
+        {
+            isTimeout = false;
+            timer = new System.Timers.Timer();
+            timer.Interval = TotalRxTimeoutMs;            
+            timer.Elapsed += Timer_Elapsed;
+            timer.Enabled = true;
+
+            BeforeReceivedTimeout = false;
+            BeforeReceivedTimer = new System.Timers.Timer();
+            BeforeReceivedTimer.Interval = BeforeRxTimeoutMs;
+            BeforeReceivedTimer.Elapsed += BeforeReceivedTimer_Elapsed;
+            BeforeReceivedTimer.Enabled = true;
+
+            AfterReceivedTimeout = false;
+            AfterReceivedTimer = new System.Timers.Timer();
+            AfterReceivedTimer.Interval = AfterReceivedTimeoutMs;
+            AfterReceivedTimer.Elapsed += AfterReceivedTimer_Elapsed;
+            AfterReceivedTimer.Enabled = true;
+
+            RxExpStr = null;
+            ReceivedExpStr = false;
+            RxByteStr = null;
+            receivedBytes = null;
+            isGetResult = 0;
+
+            if (TxBuf != null)
+            {
+                port.Write(TxBuf, IndexOfStart, TxLen);             // 发送数据
+
+                AddLog("TX", TxBuf, IndexOfStart, TxLen);
+            }
+
+            while (isTimeout == false && AfterReceivedTimeout == false)
+            {
+                if (BeforeReceivedTimeout == true && receivedBytes == null)
+                {
+                    break;
+                }
+
+                System.Threading.Thread.Sleep(25);
+            }
+
+            isTimeout = false;
+            timer.Enabled = false;
+            timer.Stop();
+            timer.Dispose();
+
+            BeforeReceivedTimeout = false;
+            BeforeReceivedTimer.Enabled = false;
+            BeforeReceivedTimer.Stop();
+            BeforeReceivedTimer.Dispose();
+
+            AfterReceivedTimeout = false;
+            AfterReceivedTimer.Enabled = false;
+            AfterReceivedTimer.Stop();
+            AfterReceivedTimer.Dispose();
+
+            // 记录到日志
+            AddLog("RX", receivedBytes);
+
+            return receivedBytes;
+        }
+
+        /// <summary>
+        /// 计时器超时
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -273,25 +482,58 @@ namespace Hyperwsn.SerialPortLibrary
             isTimeout = true;
         }
 
+        private void AfterReceivedTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            AfterReceivedTimeout = true;
+        }
+
+        private void BeforeReceivedTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            BeforeReceivedTimeout = true;
+        }
+
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            //分为不同的状态，包括
-            //1：发送Request 后的Response 信息
-            StringBuilder currentline = new StringBuilder();
-            System.Threading.Thread.Sleep(70); //尝试不要断开接收数据，在SurfaceBook 上，断开的时间大约为22ms
-
-            //20180418 非常重要  isOpen的判断是临时的
-            while (port.IsOpen && port.BytesToRead > 0)
+            try
             {
-                byte ch = (byte)port.ReadByte();
-                currentline.Append(ch.ToString("X2"));
+                //分为不同的状态，包括
+                //1：发送Request 后的Response 信息
+                StringBuilder currentline = new StringBuilder();
+                System.Threading.Thread.Sleep(70);                  // 尝试不要断开接收数据，在SurfaceBook 上，断开的时间大约为22ms
+
+                //20180418 非常重要  isOpen的判断是临时的
+                while (port.IsOpen && port.BytesToRead > 0)
+                {
+                    byte ch = (byte)port.ReadByte();
+                    currentline.Append(ch.ToString("X2"));
+                }
+
+                //补丁，防止收到单个字符
+                if (currentline.Length >= 2)
+                {
+                    RxByteStr += currentline.ToString();
+                    receivedBytes = CommArithmetic.HexStringToByteArray(RxByteStr);
+                    isGetResult++;
+
+                    if (RxExpStr != null && RxExpStr != "")
+                    {
+                        if (RxByteStr.Contains(RxExpStr) == true)
+                        {
+                            ReceivedExpStr = true;
+                        }
+                    }
+
+                    // 刷新计时器，重新计时
+                    if (AfterReceivedTimer != null && AfterReceivedTimer.Enabled == true)
+                    {
+                        AfterReceivedTimer.Stop();
+                        AfterReceivedTimer.Start();
+                    }
+                }
             }
-
-            //补丁，防止收到单个字符
-            if (currentline.Length >= 2)
+            catch
             {
-                receivedBytes = CommArithmetic.HexStringToByteArray(currentline.ToString());
-                isGetResult++;
+
             }
         }
 
@@ -324,7 +566,6 @@ namespace Hyperwsn.SerialPortLibrary
 
         private static string[] MulGetHardwareInfo(HardwareEnum hardType, string propKey)
         {
-
             List<string> strs = new List<string>();
             try
             {

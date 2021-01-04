@@ -10,116 +10,241 @@ namespace Hyperwsn.Protocol
 {
     public class BindingAnalyse
     {
-        public DataTable GatewayBinding(byte[] source)
+        private Int16 RxPktIsRight(byte[] SrcBuf, UInt16 IndexOfStart)
+        {
+            if (SrcBuf[IndexOfStart] != 0xBC || SrcBuf[IndexOfStart + 1] != 0xBC)
+            {
+                return -1;
+            }
+
+            byte PktLen = SrcBuf[IndexOfStart + 2];
+            if (SrcBuf[IndexOfStart + 3 + PktLen + 2] != 0xCB || SrcBuf[IndexOfStart + 3 + PktLen + 3] != 0xCB)
+            {
+                return -2;
+            }
+
+            UInt16 crc_chk = (UInt16)(((UInt16)SrcBuf[IndexOfStart + 3 + PktLen] << 8) | ((UInt16)SrcBuf[IndexOfStart + 4 + PktLen] << 0));
+            UInt16 crc = MyCustomFxn.CRC16(MyCustomFxn.GetItuPolynomialOfCrc16(), 0, SrcBuf, (UInt16)(IndexOfStart + 3), PktLen);
+            if (crc_chk != 0 && crc_chk != crc)
+            {
+                return -3;
+            }
+
+            // Cmd
+            if (SrcBuf[IndexOfStart + 3] != 0x6A)
+            {
+                return -4;
+            }
+
+            // Protocol
+            if (SrcBuf[IndexOfStart + 4] != 0x01)
+            {
+                return -5;
+            }
+
+            // Error
+            if (SrcBuf[IndexOfStart + 10] != 0x00)
+            {
+                return -6;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// 读取可变长度的负载内容
+        /// </summary>
+        /// <param name="SrcBuf"></param>
+        /// <param name="IndexOfStart"></param>
+        /// <returns></returns>
+        private Int16 ReadPayload(byte[] SrcBuf, UInt16 IndexOfStart, DataRow row)
+        {
+            string tempThrLowStr = "-∞";
+            string tempThrHighStr = "+∞";
+            string humThrLowStr = "0.00";
+            string humThrHighStr = "100.00";
+            string deviceName = "";
+
+            row["温度范围(℃)"] = tempThrLowStr + " ~ " + tempThrHighStr;
+            row["湿度范围(%)"] = humThrLowStr + " ~ " + humThrHighStr;
+            row["设备名称"] = deviceName;
+
+            byte PayLen = SrcBuf[IndexOfStart + 17];
+            if (PayLen == 0)
+            {
+                return 1;
+            }
+
+            byte DataType = 0;
+            byte ThrType = 0;
+
+            byte thisIndex = 18;
+            byte PayEndIndex = (byte)(thisIndex + PayLen);
+
+            while (thisIndex < PayEndIndex)
+            {
+                DataType = SrcBuf[IndexOfStart + thisIndex];
+                
+                switch (DataType)
+                {
+                    case 0x65:              // 温度
+                        {
+                            if (PayEndIndex - thisIndex < 4)
+                            {
+                                return -2;  // 长度错误
+                            }
+
+                            ThrType = SrcBuf[IndexOfStart + thisIndex + 1];
+
+                            Int16 tempI = (Int16)(((UInt16)SrcBuf[IndexOfStart + thisIndex + 2] << 8) | ((UInt16)SrcBuf[IndexOfStart + thisIndex + 3] << 0));
+                            double tempF = (double)tempI / 100.0f;
+
+                            switch (ThrType)
+                            {
+                                case 0x00:      // 阈值下限
+                                    {
+                                        tempThrLowStr = tempF.ToString("F2");
+                                        break;
+                                    }
+                                case 0x01:      // 阈值上限
+                                    {
+                                        tempThrHighStr = tempF.ToString("F2");
+                                        break;
+                                    }
+                                case 0x02:      // 预警下限
+                                    {
+                                        break;
+                                    }
+                                case 0x03:      // 预警上限
+                                    {
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        return -3;
+                                    }
+                            }
+
+                            thisIndex += 4;
+                            break;
+                        }
+                    case 0x66:              // 湿度
+                        {
+                            if (PayEndIndex - thisIndex < 4)
+                            {
+                                return -2;  // 长度错误
+                            }
+
+                            ThrType = SrcBuf[IndexOfStart + thisIndex + 1];
+
+                            UInt16 humI = (UInt16)(((UInt16)SrcBuf[IndexOfStart + thisIndex + 2] << 8) | ((UInt16)SrcBuf[IndexOfStart + thisIndex + 3] << 0));
+                            double humF = (double)humI / 100.0f;
+
+                            switch (ThrType)
+                            {
+                                case 0x00:      // 阈值下限
+                                    {
+                                        humThrLowStr = humF.ToString("F2");
+                                        break;
+                                    }
+                                case 0x01:      // 阈值上限
+                                    {
+                                        humThrHighStr = humF.ToString("F2");
+                                        break;
+                                    }
+                                case 0x02:      // 预警下限
+                                    {
+                                        break;
+                                    }
+                                case 0x03:      // 预警上限
+                                    {
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        return -3;
+                                    }
+                            }
+
+                            thisIndex += 4;
+                            break;
+                        }
+                    case 0x73:              // 设备名称，GB2312
+                        {
+                            byte NameLen = SrcBuf[IndexOfStart + thisIndex + 1];
+
+                            if (PayEndIndex - thisIndex < NameLen + 2)
+                            {
+                                return -2;  // 长度错误
+                            }
+
+                            deviceName = Encoding.Default.GetString(SrcBuf, IndexOfStart + thisIndex + 2, NameLen);
+
+                            thisIndex += (byte)(NameLen + 2);
+                            break;
+                        }
+                    default:
+                        {
+                            return -1;      // 未知的数据类型
+                        }
+                }
+            }
+
+            row["温度范围(℃)"] = tempThrLowStr + " ~ " + tempThrHighStr;
+            row["湿度范围(%)"] = humThrLowStr + " ~ " + humThrHighStr;
+            row["设备名称"] = deviceName;
+
+            return 0;
+        }
+
+
+        public DataTable GatewayBinding(byte[] SrcBuf)
         {
             DataTable dt = new DataTable();
 
-            dt.Columns.Add("序号", typeof(int));
+            dt.Columns.Add("通道号", typeof(int));
             dt.Columns.Add("设备编号", typeof(string));
             dt.Columns.Add("设备名称", typeof(string));
             dt.Columns.Add("温度范围(℃)", typeof(string));
             dt.Columns.Add("湿度范围(%)", typeof(string));
 
-            int current = 0; //标记当前位置
-            for (int i = 0; i < source.Length; i++)
+            if(SrcBuf == null || SrcBuf.Length == 0 || SrcBuf.Length > 0xFFFF)
             {
-                if (source[i] == 0xBC && source[i + 1] == 0xBC)
+                return dt;
+            }
+
+            Int16 error = 0;
+
+            byte Total = 0;
+            byte Current = 0;            
+
+            for (UInt16 iX = 0; iX < (UInt16)SrcBuf.Length; iX++)
+            {
+                error = RxPktIsRight(SrcBuf, iX);
+                if (error < 0)
                 {
-                    //找到第一条的开始位
-                    int length = source[i + 2] + current + 7;
-                    if (source.Length >= length)  // 确保有结束位
-                    {
-                        if (source[length - 2] == 0xCB && source[length - 1] == 0xCB)
-                        {
-                            DataRow row = dt.NewRow();
-                            row["序号"] = source[current + 12];
-                            row["设备编号"] = CommArithmetic.DecodeMAC(source, current + 13);
-                            row["设备名称"] = CommArithmetic.DecodeGB2312(source, current + 20 + source[current + 17], source[current + 19 + source[current + 17]]);
-                            //row["ID"] = source[current + 12];
-                            //row["ID"] = source[current + 12];
-                            double tempLow = -300;
-                            double tempHigh = -300;
-                            double humiLow = -300;
-                            double humiHigh = -300;
-
-                            //将传感信息单独形成一个数组
-                            int SensorDataLength = source[current + 17];
-                            byte[] sensorBytes = new byte[SensorDataLength];
-                            for (int j = 0; j < SensorDataLength; j++)
-                            {
-                                sensorBytes[j] = source[SensorDataLength + j + 2];
-                            }
-
-                            for (int j = 0; j < sensorBytes.Length; j = j + 4)
-                            {
-                                if (sensorBytes[j] == 0x65 && sensorBytes[j + 1] == 0x00) //温度报警下限
-                                {
-                                    tempLow = CommArithmetic.DecodeTemperature(sensorBytes, j + 2);
-                                }
-                                if (sensorBytes[j] == 0x65 && sensorBytes[j + 1] == 0x01) //温度报警上限
-                                {
-                                    tempHigh = CommArithmetic.DecodeTemperature(sensorBytes, j + 2);
-                                }
-
-                                if (sensorBytes[j] == 0x66 && sensorBytes[j + 1] == 0x00) //湿度报警下限
-                                {
-                                    humiLow = CommArithmetic.DecodeHumidity(sensorBytes, j + 2);
-                                }
-
-                                if (sensorBytes[j] == 0x66 && sensorBytes[j + 1] == 0x01) //湿度报警上限
-                                {
-                                    humiHigh = CommArithmetic.DecodeHumidity(sensorBytes, j + 2);
-                                }
-                            }
-                            string tempLowString;
-                            string tempHighString;
-                            string humiLowString;
-                            string humiHighString;
-                            if (tempLow == -300)
-                            {
-                                tempLowString = "-∞";
-                            }
-                            else
-                            {
-                                tempLowString = tempLow.ToString("0.00");
-                            }
-                            if (tempHigh == -300)
-                            {
-                                tempHighString = "∞";
-                            }
-                            else
-                            {
-                                tempHighString = tempHigh.ToString("0.00");
-                            }
-
-                            if (humiLow == -300)
-                            {
-                                humiLowString = "-∞";
-                            }
-                            else
-                            {
-                                humiLowString = humiLow.ToString("0.00");
-                            }
-                            if (humiHigh == -300)
-                            {
-                                humiHighString = "∞";
-                            }
-                            else
-                            {
-                                humiHighString = humiHigh.ToString("0.00");
-                            }
-
-                            row["温度范围(℃)"] = tempLowString + "~" + tempHighString;
-                            row["湿度范围(%)"] = humiLowString + "~" + humiHighString;
-
-                            dt.Rows.Add(row);
-
-                            current = length;
-                            i = current - 1;
-                        }
-                    }
+                    continue;
                 }
 
+                Total = SrcBuf[iX + 11];
+                Current = SrcBuf[iX + 12];
+
+                if (Total == 0 || Current >= Total)
+                {
+                    continue;
+                }
+
+                DataRow row = dt.NewRow();
+                row["通道号"] = Current + 1;
+                row["设备编号"] = CommArithmetic.ByteArrayToHexString(SrcBuf, (UInt16)(iX + 13), 4);
+
+                error = ReadPayload(SrcBuf, iX, row);
+                if (error < 0)
+                {
+                    continue;
+                }
+
+                dt.Rows.Add(row);
             }
 
             return dt;

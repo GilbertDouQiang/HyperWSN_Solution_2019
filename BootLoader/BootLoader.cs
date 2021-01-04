@@ -244,7 +244,7 @@ namespace BootLoaderLibrary
 
             StreamWriter FileWriter = new StreamWriter(filePath, false, Encoding.ASCII); // 若存在，则覆盖；若不存在，则创建；
 
-            FileWriter.WriteLine("\nMODE P4xx UART 115200 " + PortName + " PARITY");
+            FileWriter.WriteLine("\nMODE P4xx UART 115200 " + PortName + " PARITY");    
             FileWriter.WriteLine("\nRX_PASSWORD_32 .\\Pass256_HyperWSN.txt");
             FileWriter.WriteLine("\nTX_DATA_BLOCK_32 0x3F000 0x1000 ReadCfg.txt");
             FileWriter.WriteLine("\nMASS_ERASE");

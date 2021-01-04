@@ -53,9 +53,7 @@ namespace Hyperwsn.Comm
             }
 
             return 0;
-
         }
-
 
         public static string IntToHexString(int source)
         {
@@ -92,23 +90,6 @@ namespace Hyperwsn.Comm
             }
         }
 
-        public static string ByteArrayToHexString(byte[] bytes)
-        {
-            string hexString = string.Empty;
-            if (bytes != null)
-            {
-                StringBuilder strB = new StringBuilder();
-
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    strB.Append(bytes[i].ToString("X2") + " ");
-                }
-                hexString = strB.ToString();
-            }
-
-            return hexString;
-        }
-
         public static string ByteArrayToHexString(byte[] Buf, UInt16 IndexOfStart, UInt16 Len)
         {
             string hexString = string.Empty;
@@ -125,22 +106,32 @@ namespace Hyperwsn.Comm
                 hexString = strB.ToString();
             }
 
-            return hexString;
+            return hexString.Trim();
         }
 
-        public static string DecodeMAC(byte[] source, int start)
+        public static string ByteArrayToHexString(byte[] Buf)
         {
-            byte[] mac = new byte[4];
-            if (source != null && source.Length > start + 3)
+            return ByteArrayToHexString(Buf, 0, (UInt16)Buf.Length);
+        }
+
+        public static string ByteArrayToHexString(byte[,] Buf, UInt16 IndexOfStart, UInt16 Len)
+        {
+            string hexString = string.Empty;
+
+            if (Buf != null)
             {
-                mac[0] = source[start];
-                mac[1] = source[start + 1];
-                mac[2] = source[start + 2];
-                mac[3] = source[start + 3];
-                return ByteArrayToHexString(mac);
+                StringBuilder strB = new StringBuilder();
+
+                for (UInt16 i = 0; i < Len; i++)
+                {
+                    strB.Append(Buf[IndexOfStart + i, 0].ToString("X2") + " ");
+                    strB.Append(Buf[IndexOfStart + i, 1].ToString("X2") + " ");
+                }
+
+                hexString = strB.ToString();
             }
 
-            return null;
+            return hexString.Trim();
         }
 
         /// <summary>
@@ -160,44 +151,26 @@ namespace Hyperwsn.Comm
             return Encoding.GetEncoding("GB18030").GetString(gbString);
         }
 
-        public static string DecodeClientID(byte[] source, int start)
-        {
-            byte[] clientID = new byte[2];
-            if (source != null && source.Length > start + 1)
-            {
-                clientID[0] = source[start];
-                clientID[1] = source[start + 1];
-
-                return ByteArrayToHexString(clientID);
-            }
-
-            return null;
-        }
-
         public static DateTime DecodeDateTime(byte[] source, int start)
         {
             DateTime dt;
-            byte[] tempDate = new byte[6];
 
-            if (source != null && source.Length > start + 5)
-            {
-                tempDate[0] = source[start];
-                tempDate[1] = source[start + 1];
-                tempDate[2] = source[start + 2];
-                tempDate[3] = source[start + 3];
-                tempDate[4] = source[start + 4];
-                tempDate[5] = source[start + 5];
-            }
+            byte year = source[start + 0];
+            byte month = source[start + 1];
+            byte mday = source[start + 2];
+            byte hour = source[start + 3];
+            byte minute = source[start + 4];
+            byte second = source[start + 5];
 
-            string strDate = ByteArrayToHexString(tempDate);
+            string DateStr = "20" + year.ToString("X2") + "-" + month.ToString("X2") + "-" + mday.ToString("X2") + " " + hour.ToString("X2") + ":" + minute.ToString("X2") + ":" + second.ToString("X2");
 
             try
             {
-                dt = DateTime.ParseExact(strDate, "yy MM dd HH mm ss ", System.Globalization.CultureInfo.CurrentCulture);
+                dt = DateTime.ParseExact(DateStr, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture);
             }
-            catch (Exception)
-            {
-                dt = DateTime.ParseExact("20010101", "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+            catch (Exception ex)
+            {   
+                dt = DateTime.ParseExact("20000401", "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
             }
 
             return dt;
@@ -438,9 +411,6 @@ namespace Hyperwsn.Comm
             {
                 dateString += " " + dateTime.Second;
             }
-
-
-
 
             byte[] datetimeByte = CommArithmetic.HexStringToByteArray(dateString);
 

@@ -21,7 +21,7 @@ namespace Hyperwsn.Comm.Tests
         {
             SaveObject2File save = new SaveObject2File();
             Gateway gateway = new Gateway();
-            gateway.DeviceMac = "10 10 10 10";
+            gateway.DeviceMacS = "10 10 10 10";
             save.Save(gateway, "C:\\1.xml");
 
             Assert.Fail();
