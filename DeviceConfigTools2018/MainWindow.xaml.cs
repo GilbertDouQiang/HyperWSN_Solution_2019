@@ -50,8 +50,10 @@ namespace DeviceConfigTools2018
         DateTime StartTimeOfExport;             // 开始时间
         DateTime EndTimeOfExport;               // 结束时间
         UInt32 ExpTotalOfExport = 0;            // 查询到设备里有多少有效数据/用户计划读取多少条有效数据
-        ObservableCollection<M1> DataOfExport = new ObservableCollection<M1>();         // 用来存储导出的数据
-        int GridLineOfExport = 1;                                                       // M1表格的行编号  
+        ObservableCollection<M1> DataOfSingle = new ObservableCollection<M1>();         // 单节点
+        ObservableCollection<M1> DataOfBulk = new ObservableCollection<M1>();           // 批量
+        int GridLineOfSingle = 1;                                                       // 表格的行编号  
+        int GridLineOfBulk = 1;                                                         // 表格的行编号  
         UInt32 ReadBase = 0;                    // 希望读取的数据的起始位置       
         UInt32 ReadTotal = 0;                   // 希望读取的数据的总数量
         UInt32 ReadCnt = 0;                     // 读取数据的累计单元
@@ -74,12 +76,19 @@ namespace DeviceConfigTools2018
         {
             InitializeComponent();
 
-            DataGridOfExport.ItemsSource = DataOfExport;
+            DataGridOfSingle.ItemsSource = DataOfSingle;
+            DataGridOfBulk.ItemsSource = DataOfBulk;
 
             //M1 排序用
-            ICollectionView v = CollectionViewSource.GetDefaultView(DataGridOfExport.ItemsSource);
+            ICollectionView v = CollectionViewSource.GetDefaultView(DataGridOfSingle.ItemsSource);
             v.SortDescriptions.Clear();
             ListSortDirection d = ListSortDirection.Descending;
+            v.SortDescriptions.Add(new SortDescription("DisplayID", d));
+            v.Refresh();
+
+            v = CollectionViewSource.GetDefaultView(DataGridOfBulk.ItemsSource);
+            v.SortDescriptions.Clear();
+            d = ListSortDirection.Descending;
             v.SortDescriptions.Add(new SortDescription("DisplayID", d));
             v.Refresh();
 
@@ -1820,7 +1829,7 @@ namespace DeviceConfigTools2018
                 aGateway.SetSoftwareRevision(SrcData, (UInt16)(IndexOfStart + 14));
 
                 // CC1310/CC1352P软件版本
-                aGateway.cSwRevisionS = CommArithmetic.ByteArrayToHexString(SrcData, (UInt16)(IndexOfStart + 16), 2);
+                aGateway.cSwRevisionS = CommArithmetic.ByteBuf_to_HexString(SrcData, (UInt16)(IndexOfStart + 16), 2);
 
                 // 客户码
                 aGateway.SetDeviceCustomer(SrcData, (UInt16)(IndexOfStart + 18));
@@ -1935,7 +1944,7 @@ namespace DeviceConfigTools2018
                 aGateway.SetSoftwareRevision(SrcData, (UInt16)(IndexOfStart + 18));
 
                 // CC1310/CC1352P软件版本
-                aGateway.cSwRevisionS = CommArithmetic.ByteArrayToHexString(SrcData, (UInt16)(IndexOfStart + 20), 2);
+                aGateway.cSwRevisionS = CommArithmetic.ByteBuf_to_HexString(SrcData, (UInt16)(IndexOfStart + 20), 2);
 
                 // 客户码
                 aGateway.SetDeviceCustomer(SrcData, (UInt16)(IndexOfStart + 22));
@@ -2158,6 +2167,12 @@ namespace DeviceConfigTools2018
             // 湿度阈值下限
             hum = (UInt16)(((UInt16)SrcData[IndexOfStart + 46] << 8) | ((UInt16)SrcData[IndexOfStart + 47] << 0));
             aIntervalSensor.HumThrLow = (double)hum / 100.0f;
+
+            // 温度变化曲线
+            aIntervalSensor.tempCurveCoe = (double)CommArithmetic.ByteBuf_to_UInt16(SrcData, IndexOfStart + 48)/10000.0f;
+
+            // 湿度变化曲线
+            aIntervalSensor.humCurveCoe = (double)CommArithmetic.ByteBuf_to_UInt16(SrcData, IndexOfStart + 50) / 10000.0f;
 
             // 温度
             temp = (Int16)(((UInt16)SrcData[IndexOfStart + 64] << 8) | ((UInt16)SrcData[IndexOfStart + 65] << 0));
@@ -2583,85 +2598,167 @@ namespace DeviceConfigTools2018
             UInt16 SrcLen = (UInt16)(SrcData.Length - IndexOfStart);
 
             byte Protocol = SrcData[IndexOfStart + 4];
-
-            if (Protocol != 1)
+            if (Protocol != ProtocolVer)
             {
                 return -1;
             }
 
-            // 长度
-            if (SrcLen < 16)
+            if (Protocol == 1)
             {
-                return -2;
-            }
-
-            // 过程
-            byte Step = SrcData[IndexOfStart + 10];
-
-            // Error
-            Int16 Error = SrcData[IndexOfStart + 11];
-            if (Error > 0x80)
-            {
-                Error -= 0x100;
-            }
-
-            if (Step == 2 && Error == 1)
-            {
-                // 已读到尽头
-                return 3;
-            }
-            else
-            {
-                if (Error != 0)
+                // 长度
+                if (SrcLen < 16)
                 {
                     return -3;
                 }
-            }
 
-            switch (Step)
-            {
-                case 0:     // 导出开始
+                // 过程
+                byte Step = SrcData[IndexOfStart + 10];
+
+                // Error
+                Int16 Error = SrcData[IndexOfStart + 11];
+                if (Error > 0x80)
+                {
+                    Error -= 0x100;
+                }
+
+                if (Step == 2 && Error == 1)
+                {
+                    // 已读到尽头
+                    return 3;
+                }
+                else
+                {
+                    if (Error != 0)
                     {
-                        return 1;           // 继续接收
+                        return -4;
                     }
-                case 1:     // 正在导出数据
-                    {
-                        M1 aM1 = new M1(SrcData, IndexOfStart);
-                        if (aM1 == null)
+                }
+
+                switch (Step)
+                {
+                    case 0:     // 导出开始
                         {
-                            return -5;
+                            return 1;           // 继续接收
                         }
-
-                        // 添加到显示列表中
-
-                        ReadCnt++;
-
-                        if(IsMyExpSensorData(aM1.DeviceMacV, aM1.SensorCollectTime) == false)
+                    case 1:     // 正在导出数据
                         {
+                            M1 aM1 = new M1(SrcData, IndexOfStart);
+                            if (aM1 == null)
+                            {
+                                return -6;
+                            }
+
+                            // 添加到显示列表中
+
+                            ReadCnt++;
+
+                            if (IsMyExpSensorData(aM1.DeviceMacV, aM1.SensorCollectTime) == false)
+                            {
+                                break;
+                            }
+
+                            aM1.DisplayID = GridLineOfSingle;
+                            if (++GridLineOfSingle == 0)
+                            {
+                                GridLineOfSingle++;
+                            }
+
+                            aM1.Group = GroupCnt + 1;
+                            aM1.GroupCapacity = UnitOfRead;
+                            DataOfSingle.Add((M1)aM1);
+
                             break;
                         }
-
-                        aM1.DisplayID = GridLineOfExport;
-                        if (++GridLineOfExport == 0)
+                    case 2:     // 导出结束
                         {
-                            GridLineOfExport++;
-                        }                       
-
-                        aM1.Group = GroupCnt + 1;
-                        aM1.GroupCapacity = UnitOfRead;
-                        DataOfExport.Add((M1)aM1);
-
-                        break;
-                    }
-                case 2:     // 导出结束
-                    {
-                        return 2;           // 正常结束接收
-                    }
-                default:
-                    {
-                        return -5;          // 结束接收
-                    }
+                            return 2;           // 正常结束接收
+                        }
+                    default:
+                        {
+                            return -5;          // 结束接收
+                        }
+                }
             }
+            else if (ProtocolVer == 2)
+            {
+                // 长度
+                if (SrcLen < 16)
+                {
+                    return -3;
+                }
+
+                // 过程
+                byte Step = SrcData[IndexOfStart + 10];
+
+                // Error
+                Int16 Error = SrcData[IndexOfStart + 11];
+                if (Error > 0x80)
+                {
+                    Error -= 0x100;
+                }
+
+                if (Step == 2 && Error == 1)
+                {
+                    // 已读到尽头
+                    return 3;
+                }
+                else
+                {
+                    if (Error != 0)
+                    {
+                        return -4;
+                    }
+                }
+
+                switch (Step)
+                {
+                    case 0:     // 导出开始
+                        {
+                            return 1;           // 继续接收
+                        }
+                    case 1:     // 正在导出数据
+                        {
+                            M1 aM1 = new M1(SrcData, IndexOfStart);
+                            if (aM1 == null)
+                            {
+                                return -6;
+                            }
+
+                            // 添加到显示列表中
+
+                            ReadCnt++;
+
+                            if (IsMyExpSensorData(aM1.DeviceMacV, aM1.nodeNum, aM1.nSampleTime) == false)
+                            {
+                                break;
+                            }
+
+                            aM1.DisplayID = GridLineOfBulk;
+                            if (++GridLineOfBulk == 0)
+                            {
+                                GridLineOfBulk++;
+                            }
+
+                            aM1.Group = GroupCnt + 1;
+                            aM1.GroupCapacity = UnitOfRead;
+                            DataOfBulk.Add((M1)aM1);
+
+                            break;
+                        }
+                    case 2:     // 导出结束
+                        {
+                            return 2;           // 正常结束接收
+                        }
+                    default:
+                        {
+                            return -5;          // 结束接收
+                        }
+                }
+            }
+            else
+            {
+                return -2;
+            }            
 
             return 0;
         }
@@ -2876,6 +2973,78 @@ namespace DeviceConfigTools2018
             return 0;
         }
 
+        private Int16 RxPkt_ReadExtendCfg(byte[] SrcData, UInt16 IndexOfStart)
+        {
+            // 数据包的总长度
+            UInt16 SrcLen = (UInt16)(SrcData.Length - IndexOfStart);
+
+            byte Protocol = SrcData[IndexOfStart + 4];
+
+            if (Protocol != 1)
+            {
+                return -1;
+            }
+
+            // 长度
+            if (SrcLen < 26)
+            {
+                return -2;
+            }
+
+            // Catch
+            tbxCatch.Text = CommArithmetic.ByteBuf_to_HexString(SrcData, IndexOfStart + 10, 4);
+
+            // Make
+            tbxMake.Text = CommArithmetic.ByteBuf_to_HexString(SrcData, IndexOfStart + 14, 4);
+
+            // Trap
+            tbxTrap.Text = CommArithmetic.ByteBuf_to_HexString(SrcData, IndexOfStart + 18, 4);
+
+            return 0;
+        }
+
+        private Int16 RxPkt_WriteExtendCfg(byte[] SrcData, UInt16 IndexOfStart)
+        {
+            // 数据包的总长度
+            UInt16 SrcLen = (UInt16)(SrcData.Length - IndexOfStart);
+
+            byte Protocol = SrcData[IndexOfStart + 4];
+
+            if (Protocol != 1)
+            {
+                return -1;
+            }
+
+            // 长度
+            if (SrcLen < 27)
+            {
+                return -2;
+            }
+
+            // Error
+            Int16 error = SrcData[IndexOfStart + 10];
+            if(error >= 0x80)
+            {
+                error -= 0x100;
+            }
+
+            if (error < 0)
+            {
+                return -3;
+            }
+
+            // Catch
+            tbxCatch.Text = CommArithmetic.ByteBuf_to_HexString(SrcData, IndexOfStart + 11, 4);
+
+            // Make
+            tbxMake.Text = CommArithmetic.ByteBuf_to_HexString(SrcData, IndexOfStart + 15, 4);
+
+            // Trap
+            tbxTrap.Text = CommArithmetic.ByteBuf_to_HexString(SrcData, IndexOfStart + 19, 4);
+
+            return 0;
+        }
+
         /// <summary>
         /// 处理接收到的数据
         /// </summary>
@@ -3030,6 +3199,16 @@ namespace DeviceConfigTools2018
                                 ExeError = RxPkt_ReadEthernet(SrcData, iCnt);
                                 break;
                             }
+                        case 0x82:
+                            {
+                                ExeError = RxPkt_ReadExtendCfg(SrcData, iCnt);
+                                break;
+                            }
+                        case 0x83:
+                            {
+                                ExeError = RxPkt_WriteExtendCfg(SrcData, iCnt);
+                                break;
+                            }
                         default:
                             {
                                 break;
@@ -3051,6 +3230,7 @@ namespace DeviceConfigTools2018
                 catch (Exception ex)
                 {
                     MessageBox.Show("处理接收数据包错误" + ex.Message);
+                    break;
                 }
             }
             return 0;
@@ -4200,8 +4380,21 @@ namespace DeviceConfigTools2018
         /// <returns></returns>
         private byte[] NewExportTxBuf(UInt32 IndexOfStart, UInt32 NbrOfRead)
         {
-            byte[] TxBuf = new byte[16];
+            byte[] TxBuf = null;
             UInt16 TxLen = 0;
+
+            if (ProtocolVer == 1)
+            {
+                TxBuf = new byte[16];
+            }
+            else if (ProtocolVer == 2)
+            {
+                TxBuf = new byte[18];
+            }
+            else
+            {
+                return null;
+            }
 
             // 起始位
             TxBuf[TxLen++] = 0xCB;
@@ -4214,20 +4407,41 @@ namespace DeviceConfigTools2018
             TxBuf[TxLen++] = 0x62;
 
             // 协议版本
-            TxBuf[TxLen++] = 0x01;
+            TxBuf[TxLen++] = ProtocolVer;
 
             // 存储区域
             TxBuf[TxLen++] = DataArea;
 
-            // 起始位置
-            TxBuf[TxLen++] = (byte)((IndexOfStart & 0x00FF0000) >> 16);
-            TxBuf[TxLen++] = (byte)((IndexOfStart & 0x0000FF00) >> 8);
-            TxBuf[TxLen++] = (byte)((IndexOfStart & 0x000000FF) >> 0);
+            if (ProtocolVer == 1)
+            {
+                // 起始位置
+                TxBuf[TxLen++] = (byte)((IndexOfStart & 0x00FF0000) >> 16);
+                TxBuf[TxLen++] = (byte)((IndexOfStart & 0x0000FF00) >> 8);
+                TxBuf[TxLen++] = (byte)((IndexOfStart & 0x000000FF) >> 0);
 
-            // 读取数量
-            TxBuf[TxLen++] = (byte)((NbrOfRead & 0x00FF0000) >> 16);
-            TxBuf[TxLen++] = (byte)((NbrOfRead & 0x0000FF00) >> 8);
-            TxBuf[TxLen++] = (byte)((NbrOfRead & 0x000000FF) >> 0);
+                // 读取数量
+                TxBuf[TxLen++] = (byte)((NbrOfRead & 0x00FF0000) >> 16);
+                TxBuf[TxLen++] = (byte)((NbrOfRead & 0x0000FF00) >> 8);
+                TxBuf[TxLen++] = (byte)((NbrOfRead & 0x000000FF) >> 0);
+            }
+            else if (ProtocolVer == 2)
+            {
+                // 起始位置
+                TxBuf[TxLen++] = (byte)((IndexOfStart & 0xFF000000) >> 24);
+                TxBuf[TxLen++] = (byte)((IndexOfStart & 0x00FF0000) >> 16);
+                TxBuf[TxLen++] = (byte)((IndexOfStart & 0x0000FF00) >> 8);
+                TxBuf[TxLen++] = (byte)((IndexOfStart & 0x000000FF) >> 0);
+
+                // 读取数量
+                TxBuf[TxLen++] = (byte)((NbrOfRead & 0xFF000000) >> 24);
+                TxBuf[TxLen++] = (byte)((NbrOfRead & 0x00FF0000) >> 16);
+                TxBuf[TxLen++] = (byte)((NbrOfRead & 0x0000FF00) >> 8);
+                TxBuf[TxLen++] = (byte)((NbrOfRead & 0x000000FF) >> 0);
+            }
+            else
+            {
+                return null;
+            }
 
             // CRC16
             UInt16 crc = MyCustomFxn.CRC16(MyCustomFxn.GetItuPolynomialOfCrc16(), 0, TxBuf, 3, (UInt16)(TxLen - 3));
@@ -4256,7 +4470,21 @@ namespace DeviceConfigTools2018
             byte[] TxBuf;
             Int16 error;
 
-            ForceExist = false;
+            string expEndStr = string.Empty;
+            if (ProtocolVer == 1)
+            {
+                expEndStr = "BC BC 09 62 01";
+            }
+            else if (ProtocolVer == 2)
+            {
+                expEndStr = "BC BC 09 62 02";
+            }
+            else
+            {
+                return -100;
+            }
+
+                ForceExist = false;
 
             ReadCnt = 0;                                             // 已导出的数量
 
@@ -4287,7 +4515,7 @@ namespace DeviceConfigTools2018
 
                 TxBuf = NewExportTxBuf(IndexOfStart, UnitOfRead);
 
-                RxBuf = helper.Send(TxBuf, 0, (UInt16)TxBuf.Length, ExportTimoutMs, "BC BC 09 62 01");
+                RxBuf = helper.Send(TxBuf, 0, (UInt16)TxBuf.Length, ExportTimoutMs, expEndStr);
 
                 GroupCnt = iX;      // 记录当前是导出的第几组，显示数据时会用到
                 error = ThisThreadOutputOfExport(RxBuf);
@@ -4374,6 +4602,7 @@ namespace DeviceConfigTools2018
 
         Thread ThisThreadOfExport;
 
+        byte ProtocolVer = 1;           // 协议版本
         byte DataArea = 0;              // 数据的存储区域
 
         void ThisThreadEndOfExport()
@@ -4463,6 +4692,9 @@ namespace DeviceConfigTools2018
             // 存储区域
             DataArea = (byte)cbxSensorChannel.SelectedIndex;
 
+            // 协议版本
+            ProtocolVer = (byte)(cbxProtocol.SelectedIndex + 1);
+
             tbkExportResult.Text = "开始导出数据";
             tbkExportResult.Foreground = new SolidColorBrush(Colors.Green);
             tbkExportResult.FontWeight = FontWeights.Bold;
@@ -4484,8 +4716,13 @@ namespace DeviceConfigTools2018
         {
             tbxStartTimeOfData.Text = "";
             tbkTotalOfData.Text = "";
-            GridLineOfExport = 1;
-            DataOfExport.Clear();
+
+            GridLineOfSingle = 1;
+            DataOfSingle.Clear();
+
+            GridLineOfBulk = 1;
+            DataOfBulk.Clear();
+
             tbkExportResult.Text = "";
         }
 
@@ -4594,6 +4831,36 @@ namespace DeviceConfigTools2018
             return true;
         }
 
+        bool IsMyExpSensorData(UInt32 Id, byte nodeNum, DateTime[] st)
+        {
+            bool IsExpId = IsMyExpSensorId(Id);
+            if (IsExpId == false)
+            {
+                return false;
+            }
+
+            int dif = 0;
+
+            for(int iX = 0; iX < nodeNum; iX++)
+            {
+                dif = DateTime.Compare(st[iX], SampleStart);
+                if (dif < 0)
+                {
+                    continue;
+                }
+
+                dif = DateTime.Compare(SampleEnd, st[iX]);
+                if (dif < 0)
+                {
+                    continue;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         private void btnExportPart_Click(object sender, RoutedEventArgs e)
         {
             SaveListAndSampleTime();
@@ -4612,6 +4879,9 @@ namespace DeviceConfigTools2018
 
             // 存储区域
             DataArea = (byte)cbxSensorChannel.SelectedIndex;
+
+            // 协议版本
+            ProtocolVer = (byte)(cbxProtocol.SelectedIndex + 1);
 
             if (ReadTotal == 0)
             {
@@ -4692,6 +4962,10 @@ namespace DeviceConfigTools2018
             tbxNewApn.Text = tbxApn.Text;
             tbxNewUserName.Text = tbxUserName.Text;
             tbxNewPassword.Text = tbxPassword.Text;
+
+            tbxNewCatch.Text = tbxCatch.Text;
+            tbxNewMake.Text = tbxMake.Text;
+            tbxNewTrap.Text = tbxTrap.Text;
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
@@ -4701,7 +4975,9 @@ namespace DeviceConfigTools2018
             tbxPrimaryMac.Text = "";
             tbxProtocol.Text = "";
             tbxSwRevisionM.Text = "";
+            tbxNewSwRevisionM.Text = "";
             tbxSwRevisionS.Text = "";
+            tbxNewSwRevisionS.Text = "";
             tbxCurrent.Text = "";
             tbxDeviceMac.Text = "";
             tbxHwRevision.Text = "";
@@ -4739,6 +5015,10 @@ namespace DeviceConfigTools2018
             tbxApn.Text = "";
             tbxUserName.Text = "";
             tbxPassword.Text = "";
+
+            tbxCatch.Text = "";
+            tbxMake.Text = "";
+            tbxTrap.Text = "";
         }
 
         byte SensorIx = 0;              // 本地传感器的编号，取值范围：0或1；
@@ -5116,11 +5396,31 @@ namespace DeviceConfigTools2018
             TxBuf[TxLen++] = (byte)((uValue & 0xFF00) >> 8);
             TxBuf[TxLen++] = (byte)((uValue & 0x00FF) >> 0);
 
-            // 保留位
-            TxBuf[TxLen++] = 0x00;
-            TxBuf[TxLen++] = 0x00;
-            TxBuf[TxLen++] = 0x00;
-            TxBuf[TxLen++] = 0x00;
+            // 温度变化系数
+            if (SensorIx == 0)
+            {
+                fValue = Convert.ToDouble(tbxNewTempCurveCoeOfLs1.Text);
+            }
+            else
+            {
+                fValue = Convert.ToDouble(tbxNewTempCurveCoeOfLs2.Text);
+            }
+            uValue = (UInt16)(fValue * 10000.0f);
+            TxBuf[TxLen++] = (byte)((uValue & 0xFF00) >> 8);
+            TxBuf[TxLen++] = (byte)((uValue & 0x00FF) >> 0);
+
+            // 湿度变化系数
+            if (SensorIx == 0)
+            {
+                fValue = Convert.ToDouble(tbxNewHumCurveCoeOfLs1.Text);
+            }
+            else
+            {
+                fValue = Convert.ToDouble(tbxNewHumCurveCoeOfLs2.Text);
+            }
+            uValue = (UInt16)(fValue * 10000.0f);
+            TxBuf[TxLen++] = (byte)((uValue & 0xFF00) >> 8);
+            TxBuf[TxLen++] = (byte)((uValue & 0x00FF) >> 0);
 
             // CRC16
             UInt16 crc = MyCustomFxn.CRC16(MyCustomFxn.GetItuPolynomialOfCrc16(), 0, TxBuf, 3, (UInt16)(TxLen - 3));
@@ -5171,6 +5471,8 @@ namespace DeviceConfigTools2018
             tbxNewTempThrHighOfLs1.Text = tbxTempThrHighOfLs1.Text;
             tbxNewHumThrLowOfLs1.Text = tbxHumThrLowOfLs1.Text;
             tbxNewHumThrHighOfLs1.Text = tbxHumThrHighOfLs1.Text;
+            tbxNewTempCurveCoeOfLs1.Text = tbxTempCurveCoeOfLs1.Text;
+            tbxNewHumCurveCoeOfLs1.Text = tbxHumCurveCoeOfLs1.Text;
         }
 
         private void btnClearOfLs1_Click(object sender, RoutedEventArgs e)
@@ -5195,6 +5497,8 @@ namespace DeviceConfigTools2018
             tbxHumOfLs1.Text = "";
             tbxHumThrLowOfLs1.Text = "";
             tbxHumThrHighOfLs1.Text = "";
+            tbxTempCurveCoeOfLs1.Text = "";
+            tbxHumCurveCoeOfLs1.Text = "";
         }
 
         private void btnReadCfgOfLs2_Click(object sender, RoutedEventArgs e)
@@ -5220,6 +5524,8 @@ namespace DeviceConfigTools2018
             tbxNewTempThrHighOfLs2.Text = tbxTempThrHighOfLs2.Text;
             tbxNewHumThrLowOfLs2.Text = tbxHumThrLowOfLs2.Text;
             tbxNewHumThrHighOfLs2.Text = tbxHumThrHighOfLs2.Text;
+            tbxNewTempCurveCoeOfLs2.Text = tbxTempCurveCoeOfLs2.Text;
+            tbxNewHumCurveCoeOfLs2.Text = tbxHumCurveCoeOfLs2.Text;
         }
 
         private void btnClearOfLs2_Click(object sender, RoutedEventArgs e)
@@ -5244,6 +5550,8 @@ namespace DeviceConfigTools2018
             tbxHumOfLs2.Text = "";
             tbxHumThrLowOfLs2.Text = "";
             tbxHumThrHighOfLs2.Text = "";
+            tbxTempCurveCoeOfLs2.Text = "";
+            tbxHumCurveCoeOfLs2.Text = "";
         }
 
         private void btnSetCfgOfLs2_Click(object sender, RoutedEventArgs e)
@@ -6005,8 +6313,7 @@ namespace DeviceConfigTools2018
         }
 
         private void btnSaveExcel_Click(object sender, RoutedEventArgs e)
-        {         
-            
+        {                 
             SaveFileDialog saveDlg = new SaveFileDialog();
             saveDlg.Filter = "XLS文件|*.xls|所有文件|*.*";
             saveDlg.FileName = "Export_" + DateTime.Now.ToString("yyyyMMdd_hhmmss");
@@ -6016,12 +6323,20 @@ namespace DeviceConfigTools2018
             Comment += "Gateway MAC: " + tbxDeviceMac.Text + "\n";
             Comment += "起始时间: " + tbxStartTimeOfData.Text + "\n";
 
-            if (saveDlg.ShowDialog() == true)
+            if (saveDlg.ShowDialog() == false)
             {
-                ExportXLS export = new ExportXLS();
-                export.ExportWPFDataGrid(DataGridOfExport, saveDlg.FileName, DataOfExport, Comment);
+                return; 
             }
-            
+
+            ExportXLS export = new ExportXLS();
+
+            if(tabData.SelectedIndex == 0)
+            {
+                export.ExportWPFDataGrid(DataGridOfSingle, saveDlg.FileName, DataOfSingle, Comment);
+            }else if (tabData.SelectedIndex == 1)
+            {
+                export.ExportWPFDataGrid(DataGridOfBulk, saveDlg.FileName, DataOfBulk, Comment);
+            }
         }
 
         private void btnResetFilter_Click(object sender, RoutedEventArgs e)
@@ -6357,6 +6672,166 @@ namespace DeviceConfigTools2018
         private void btnStopCheck_Click(object sender, RoutedEventArgs e)
         {
             NeedStopCheck = true;
+        }
+
+        /// <summary>
+        /// 读取扩展配置
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="helper"></param>
+        /// <returns></returns>
+        private Int16 ReadExtendCfg(object sender, RoutedEventArgs e, SerialPortHelper helper)
+        {
+            byte[] TxBuf = new byte[14];
+            UInt16 TxLen = 0;
+
+            // 起始位
+            TxBuf[TxLen++] = 0xCB;
+            TxBuf[TxLen++] = 0xCB;
+
+            // 长度位
+            TxBuf[TxLen++] = 0x00;
+
+            // 功能位
+            TxBuf[TxLen++] = 0x82;
+
+            // 协议版本
+            TxBuf[TxLen++] = 0x01;
+
+            // 保留位
+            TxBuf[TxLen++] = 0x00;
+            TxBuf[TxLen++] = 0x00;
+            TxBuf[TxLen++] = 0x00;
+            TxBuf[TxLen++] = 0x00;
+
+            // CRC16
+            UInt16 crc = MyCustomFxn.CRC16(MyCustomFxn.GetItuPolynomialOfCrc16(), 0, TxBuf, 3, (UInt16)(TxLen - 3));
+            TxBuf[TxLen++] = (byte)((crc & 0xFF00) >> 8);
+            TxBuf[TxLen++] = (byte)((crc & 0x00FF) >> 0);
+
+            // 结束位
+            TxBuf[TxLen++] = 0xBC;
+            TxBuf[TxLen++] = 0xBC;
+
+            // 重写长度位
+            TxBuf[2] = (byte)(TxLen - 7);
+
+            RxBuf = helper.Send(TxBuf, 0, TxLen, 500);
+
+            Int16 error = RxPkt_Handle(RxBuf);
+            if (error < 0)
+            {
+                MessageBox.Show("读取扩展配置失败:" + error.ToString("G"));
+                return -1;
+            }
+
+            return 0;
+        }
+
+        private void btnReadExtendCfg_Click(object sender, RoutedEventArgs e)
+        {
+            OpenTxRxClose(sender, e, ReadExtendCfg);
+        }
+
+        private Int16 WriteExtendCfg(object sender, RoutedEventArgs e, SerialPortHelper helper)
+        {
+            byte[] TxBuf = new byte[24];
+            UInt16 TxLen = 0;
+
+            // 起始位
+            TxBuf[TxLen++] = 0xCB;
+            TxBuf[TxLen++] = 0xCB;
+
+            // 长度位
+            TxBuf[TxLen++] = 0x00;
+
+            // 功能位
+            TxBuf[TxLen++] = 0x83;
+
+            // 协议版本
+            TxBuf[TxLen++] = 0x01;
+
+            // Catch
+            byte[] byteBuf = CommArithmetic.HexStringToByteArray(tbxNewCatch.Text);
+            if(byteBuf == null && byteBuf.Length < 4)
+            {
+                MessageBox.Show("Catch不合法！");
+                return -99;
+            }
+            TxBuf[TxLen++] = byteBuf[0];
+            TxBuf[TxLen++] = byteBuf[1];
+            TxBuf[TxLen++] = byteBuf[2];
+            TxBuf[TxLen++] = byteBuf[3];
+
+            // Make
+            byteBuf = CommArithmetic.HexStringToByteArray(tbxNewMake.Text);
+            if (byteBuf == null && byteBuf.Length < 4)
+            {
+                MessageBox.Show("Make不合法！");
+                return -99;
+            }
+            TxBuf[TxLen++] = byteBuf[0];
+            TxBuf[TxLen++] = byteBuf[1];
+            TxBuf[TxLen++] = byteBuf[2];
+            TxBuf[TxLen++] = byteBuf[3];
+
+            // Trap
+            byteBuf = CommArithmetic.HexStringToByteArray(tbxNewTrap.Text);
+            if (byteBuf == null && byteBuf.Length < 4)
+            {
+                MessageBox.Show("Trap不合法！");
+                return -99;
+            }
+            TxBuf[TxLen++] = byteBuf[0];
+            TxBuf[TxLen++] = byteBuf[1];
+            TxBuf[TxLen++] = byteBuf[2];
+            TxBuf[TxLen++] = byteBuf[3];
+
+            // CRC16
+            UInt16 crc = MyCustomFxn.CRC16(MyCustomFxn.GetItuPolynomialOfCrc16(), 0, TxBuf, 3, (UInt16)(TxLen - 3));
+            TxBuf[TxLen++] = (byte)((crc & 0xFF00) >> 8);
+            TxBuf[TxLen++] = (byte)((crc & 0x00FF) >> 0);
+
+            // 结束位
+            TxBuf[TxLen++] = 0xBC;
+            TxBuf[TxLen++] = 0xBC;
+
+            // 重写长度位
+            TxBuf[2] = (byte)(TxLen - 7);
+
+            RxBuf = helper.Send(TxBuf, 0, TxLen, 500);
+
+            Int16 error = RxPkt_Handle(RxBuf);
+            if (error < 0)
+            {
+                MessageBox.Show("修改扩展配置失败:" + error.ToString("G"));
+                return -1;
+            }
+
+            return 0;
+        }
+
+        private void btnWriteExtendCfg_Click(object sender, RoutedEventArgs e)
+        {
+            OpenTxRxClose(sender, e, WriteExtendCfg);
+        }
+
+        private void cbxProtocol_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tabData == null)
+            {
+                return;
+            }
+
+            if (cbxProtocol.SelectedIndex == 0)
+            {
+                tabData.SelectedIndex = 0;
+            }
+            else if (cbxProtocol.SelectedIndex == 1)
+            {
+                tabData.SelectedIndex = 1;
+            }
         }
 
 

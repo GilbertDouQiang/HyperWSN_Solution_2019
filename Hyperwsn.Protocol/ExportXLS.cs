@@ -21,7 +21,6 @@ namespace Hyperwsn.Protocol
 {
     public class ExportXLS
     {
-
         private int CreateDataSheet(DataGrid SrcDataGrid, ObservableCollection<M1> data, ICellStyle cellStyle, ref HSSFWorkbook hssfworkbook, int iX, int Start, int Count)
         {
             IRow row;
@@ -52,6 +51,8 @@ namespace Hyperwsn.Protocol
                 }
             }
 
+            Int32 iC = 0;
+
             // 填充数据
             for (int r = 0; r < Count; r++)
             {
@@ -68,7 +69,18 @@ namespace Hyperwsn.Protocol
                     cell = row.CreateCell(c);
                     DataGridTextColumn dgcol = SrcDataGrid.Columns[c] as DataGridTextColumn;
                     Binding binding = (Binding)dgcol.Binding;
-                    string path = binding.Path.Path;  //对象属性的名称拿到了
+                    string path = binding.Path.Path;            // 对象属性的名称拿到了
+
+                    string[] pathSplit = path.Split('[');
+
+                    path = pathSplit[0];
+
+                    if(pathSplit.Length >= 2)
+                    {
+                        pathSplit[1] = pathSplit[1].TrimEnd(']');
+                        iC = Convert.ToInt32(pathSplit[1]);
+                    }
+
                     PropertyInfo info1 = data[Start + r].GetType().GetProperty(path);
                     if (info1 == null)
                     {
@@ -77,34 +89,164 @@ namespace Hyperwsn.Protocol
 
                     switch (info1.PropertyType.Name)
                     {
+                        case "Boolean":
+                            {
+                                bool boolValue = (bool)info1.GetValue(data[r], null);
+                                row.CreateCell(c).SetCellValue(boolValue);
+                                break;
+                            }
+                        case "Boolean[]":
+                            {
+                                bool[] boolValue = (bool[])info1.GetValue(data[r], null);
+                                if (iC < boolValue.Length)
+                                {
+                                    row.CreateCell(c).SetCellValue(boolValue[iC]);
+                                }
+                                else
+                                {
+                                    row.CreateCell(c).SetCellValue("");
+                                }
+                                break;
+                            }
                         case "Byte":
-                            byte byteValue = (byte)info1.GetValue(data[r], null);
-                            row.CreateCell(c).SetCellValue(byteValue);
-                            break;
+                            {
+                                byte byteValue = (byte)info1.GetValue(data[r], null);
+                                row.CreateCell(c).SetCellValue(byteValue);
+                                break;
+                            }
+                        case "Byte[]":
+                            {
+                                byte[] byteValue = (byte[])info1.GetValue(data[r], null);
+                                if(iC < byteValue.Length)
+                                {
+                                    row.CreateCell(c).SetCellValue(byteValue[iC]);
+                                }
+                                else
+                                {
+                                    row.CreateCell(c).SetCellValue("");
+                                }                                
+                                break;
+                            }
                         case "UInt16":
-                            UInt16 UInt16Value = (UInt16)info1.GetValue(data[r], null);
-                            row.CreateCell(c).SetCellValue(UInt16Value);
-                            break;
+                            {
+                                UInt16 UInt16Value = (UInt16)info1.GetValue(data[r], null);
+                                row.CreateCell(c).SetCellValue(UInt16Value);
+                                break;
+                            }
+                        case "UInt16[]":
+                            {
+                                UInt16[] UInt16Value = (UInt16[])info1.GetValue(data[r], null);
+                                if (iC < UInt16Value.Length)
+                                {
+                                    row.CreateCell(c).SetCellValue(UInt16Value[iC]);
+                                }
+                                else
+                                {
+                                    row.CreateCell(c).SetCellValue("");
+                                }
+                                break;
+                            }
                         case "Int16":
-                            Int16 Int16Value = (Int16)info1.GetValue(data[r], null);
-                            row.CreateCell(c).SetCellValue(Int16Value);
-                            break;
+                            {
+                                Int16 Int16Value = (Int16)info1.GetValue(data[r], null);
+                                row.CreateCell(c).SetCellValue(Int16Value);
+                                break;
+                            }
+                        case "Int16[]":
+                            {
+                                Int16[] Int16Value = (Int16[])info1.GetValue(data[r], null);
+                                if (iC < Int16Value.Length)
+                                {
+                                    row.CreateCell(c).SetCellValue(Int16Value[iC]);
+                                }
+                                else
+                                {
+                                    row.CreateCell(c).SetCellValue("");
+                                }
+                                break;
+                            }
                         case "UInt32":
-                            UInt32 UInt32Value = (UInt32)info1.GetValue(data[r], null);
-                            row.CreateCell(c).SetCellValue(UInt32Value);
-                            break;
+                            {
+                                UInt32 UInt32Value = (UInt32)info1.GetValue(data[r], null);
+                                row.CreateCell(c).SetCellValue(UInt32Value);
+                                break;
+                            }
+                        case "UInt32[]":
+                            {
+                                UInt32[] UInt32Value = (UInt32[])info1.GetValue(data[r], null);
+                                if (iC < UInt32Value.Length)
+                                {
+                                    row.CreateCell(c).SetCellValue(UInt32Value[iC]);
+                                }
+                                else
+                                {
+                                    row.CreateCell(c).SetCellValue("");
+                                }
+                                break;
+                            }
                         case "Int32":
-                            Int32 intValue = (Int32)info1.GetValue(data[r], null);
-                            row.CreateCell(c).SetCellValue(intValue);
-                            break;
+                            {
+                                Int32 intValue = (Int32)info1.GetValue(data[r], null);
+                                row.CreateCell(c).SetCellValue(intValue);
+                                break;
+                            }
+                        case "Int32[]":
+                            {
+                                Int32[] intValue = (Int32[])info1.GetValue(data[r], null);
+                                if (iC < intValue.Length)
+                                {
+                                    row.CreateCell(c).SetCellValue(intValue[iC]);
+                                }
+                                else
+                                {
+                                    row.CreateCell(c).SetCellValue("");
+                                }
+                                break;
+                            }
                         case "Double":
-                            double doubleValue = (double)info1.GetValue(data[r], null);
-                            row.CreateCell(c).SetCellValue(doubleValue);
-                            break;
+                            {
+                                double doubleValue = (double)info1.GetValue(data[r], null);
+                                row.CreateCell(c).SetCellValue(doubleValue);
+                                break;
+                            }
+                        case "Double[]":
+                            {
+                                double[] doubleValue = (double[])info1.GetValue(data[r], null);
+                                if (iC < doubleValue.Length)
+                                {
+                                    row.CreateCell(c).SetCellValue(doubleValue[iC]);
+                                }
+                                else
+                                {
+                                    row.CreateCell(c).SetCellValue("");
+                                }
+                                break;
+                            }
+                        case "DateTime":
+                            {
+                                DateTime dateTime = (DateTime)info1.GetValue(data[r], null);
+                                row.CreateCell(c).SetCellValue(dateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                                break;
+                            }
+                        case "DateTime[]":
+                            {
+                                DateTime[] dateTime = (DateTime[])info1.GetValue(data[r], null);
+                                if (iC < dateTime.Length)
+                                {
+                                    row.CreateCell(c).SetCellValue(dateTime[iC].ToString("yyyy-MM-dd HH:mm:ss"));
+                                }
+                                else
+                                {
+                                    row.CreateCell(c).SetCellValue("");
+                                }
+                                break;
+                            }
                         default:
-                            string cellString = info1.GetValue(data[r], null).ToString();
-                            row.CreateCell(c).SetCellValue(cellString);
-                            break;
+                            {
+                                string cellString = info1.GetValue(data[r], null).ToString();
+                                row.CreateCell(c).SetCellValue(cellString);
+                                break;
+                            }                            
                     }
                     row.Cells[c].CellStyle = cellStyle;
                 }

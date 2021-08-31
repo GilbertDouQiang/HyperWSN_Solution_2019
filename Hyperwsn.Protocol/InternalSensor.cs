@@ -67,5 +67,15 @@ namespace Hyperwsn.Protocol
         /// 湿度补偿
         /// </summary>
         public double HumCompensation { get; set; }
+
+        /// <summary>
+        /// 温度变化曲线
+        /// </summary>
+        public double tempCurveCoe { get; set; }
+
+        /// <summary>
+        /// 湿度变化曲线
+        /// </summary>
+        public double humCurveCoe { get; set; }
     }
 }

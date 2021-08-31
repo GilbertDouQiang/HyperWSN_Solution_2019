@@ -167,7 +167,7 @@ namespace Hyperwsn.Protocol
         /// <param name="StartIndex"></param>
         public void SetReserved(byte[] SrcData, UInt16 StartIndex, UInt16 Len)
         {
-            ReservedS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, Len);
+            ReservedS = CommArithmetic.ByteBuf_to_HexString(SrcData, StartIndex, Len);
 
             byte[] Reserved = new byte[Len];
 

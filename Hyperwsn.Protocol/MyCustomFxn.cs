@@ -287,11 +287,6 @@ namespace Hyperwsn.Protocol
             return (byte)(tens * 10 + units);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
         static public string ToHexString(byte[] HexBuf, UInt16 IndexOfStart, UInt16 HexLen)
         {
             string hexString = string.Empty;
@@ -330,6 +325,26 @@ namespace Hyperwsn.Protocol
             ipByteBuf[3] = byte.Parse(ipStrCell[3]);
 
             return ipByteBuf;
+        }
+
+        static public UInt32 DateTime_to_UTC(System.DateTime time)
+        {
+            double intResult = 0;
+
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+
+            intResult = (time - startTime).TotalSeconds;
+
+            return (UInt32)intResult;
+        }
+
+        static public DateTime UTC_to_DateTime(UInt32 utc)
+        {
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+
+            startTime = startTime.AddSeconds((double)utc);          
+
+            return startTime;
         }
     }
 }

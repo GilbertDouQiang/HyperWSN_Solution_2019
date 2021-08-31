@@ -14,7 +14,7 @@
     </Window.Resources>
     <Grid>
         <Grid>
-            <telerik:RadDocking HasDocumentHost="True" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,10,0,-10">
+            <telerik:RadDocking HasDocumentHost="True" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0">
                 <telerik:RadSplitContainer Width="150">
                     <telerik:RadPaneGroup HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="12">
                         <telerik:RadPane Header="Device Status">
@@ -26,7 +26,7 @@
                     <telerik:RadPaneGroup>
                         <telerik:RadDocumentPane Title="HyperWSN Device ">
 
-                            <Border Padding="5 5 5 5">
+                            <Border Padding="0 0 0 0">
 
                                 <StackPanel x:Name="StackM1" Margin="0 0 0 0">
 
@@ -50,18 +50,18 @@
                                         <telerik:RadComboBox x:Name="cbDeviceList"  Grid.Column="2" Margin="0 0 0 0"/>
                                         <telerik:RadButton x:Name="btnConnectDevice" Click="btnConnectDevice_Click" Grid.Column="4" Content="Connect"  Margin="0,0,0,0" />
                                         <telerik:RadButton x:Name="btnRefersh"  Grid.Column="6" Content="Refresh" Click="btnRefersh_Click"  Margin="0 0 0 0" />
-                                        <telerik:RadButton x:Name="btnStartCheck" Grid.Column="8"  Content="开始检查" Click="btnStartCheck_Click"  Margin="0 0 0 0" />
-                                        <telerik:RadButton x:Name="btnStopCheck"  Grid.Column="10" Content="停止检查" Click="btnStopCheck_Click"   Margin="0 0 0 0" />
+                                        <telerik:RadButton x:Name="btnStartCheck" Grid.Column="8"  Content="开始检查" Click="btnStartCheck_Click"  Margin="0 0 0 0" Visibility="Hidden" />
+                                        <telerik:RadButton x:Name="btnStopCheck"  Grid.Column="10" Content="停止检查" Click="btnStopCheck_Click"   Margin="0 0 0 0" Visibility="Hidden" />
                                     </Grid>
 
                                     <Grid Margin="0 5 0 0" >
 
                                         <telerik:RadTabControl Padding="0, 0, 0, 0" x:Name="aRadTabControl" SelectedIndex="0" Background="{x:Null}" >
 
-                                            <telerik:RadTabItem x:Name="RadTabItemOfCfg" Header=" Config ">
+                                            <telerik:RadTabItem x:Name="RadTabItemOfCfg" Header=" 配置 " Padding="0,3">
                                                 <StackPanel x:Name="GatewayDetail">
 
-                                                    <Grid Margin="0 15 0 0">
+                                                    <Grid Margin="0 10 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="0.2*"/>
                                                             <ColumnDefinition Width="0.8*"/>
@@ -119,8 +119,8 @@
                                                         <TextBox x:Name="tbxNewSwRevisionM" Text="{Binding SwRevisionS}" Grid.Column="7" Margin="5,0,0,0" IsReadOnly="True" MaxLines="1" MaxLength="5" FontWeight="Bold" />
 
                                                         <TextBlock  Grid.Column="9" Text=" 软件次版本："  Margin="0,3,3,0" HorizontalAlignment="Right"/>
-                                                        <TextBox x:Name="tbxSwRevisionS"    Text="{Binding HwRevisionS}" Margin="0,0,5,0" Grid.Column="10" IsReadOnly="True" MaxLines="1" MaxLength="5" FontWeight="Bold"/>
-                                                        <TextBox x:Name="tbxNewSwRevisionS" Text="{Binding HwRevisionS}" Margin="5,0,0,0" Grid.Column="11" IsReadOnly="True" MaxLines="1" MaxLength="5" FontWeight="Bold" />
+                                                        <TextBox x:Name="tbxSwRevisionS"    Text="{Binding cSwRevisionS}" Margin="0,0,5,0" Grid.Column="10" IsReadOnly="True" MaxLines="1" MaxLength="5" FontWeight="Bold"/>
+                                                        <TextBox x:Name="tbxNewSwRevisionS" Text="{Binding cSwRevisionS}" Margin="5,0,0,0" Grid.Column="11" IsReadOnly="True" MaxLines="1" MaxLength="5" FontWeight="Bold" />
 
                                                         <Button x:Name="btnClear" Content="Clear" Grid.Column="13" Click="btnClear_Click" Margin="0,0,0,0"/>
                                                     </Grid>
@@ -490,6 +490,44 @@
                                                         <Button x:Name="btnDeleteFlash" Content="删除全部数据" Grid.Column="13" Click="btnDeleteFlash_Click"    Margin="0,0,0,0"/>
                                                     </Grid>
 
+
+                                                    <Grid Margin="0 15 0 0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                            <ColumnDefinition Width="0.8*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                            <ColumnDefinition Width="0.8*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                            <ColumnDefinition Width="0.8*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                            <ColumnDefinition Width="0.75*"/>
+                                                            <ColumnDefinition Width="0.1*"/>
+                                                            <ColumnDefinition Width="0.75*"/>
+                                                            <ColumnDefinition Width="0.2*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock   Grid.Column="1" Text="Catch：" Margin="0,3,3,0" HorizontalAlignment="Right" />
+                                                        <TextBox x:Name="tbxCatch" Text=""  Grid.Column="2"  Margin="0 0 5 0" IsReadOnly="True" MaxLength="11" MaxLines="1" FontWeight="Bold" />
+                                                        <TextBox x:Name="tbxNewCatch" Text=""  Grid.Column="3"  Margin="5 0 0 0" MaxLength="11" MaxLines="1" FontWeight="Bold"/>
+
+                                                        <TextBlock   Grid.Column="5" Text="Make：" Margin="0,3,3,0" HorizontalAlignment="Right" />
+                                                        <TextBox x:Name="tbxMake" Text=""  Grid.Column="6"  Margin="0 0 5 0" IsReadOnly="True" MaxLength="11" MaxLines="1" FontWeight="Bold"/>
+                                                        <TextBox x:Name="tbxNewMake" Text="" Grid.Column="7"  Margin="5 0 0 0" MaxLength="11" MaxLines="1" FontWeight="Bold"/>
+
+                                                        <TextBlock   Grid.Column="9" Text="Trap：" Margin="0,3,3,0" HorizontalAlignment="Right" />
+                                                        <TextBox x:Name="tbxTrap" Text=""  Grid.Column="10"  Margin="0 0 5 0" IsReadOnly="True" MaxLength="11" MaxLines="1" FontWeight="Bold"/>
+                                                        <TextBox x:Name="tbxNewTrap" Text=""   Grid.Column="11" Margin="5 0 0 0" MaxLength="11" MaxLines="1" FontWeight="Bold"/>
+
+                                                        <Button x:Name="btnReadExtendCfg" Content="读取" Grid.Column="13" Click="btnReadExtendCfg_Click" Margin="0,0,0,0"/>
+                                                        <Button x:Name="btnWriteExtendCfg" Content="修改" Grid.Column="15" Click="btnWriteExtendCfg_Click" Margin="0,0,0,0"/>
+                                                    </Grid>
+
                                                     <Grid Margin="0 15 0 0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="0.06*"/>
@@ -654,12 +692,13 @@
                                                 </StackPanel>
                                             </telerik:RadTabItem>
 
-                                            <telerik:RadTabItem x:Name="RadTabItemOfInternalSensor" Header=" Internal Sensor ">
+                                            <telerik:RadTabItem x:Name="RadTabItemOfInternalSensor" Header=" 本地传感器 " Padding="0,3">
                                                 <StackPanel>
                                                     <Grid x:Name="InternalSernsor1">
 
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="1.2*"/>
+                                                            <RowDefinition Height="*"/>
                                                             <RowDefinition Height="*"/>
                                                             <RowDefinition Height="*"/>
                                                             <RowDefinition Height="*"/>
@@ -876,7 +915,7 @@
                                                             <Button x:Name="btnSetCfgOfLs1" Content="修改配置" Grid.Column="13" Click="btnSetCfgOfLs1_Click" Margin="0,0,0,0"/>
                                                         </Grid>
 
-                                                        <Grid Margin="0 5 0 10" Grid.Row="8">
+                                                        <Grid Margin="0 5 0 0" Grid.Row="8">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="0.2*"/>
                                                                 <ColumnDefinition Width="0.8*"/>
@@ -907,12 +946,41 @@
                                                             <TextBox x:Name="tbxNewHumThrHighOfLs1"  Text="" Grid.Column="11"  Margin="5 0 0 0" MaxLength="6" MaxLines="1"/>
                                                         </Grid>
 
+                                                        <Grid Margin="0 5 0 10" Grid.Row="9">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                                <ColumnDefinition Width="0.8*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                                <ColumnDefinition Width="0.8*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                                <ColumnDefinition Width="0.8*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                                <ColumnDefinition Width="1.4*"/>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            
+                                                            <TextBlock   Grid.Column="5" Text="温度变化系数" Margin="0,3,3,0" HorizontalAlignment="Right" />
+                                                            <TextBox x:Name="tbxTempCurveCoeOfLs1" Text="{Binding tempCurveCoe, StringFormat=\{0:F4\}}"  Grid.Column="6"  Margin="0 0 5 0" IsReadOnly="True" MaxLength="6" MaxLines="1"/>
+                                                            <TextBox x:Name="tbxNewTempCurveCoeOfLs1" Text=""  Grid.Column="7"  Margin="5 0 0 0" MaxLength="6" MaxLines="1"/>
+
+                                                            <TextBlock   Grid.Column="9" Text="湿度变化系数" Margin="0,3,3,0" HorizontalAlignment="Right" />
+                                                            <TextBox x:Name="tbxHumCurveCoeOfLs1" Text="{Binding humCurveCoe, StringFormat=\{0:F4\}}"  Grid.Column="10"  Margin="0 0 5 0" IsReadOnly="True" MaxLength="6" MaxLines="1"/>
+                                                            <TextBox x:Name="tbxNewHumCurveCoeOfLs1"  Text="" Grid.Column="11"  Margin="5 0 0 0" MaxLength="6" MaxLines="1"/>
+                                                        </Grid>
+
                                                     </Grid>
 
                                                     <Grid x:Name="InternalSernsor2">
 
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="1.2*"/>
+                                                            <RowDefinition Height="*"/>
                                                             <RowDefinition Height="*"/>
                                                             <RowDefinition Height="*"/>
                                                             <RowDefinition Height="*"/>
@@ -1129,7 +1197,7 @@
                                                             <Button x:Name="btnSetCfgOfLs2" Content="修改配置" Grid.Column="13" Click="btnSetCfgOfLs2_Click" Margin="0,0,0,0"/>
                                                         </Grid>
 
-                                                        <Grid Margin="0 5 0 10" Grid.Row="8">
+                                                        <Grid Margin="0 5 0 0" Grid.Row="8">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="0.2*"/>
                                                                 <ColumnDefinition Width="0.8*"/>
@@ -1160,11 +1228,39 @@
                                                             <TextBox x:Name="tbxNewHumThrHighOfLs2"  Text="" Grid.Column="11"  Margin="5 0 0 0" MaxLength="6" MaxLines="1"/>
                                                         </Grid>
 
+                                                        <Grid Margin="0 5 0 20" Grid.Row="9">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                                <ColumnDefinition Width="0.8*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                                <ColumnDefinition Width="0.8*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                                <ColumnDefinition Width="0.8*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                                <ColumnDefinition Width="1.4*"/>
+                                                                <ColumnDefinition Width="0.2*"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock   Grid.Column="5" Text="温度变化系数" Margin="0,3,3,0" HorizontalAlignment="Right" />
+                                                            <TextBox x:Name="tbxTempCurveCoeOfLs2" Text="{Binding tempCurveCoe, StringFormat=\{0:F4\}}"  Grid.Column="6"  Margin="0 0 5 0" IsReadOnly="True" MaxLength="6" MaxLines="1"/>
+                                                            <TextBox x:Name="tbxNewTempCurveCoeOfLs2" Text=""  Grid.Column="7"  Margin="5 0 0 0" MaxLength="6" MaxLines="1"/>
+
+                                                            <TextBlock   Grid.Column="9" Text="湿度变化系数" Margin="0,3,3,0" HorizontalAlignment="Right" />
+                                                            <TextBox x:Name="tbxHumCurveCoeOfLs2" Text="{Binding humCurveCoe, StringFormat=\{0:F4\}}"  Grid.Column="10"  Margin="0 0 5 0" IsReadOnly="True" MaxLength="6" MaxLines="1"/>
+                                                            <TextBox x:Name="tbxNewHumCurveCoeOfLs2"  Text="" Grid.Column="11"  Margin="5 0 0 0" MaxLength="6" MaxLines="1"/>
+                                                        </Grid>
                                                     </Grid>
+                                                    
                                                 </StackPanel>
                                             </telerik:RadTabItem>
 
-                                            <telerik:RadTabItem x:Name="RadTabItemOfSG6XCC1101" Header=" CC1101 " >
+                                            <telerik:RadTabItem x:Name="RadTabItemOfSG6XCC1101" Header=" CC1101 " Padding="0,3" >
                                                 <StackPanel x:Name="SG6X1101">
                                                     <Grid Margin="0,50,0,0">
                                                         <Grid.ColumnDefinitions>
@@ -1282,7 +1378,7 @@
                                                 </StackPanel>
                                             </telerik:RadTabItem>
 
-                                            <telerik:RadTabItem x:Name="RadTabItemOfLayout" Header=" 打印布局 " >
+                                            <telerik:RadTabItem x:Name="RadTabItemOfLayout" Header=" 打印布局 " Padding="0,3" >
                                                 <StackPanel x:Name="Layout">
 
                                                     <Grid Margin="0,20,0,0">
@@ -1346,7 +1442,7 @@
                                                 </StackPanel>
                                             </telerik:RadTabItem>
 
-                                            <telerik:RadTabItem x:Name="RadTabItemOfExport" Header=" 导出数据 " >
+                                            <telerik:RadTabItem x:Name="RadTabItemOfExport" Header=" 导出数据 " Padding="0,3" >
                                                 <StackPanel x:Name="Export" >
 
                                                     <Grid Margin="0,15,0,0">
@@ -1399,6 +1495,7 @@
                                                         <ComboBox Grid.Column="9" x:Name="cbxSensorChannel" Margin="10,0,5,0" SelectedIndex="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
                                                             <ListBoxItem Content="高区/通道1" />
                                                             <ListBoxItem Content="低区/通道2" />
+                                                            <ListBoxItem Content="大包" />
                                                         </ComboBox>
                                                                  
                                                     </Grid>
@@ -1424,44 +1521,142 @@
                                                         <TextBlock  Grid.Column="5" Text="采集时间：" Margin="0,3,4,0" HorizontalAlignment="Right" Padding="0,0,0,0" />
                                                         <TextBox Grid.Column="6" x:Name="tbxSampleStart"  Margin="0,0,5,0" MaxLines="1" Text="2017-04-01 23:59:59"/>
                                                         <TextBox Grid.Column="7" x:Name="tbxSampleEnd"  Margin="5,0,5,0" MaxLines="1" Text="2099-04-01 23:59:59"/>
+                                                        <ComboBox Grid.Column="8" x:Name="cbxProtocol" Margin="10,0,5,0" SelectedIndex="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="cbxProtocol_SelectionChanged">
+                                                            <ListBoxItem Content="协议版本1" />
+                                                            <ListBoxItem Content="协议版本2" />
+                                                        </ComboBox>
                                                     </Grid>
 
-                                                    <DataGrid Margin="10,15,10,15" Height="444" x:Name="DataGridOfExport" AutoGenerateColumns="False"  AlternatingRowBackground="#F4F4F4" HorizontalScrollBarVisibility="Visible" AlternationCount="2" >
-                                                        <DataGrid.Columns>
-                                                            <DataGridTextColumn Header="序号" Binding="{Binding DisplayID}" />
-                                                            <DataGridTextColumn Header="Error" Binding="{Binding ExportRrror}" />
-                                                            <DataGridTextColumn Header="系统时间" Binding="{Binding SystemTime, StringFormat=\{0:yy-MM-dd HH:mm:ss:fff\}}" />
-                                                            <DataGridTextColumn Header="导出组序号" Binding="{Binding Group}" />
-                                                            <DataGridTextColumn Header="导出组容量" Binding="{Binding GroupCapacity}" />
-                                                            <DataGridTextColumn Header="组内序号" Binding="{Binding SerialInGroup}" />
-                                                            <DataGridTextColumn Header="Send OK" Binding="{Binding SendOk}" />
-                                                            <DataGridTextColumn Header="SS MAC" Binding="{Binding DeviceMacS}" />
-                                                            <DataGridTextColumn Header="传输时间" Binding="{Binding SensorTransforTime, StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
-                                                            <DataGridTextColumn Header="RSSI" Binding="{Binding RSSI}" />
-                                                            <DataGridTextColumn Header="状态" Binding="{Binding AlertStatusByGw, StringFormat=\{0:X2\}}" />
-                                                            <DataGridTextColumn Header="功能位" Binding="{Binding Pattern}" />
-                                                            <DataGridTextColumn Header="SS类型" Binding="{Binding DeviceTypeS}" />
-                                                            <DataGridTextColumn Header="协议版本" Binding="{Binding Protocol}" />
-                                                            <DataGridTextColumn Header="L/H" Binding="{Binding LastHistory, StringFormat=\{0:X2\}}" />
-                                                            <DataGridTextColumn Header="状态" Binding="{Binding AlertStatusBySs, StringFormat=\{0:X2\}}" />
-                                                            <DataGridTextColumn Header="报警项" Binding="{Binding AlertItemBySs, StringFormat=\{0:X2\}}" />
-                                                            <DataGridTextColumn Header="采集序列号" Binding="{Binding SensorSN}" />
-                                                            <DataGridTextColumn Header="采集时间" Binding="{Binding SensorCollectTime, StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
-                                                            <DataGridTextColumn Header="IC温度" Binding="{Binding ICTemperature}" />                                                            
-                                                            <DataGridTextColumn Header="SS电压V" Binding="{Binding Volt, StringFormat=\{0:F3\}}" />
-                                                            <DataGridTextColumn Header="接电" Binding="{Binding LinkCharge}" />
-                                                            <DataGridTextColumn Header="RAM" Binding="{Binding ToSendRam}" />
-                                                            <DataGridTextColumn Header="FLASH" Binding="{Binding ToSendFlash}" />
-                                                            <DataGridTextColumn Header="温度℃" Binding="{Binding tempS}" />
-                                                            <DataGridTextColumn Header="湿度%" Binding="{Binding humS}" />
-                                                            <DataGridTextColumn Header="源数据" Binding="{Binding SourceData}" />
-                                                        </DataGrid.Columns>
-                                                    </DataGrid>
+                                                    <TabControl x:Name="tabData" Margin="20,10,20,10" SelectedIndex="0" >
 
+                                                        <TabItem x:Name="TableSingle" Header=" 单点 ">
+                                                            <Grid Margin="0,0,0,0">
+                                                                <DataGrid Margin="10,5,10,5" Height="444" x:Name="DataGridOfSingle" AutoGenerateColumns="False"  AlternatingRowBackground="#F4F4F4" HorizontalScrollBarVisibility="Visible" AlternationCount="2" >
+                                                                    <DataGrid.Columns>
+                                                                        <DataGridTextColumn Header="序号" Binding="{Binding DisplayID}" />
+                                                                        <DataGridTextColumn Header="Error" Binding="{Binding ExportRrror}" />
+                                                                        <DataGridTextColumn Header="系统时间" Binding="{Binding SystemTime, StringFormat=\{0:yy-MM-dd HH:mm:ss:fff\}}" />
+                                                                        <DataGridTextColumn Header="导出组序号" Binding="{Binding Group}" />
+                                                                        <DataGridTextColumn Header="导出组容量" Binding="{Binding GroupCapacity}" />
+                                                                        <DataGridTextColumn Header="组内序号" Binding="{Binding SerialInGroup}" />
+                                                                        <DataGridTextColumn Header="Send OK" Binding="{Binding SendOk}" />
+                                                                        <DataGridTextColumn Header="SS MAC" Binding="{Binding DeviceMacS}" />
+                                                                        <DataGridTextColumn Header="传输时间" Binding="{Binding SensorTransferTime, StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
+                                                                        <DataGridTextColumn Header="RSSI" Binding="{Binding RSSI}" />
+                                                                        <DataGridTextColumn Header="状态" Binding="{Binding AlertStatusByGw, StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="功能位" Binding="{Binding Pattern}" />
+                                                                        <DataGridTextColumn Header="SS类型" Binding="{Binding DeviceTypeS}" />
+                                                                        <DataGridTextColumn Header="SS名称" Binding="{Binding Name}" />
+                                                                        <DataGridTextColumn Header="协议版本" Binding="{Binding Protocol}" />
+                                                                        <DataGridTextColumn Header="L/H" Binding="{Binding LastHistory, StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="状态" Binding="{Binding AlertStatusBySs, StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="报警项" Binding="{Binding AlertItemBySs, StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="采集序列号" Binding="{Binding SensorSN}" />
+                                                                        <DataGridTextColumn Header="采集时间" Binding="{Binding SensorCollectTime, StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
+                                                                        <DataGridTextColumn Header="IC温度" Binding="{Binding ICTemperature}" />
+                                                                        <DataGridTextColumn Header="SS电压V" Binding="{Binding Volt, StringFormat=\{0:F3\}}" />
+                                                                        <DataGridTextColumn Header="接电" Binding="{Binding LinkCharge}" />
+                                                                        <DataGridTextColumn Header="RAM" Binding="{Binding ToSendRam}" />
+                                                                        <DataGridTextColumn Header="FLASH" Binding="{Binding ToSendFlash}" />
+                                                                        <DataGridTextColumn Header="温度℃" Binding="{Binding tempS}" />
+                                                                        <DataGridTextColumn Header="湿度%" Binding="{Binding humS}" />
+                                                                        <DataGridTextColumn Header="源数据" Binding="{Binding SourceData}" />
+                                                                    </DataGrid.Columns>
+                                                                </DataGrid>
+
+                                                            </Grid>
+
+                                                        </TabItem>
+
+                                                        <TabItem x:Name="TableBulk" Header=" 批量 ">
+                                                            <Grid Margin="0,0,0,0">
+                                                                <DataGrid Margin="10,5,10,5" Height="444" x:Name="DataGridOfBulk" AutoGenerateColumns="False"  AlternatingRowBackground="#F4F4F4" HorizontalScrollBarVisibility="Visible" AlternationCount="2" >
+                                                                    <DataGrid.Columns>
+                                                                        <DataGridTextColumn Header="序号" Binding="{Binding DisplayID}" />
+                                                                        <DataGridTextColumn Header="Error" Binding="{Binding ExportRrror}" />
+                                                                        <DataGridTextColumn Header="系统时间" Binding="{Binding SystemTime, StringFormat=\{0:yy-MM-dd HH:mm:ss:fff\}}" />
+                                                                        <DataGridTextColumn Header="导出组序号" Binding="{Binding Group}" />
+                                                                        <DataGridTextColumn Header="导出组容量" Binding="{Binding GroupCapacity}" />
+                                                                        <DataGridTextColumn Header="组内序号" Binding="{Binding SerialInGroup}" />
+                                                                        <DataGridTextColumn Header="Send OK" Binding="{Binding SendOk}" />
+                                                                        <DataGridTextColumn Header="SS MAC" Binding="{Binding DeviceMacS}" />
+                                                                        <DataGridTextColumn Header="传输时间" Binding="{Binding SensorTransferTime, StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
+                                                                        <DataGridTextColumn Header="RSSI" Binding="{Binding RSSI}" />
+                                                                        <DataGridTextColumn Header="状态" Binding="{Binding AlertStatusByGw, StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="功能位" Binding="{Binding Pattern}" />
+                                                                        <DataGridTextColumn Header="SS类型" Binding="{Binding DeviceTypeS}" />
+                                                                        <DataGridTextColumn Header="SS名称" Binding="{Binding Name}" />
+                                                                        <DataGridTextColumn Header="协议版本" Binding="{Binding Protocol}" />
+                                                                        <DataGridTextColumn Header="当前时间" Binding="{Binding SensorCurrentTime, StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
+                                                                        <DataGridTextColumn Header="毫秒" Binding="{Binding milliSec}" />
+                                                                        <DataGridTextColumn Header="触因" Binding="{Binding cau, StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="RAM" Binding="{Binding ToSendRam}" />
+                                                                        <DataGridTextColumn Header="FLASH" Binding="{Binding ToSendFlash}" />
+                                                                        <DataGridTextColumn Header="节点数量" Binding="{Binding nodeNum}" />
+                                                                        
+                                                                        <DataGridTextColumn Header="状态1" Binding="{Binding nStatus[0], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="详情1" Binding="{Binding nDetail[0], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="采集序列号1" Binding="{Binding nSampleSerial[0]}" />
+                                                                        <DataGridTextColumn Header="采集时间1" Binding="{Binding nSampleTime[0], StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
+                                                                        <DataGridTextColumn Header="IC温度1" Binding="{Binding nMonTemp[0]}" />
+                                                                        <DataGridTextColumn Header="电压1" Binding="{Binding nVolt[0], StringFormat=\{0:F3\}}" />
+                                                                        <DataGridTextColumn Header="接电1" Binding="{Binding nCharged[0]}" />
+                                                                        <DataGridTextColumn Header="温度1" Binding="{Binding nTemp[0], StringFormat=\{0:F2\}}" />
+                                                                        <DataGridTextColumn Header="湿度1" Binding="{Binding nHum[0], StringFormat=\{0:F2\}}" />
+
+                                                                        <DataGridTextColumn Header="状态2" Binding="{Binding nStatus[1], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="详情2" Binding="{Binding nDetail[1], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="采集序列号2" Binding="{Binding nSampleSerial[1]}" />
+                                                                        <DataGridTextColumn Header="采集时间2" Binding="{Binding nSampleTime[1], StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
+                                                                        <DataGridTextColumn Header="IC温度2" Binding="{Binding nMonTemp[1]}" />
+                                                                        <DataGridTextColumn Header="电压2" Binding="{Binding nVolt[1], StringFormat=\{0:F3\}}" />
+                                                                        <DataGridTextColumn Header="接电2" Binding="{Binding nCharged[1]}" />
+                                                                        <DataGridTextColumn Header="温度2" Binding="{Binding nTemp[1], StringFormat=\{0:F2\}}" />
+                                                                        <DataGridTextColumn Header="湿度2" Binding="{Binding nHum[1], StringFormat=\{0:F2\}}" />
+
+                                                                        <DataGridTextColumn Header="状态3" Binding="{Binding nStatus[2], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="详情3" Binding="{Binding nDetail[2], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="采集序列号3" Binding="{Binding nSampleSerial[2]}" />
+                                                                        <DataGridTextColumn Header="采集时间3" Binding="{Binding nSampleTime[2], StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
+                                                                        <DataGridTextColumn Header="IC温度3" Binding="{Binding nMonTemp[2]}" />
+                                                                        <DataGridTextColumn Header="电压3" Binding="{Binding nVolt[2], StringFormat=\{0:F3\}}" />
+                                                                        <DataGridTextColumn Header="接电3" Binding="{Binding nCharged[2]}" />
+                                                                        <DataGridTextColumn Header="温度3" Binding="{Binding nTemp[2], StringFormat=\{0:F2\}}" />
+                                                                        <DataGridTextColumn Header="湿度3" Binding="{Binding nHum[2], StringFormat=\{0:F2\}}" />
+
+                                                                        <DataGridTextColumn Header="状态4" Binding="{Binding nStatus[3], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="详情4" Binding="{Binding nDetail[3], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="采集序列号4" Binding="{Binding nSampleSerial[3]}" />
+                                                                        <DataGridTextColumn Header="采集时间4" Binding="{Binding nSampleTime[3], StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
+                                                                        <DataGridTextColumn Header="IC温度4" Binding="{Binding nMonTemp[3]}" />
+                                                                        <DataGridTextColumn Header="电压4" Binding="{Binding nVolt[3], StringFormat=\{0:F3\}}" />
+                                                                        <DataGridTextColumn Header="接电4" Binding="{Binding nCharged[3]}" />
+                                                                        <DataGridTextColumn Header="温度4" Binding="{Binding nTemp[3], StringFormat=\{0:F2\}}" />
+                                                                        <DataGridTextColumn Header="湿度4" Binding="{Binding nHum[3], StringFormat=\{0:F2\}}" />
+
+                                                                        <DataGridTextColumn Header="状态5" Binding="{Binding nStatus[4], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="详情5" Binding="{Binding nDetail[4], StringFormat=\{0:X2\}}" />
+                                                                        <DataGridTextColumn Header="采集序列号5" Binding="{Binding nSampleSerial[4]}" />
+                                                                        <DataGridTextColumn Header="采集时间5" Binding="{Binding nSampleTime[4], StringFormat=\{0:yy-MM-dd HH:mm:ss\}}" />
+                                                                        <DataGridTextColumn Header="IC温度5" Binding="{Binding nMonTemp[4]}" />
+                                                                        <DataGridTextColumn Header="电压5" Binding="{Binding nVolt[4], StringFormat=\{0:F3\}}" />
+                                                                        <DataGridTextColumn Header="接电5" Binding="{Binding nCharged[4]}" />
+                                                                        <DataGridTextColumn Header="温度5" Binding="{Binding nTemp[4], StringFormat=\{0:F2\}}" />
+                                                                        <DataGridTextColumn Header="湿度5" Binding="{Binding nHum[4], StringFormat=\{0:F2\}}" />
+                                                                        
+                                                                        <DataGridTextColumn Header="源数据" Binding="{Binding SourceData}" />
+                                                                    </DataGrid.Columns>
+                                                                </DataGrid>
+
+                                                            </Grid>
+
+                                                        </TabItem>
+
+                                                    </TabControl>
                                                 </StackPanel>
                                             </telerik:RadTabItem>
 
-                                            <telerik:RadTabItem x:Name="RadTabItemOfBind" Header=" 绑定设备 " >
+                                            <telerik:RadTabItem x:Name="RadTabItemOfBind" Header=" 绑定设备 " Padding="0,3" >
                                                 <StackPanel x:Name="Bind">
 
                                                     <Grid Margin="3 10 3 8">
@@ -1541,7 +1736,7 @@
 
                                             </telerik:RadTabItem>
 
-                                            <telerik:RadTabItem x:Name="RadTabItemOfEthernet" Header=" Ethernet " Visibility="Hidden" >
+                                            <telerik:RadTabItem x:Name="RadTabItemOfEthernet" Header=" Ethernet " Visibility="Hidden" Padding="0,3" >
                                                 <StackPanel x:Name="以太网">
                                                     
                                                     <Grid Margin="0,50,0,0">
@@ -1634,6 +1829,7 @@
                                             </telerik:RadTabItem>
 
                                         </telerik:RadTabControl>
+                                        
                                     </Grid>
 
                                 </StackPanel>

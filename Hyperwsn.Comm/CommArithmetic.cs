@@ -74,14 +74,59 @@ namespace Hyperwsn.Comm
             return result;
         }
 
+        public static UInt32 ByteBuf_to_UInt32(byte[] source, int start)
+        {
+            return ((UInt32)source[start] << 24) | ((UInt32)source[start + 1] << 16) | ((UInt32)source[start + 2] << 8) | ((UInt32)source[start + 3] << 0);
+        }
+
+        public static UInt16 ByteBuf_to_UInt16(byte[] source, int start)
+        {
+            return (UInt16)(((UInt16)source[start] << 8) | ((UInt16)source[start + 1] << 0));
+        }
+
+        /// <summary>
+        /// 将一个字节按照有符号数来解析
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static Int16 ByteBuf_to_Int8(byte[] source, int start)
+        {
+            Int16 val = (Int16)source[start];
+
+            if (val >= 0x80)
+            {
+                val -= 0x100;
+            }
+
+            return val;
+        }
+
+        public static string ByteBuf_to_HexString(byte[] source, int start, int len)
+        {
+            string hexStr = string.Empty;
+
+            for (int iX = 0; iX < len; iX++)
+            {
+                hexStr += source[start + iX].ToString("X2") + " ";
+            }
+
+            return hexStr.Trim();
+        }
+
         public static byte[] HexStringToByteArray(string s)
         {
             try
             {
                 s = s.Replace(" ", "");
+
                 byte[] buffer = new byte[s.Length / 2];
-                for (int i = 0; i < s.Length; i += 2)
+
+                for (int i = 0; (i < s.Length && (i + 2) <= s.Length); i += 2)
+                {
                     buffer[i / 2] = (byte)Convert.ToByte(s.Substring(i, 2), 16);
+                }
+
                 return buffer;
             }
             catch (Exception)
@@ -90,28 +135,9 @@ namespace Hyperwsn.Comm
             }
         }
 
-        public static string ByteArrayToHexString(byte[] Buf, UInt16 IndexOfStart, UInt16 Len)
-        {
-            string hexString = string.Empty;
-
-            if (Buf != null)
-            {
-                StringBuilder strB = new StringBuilder();
-
-                for (UInt16 i = 0; i < Len; i++)
-                {
-                    strB.Append(Buf[IndexOfStart + i].ToString("X2") + " ");
-                }
-
-                hexString = strB.ToString();
-            }
-
-            return hexString.Trim();
-        }
-
         public static string ByteArrayToHexString(byte[] Buf)
         {
-            return ByteArrayToHexString(Buf, 0, (UInt16)Buf.Length);
+            return ByteBuf_to_HexString(Buf, 0, Buf.Length);
         }
 
         public static string ByteArrayToHexString(byte[,] Buf, UInt16 IndexOfStart, UInt16 Len)
@@ -196,7 +222,6 @@ namespace Hyperwsn.Comm
         public static double DecodeHumidity(byte[] SourceData, int Start)
         {
             return Math.Round(Convert.ToDouble((SourceData[Start] * 256 + SourceData[Start + 1])) / 100, 2);
-
         }
 
         public static double DecodeVoltage(byte[] SourceData, int Start)
@@ -214,9 +239,7 @@ namespace Hyperwsn.Comm
                 volt = (double)voltint / (double)1000;
             }
             return Math.Round(volt, 2);
-
         }
-
 
         public static double DecodeSensorVoltage(byte[] SourceData, int Start)
         {

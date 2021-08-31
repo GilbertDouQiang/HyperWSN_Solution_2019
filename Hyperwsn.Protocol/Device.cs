@@ -82,6 +82,16 @@ namespace Hyperwsn.Protocol
             ZQSG6M = 0x94,              // ZQSG6M
             SG6E = 0x9A,                // SG6E
             M60 = 0x9F,                 // M60
+            M70 = 0xA0,                 // M70
+            M60_SHT30 = 0xA1,           // M60_SHT30
+            M60_MAX31855 = 0xA2,        // M60_MAX31855
+            M70_SHT30 = 0xA3,           // M60_SHT30
+            M70_MAX31855 = 0xA4,        // M60_MAX31855
+            S1Find = 0xA5,              // S1+ 找货神器
+            SG9 = 0xA6,                 // SG9 野保网关
+            SG6Lite = 0xA7,             // SG6Lite
+            Beetech_M20 = 0xA8,         // Beetech M20
+            M1000 = 0xA9,               // M1000
             MaxValue,                   // 此枚举类型的最大值
         }
 
@@ -258,14 +268,414 @@ namespace Hyperwsn.Protocol
             DeviceTypeV = deviceType;
             DeviceTypeS = deviceType.ToString("X2");
 
-            if (deviceType >= (byte)DeviceType.MaxValue)
+            switch (deviceType)
             {
-                Name = DeviceTypeS;
+                case 0x51:
+                    {
+                        Name = "M1";
+                        break;
+                    }
+                case 0x52:
+                    {
+                        Name = "SG2";
+                        break;
+                    }
+                case 0x53:
+                    {
+                        Name = "M1P";
+                        break;
+                    }
+                case 0x54:
+                    {
+                        Name = "USB_MSP430+CC1101";
+                        break;
+                    }
+                case 0x55:
+                    {
+                        Name = "GM";
+                        break;
+                    }
+                case 0x56:
+                    {
+                        Name = "USB_MSP430+CC1310";
+                        break;
+                    }
+                case 0x57:
+                    {
+                        Name = "M2";
+                        break;
+                    }
+                case 0x58:
+                    {
+                        Name = "M4(SK)";
+                        break;
+                    }
+                case 0x59:
+                    {
+                        Name = "Alert";
+                        break;
+                    }
+                case 0x5A:
+                    {
+                        Name = "S1";
+                        break;
+                    }
+                case 0x5B:
+                    {
+                        Name = "SGA3";
+                        break;
+                    }
+                case 0x5C:
+                    {
+                        Name = "M1_NTC";
+                        break;
+                    }
+                case 0x5D:
+                    {
+                        Name = "M1_Beetech";
+                        break;
+                    }
+                case 0x60:
+                    {
+                        Name = "SG5";
+                        break;
+                    }
+                case 0x61:
+                    {
+                        Name = "SC";
+                        break;
+                    }
+                case 0x62:
+                    {
+                        Name = "TB2";
+                        break;
+                    }
+                case 0x63:
+                    {
+                        Name = "USB_CC1310+CP2102";
+                        break;
+                    }
+                case 0x64:
+                    {
+                        Name = "BB";
+                        break;
+                    }
+                case 0x65:
+                    {
+                        Name = "SGX_SHT30";
+                        break;
+                    }
+                case 0x66:
+                    {
+                        Name = "SGX_NTC";
+                        break;
+                    }
+                case 0x67:
+                    {
+                        Name = "SGX_PT100";
+                        break;
+                    }
+                case 0x68:
+                    {
+                        Name = "SG6";
+                        break;
+                    }
+                case 0x6A:
+                    {
+                        Name = "SG6P";
+                        break;
+                    }
+                case 0x6D:
+                    {
+                        Name = "M6";
+                        break;
+                    }
+                case 0x6E:
+                    {
+                        Name = "M2_PT100";
+                        break;
+                    }
+                case 0x6F:
+                    {
+                        Name = "M2_SHT30";
+                        break;
+                    }
+                case 0x70:
+                    {
+                        Name = "PM";
+                        break;
+                    }
+                case 0x71:
+                    {
+                        Name = "LBGZ_TC04";
+                        break;
+                    }
+                case 0x73:
+                    {
+                        Name = "SG6X";
+                        break;
+                    }
+                case 0x77:
+                    {
+                        Name = "M9(振动)";
+                        break;
+                    }
+                case 0x78:
+                    {
+                        Name = "ACO2";
+                        break;
+                    }
+                case 0x79:
+                    {
+                        Name = "M30";
+                        break;
+                    }
+                case 0x7A:
+                    {
+                        Name = "AO2";
+                        break;
+                    }
+                case 0x7B:
+                    {
+                        Name = "RT";
+                        break;
+                    }
+                case 0x7C:
+                    {
+                        Name = "GMP";
+                        break;
+                    }
+                case 0x7D:
+                    {
+                        Name = "M1_Zigin";
+                        break;
+                    }
+                case 0x7E:
+                    {
+                        Name = "M5(气压)";
+                        break;
+                    }
+                case 0x7F:
+                    {
+                        Name = "M40（门磁）";
+                        break;
+                    }
+                case 0x80:
+                    {
+                        Name = "M20";
+                        break;
+                    }
+                case 0x81:
+                    {
+                        Name = "M1X";
+                        break;
+                    }
+                case 0x82:
+                    {
+                        Name = "ZQSG1CC1352P";
+                        break;
+                    }
+                case 0x83:
+                    {
+                        Name = "ZQSG1MSP432";
+                        break;
+                    }
+                case 0x84:
+                    {
+                        Name = "M10";
+                        break;
+                    }
+                case 0x85:
+                    {
+                        Name = "L1";
+                        break;
+                    }
+                case 0x86:
+                    {
+                        Name = "SG6M(MSP432)";
+                        break;
+                    }
+                case 0x87:
+                    {
+                        Name = "SG6M(CC1352P)";
+                        break;
+                    }
+                case 0x88:
+                    {
+                        Name = "ZQSG2(MSP432)";
+                        break;
+                    }
+                case 0x89:
+                    {
+                        Name = "ZQSG2(CC1352P)";
+                        break;
+                    }
+                case 0x8A:
+                    {
+                        Name = "ESK";
+                        break;
+                    }
+                case 0x8B:
+                    {
+                        Name = "IR20";
+                        break;
+                    }
+                case 0x8C:
+                    {
+                        Name = "M44(MSP432)";
+                        break;
+                    }
+                case 0x8D:
+                    {
+                        Name = "M44(CC1352P)";
+                        break;
+                    }
+                case 0x8E:
+                    {
+                        Name = "WP";
+                        break;
+                    }
+                case 0x8F:
+                    {
+                        Name = "M44_485_AC2";
+                        break;
+                    }
+                case 0x90:
+                    {
+                        Name = "M44_485_CO2: CO2";
+                        break;
+                    }
+                case 0x91:
+                    {
+                        Name = "M44_485_CO2: O2";
+                        break;
+                    }
+                case 0x92:
+                    {
+                        Name = "C1";
+                        break;
+                    }
+                case 0x93:
+                    {
+                        Name = "SG10";
+                        break;
+                    }
+                case 0x94:
+                    {
+                        Name = "ZQSG6M";
+                        break;
+                    }
+                case 0x95:
+                    {
+                        Name = "M24";
+                        break;
+                    }
+                case 0x96:
+                    {
+                        Name = "M24_485_CO2: CO2";
+                        break;
+                    }
+                case 0x97:
+                    {
+                        Name = "M24_485_CO2: O2";
+                        break;
+                    }
+                case 0x98:
+                    {
+                        Name = "M24_485_AC2";
+                        break;
+                    }
+                case 0x99:
+                    {
+                        Name = "M24_485_TEC3000";
+                        break;
+                    }
+                case 0x9A:
+                    {
+                        Name = "SG6E";
+                        break;
+                    }
+                case 0x9B:
+                    {
+                        Name = "RT";
+                        break;
+                    }
+                case 0x9C:
+                    {
+                        Name = "M24_CSF11";
+                        break;
+                    }
+                case 0x9D:
+                    {
+                        Name = "EK";
+                        break;
+                    }
+                case 0x9E:
+                    {
+                        Name = "EK_SHT30";
+                        break;
+                    }
+                case 0x9F:
+                    {
+                        Name = "M60";
+                        break;
+                    }
+                case 0xA0:
+                    {
+                        Name = "M70";
+                        break;
+                    }
+                case 0xA1:
+                    {
+                        Name = "M60_SHT30";
+                        break;
+                    }
+                case 0xA2:
+                    {
+                        Name = "M60_MAX31855";
+                        break;
+                    }
+                case 0xA3:
+                    {
+                        Name = "M70_SHT30";
+                        break;
+                    }
+                case 0xA4:
+                    {
+                        Name = "M70_MAX31855";
+                        break;
+                    }
+                case 0xA5:
+                    {
+                        Name = "S1+";
+                        break;
+                    }
+                case 0xA6:
+                    {
+                        Name = "SG9";
+                        break;
+                    }
+                case 0xA7:
+                    {
+                        Name = "SG6L";
+                        break;
+                    }
+                case 0xA8:
+                    {
+                        Name = "Beetech M20";
+                        break;
+                    }
+                case 0xA9:
+                    {
+                        Name = "M1000";
+                        break;
+                    }
+                default:
+                    {
+                        Name = deviceType.ToString("X2");
+                        break;
+                    }
             }
-            else
-            {
-                Name = ((DeviceType)deviceType).ToString();
-            }          
 
             return Name;
         }
@@ -276,7 +686,7 @@ namespace Hyperwsn.Protocol
         /// <param name="deviceType"></param>
         public void SetDevicePrimaryMac(byte[] SrcData, UInt16 StartIndex)
         {
-            PrimaryMacS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 4);
+            PrimaryMacS = CommArithmetic.ByteBuf_to_HexString(SrcData, StartIndex, 4);
 
             PrimaryMacV = (UInt32)(SrcData[StartIndex] * 256 * 256 * 256 + SrcData[StartIndex + 1] * 256 * 256 + SrcData[StartIndex + 2] * 256 + SrcData[StartIndex + 3]);
         }
@@ -287,7 +697,7 @@ namespace Hyperwsn.Protocol
         /// <param name="deviceType"></param>
         public void SetDeviceMac(byte[] SrcData, UInt16 StartIndex)
         {
-            DeviceMacS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 4);
+            DeviceMacS = CommArithmetic.ByteBuf_to_HexString(SrcData, StartIndex, 4);
 
             DeviceMacV = (UInt32)(SrcData[StartIndex] * 256 * 256 * 256 + SrcData[StartIndex + 1] * 256 * 256 + SrcData[StartIndex + 2] * 256 + SrcData[StartIndex + 3]);
         }
@@ -299,7 +709,7 @@ namespace Hyperwsn.Protocol
         /// <param name="StartIndex"></param>
         public void SetHardwareRevision(byte[] SrcData, UInt16 StartIndex)
         {
-            HwRevisionS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 4);
+            HwRevisionS = CommArithmetic.ByteBuf_to_HexString(SrcData, StartIndex, 4);
 
             HwRevisionV = (UInt32)(SrcData[StartIndex] * 256 * 256 * 256 + SrcData[StartIndex + 1] * 256 * 256 + SrcData[StartIndex + 2] * 256 + SrcData[StartIndex + 3]);
         }
@@ -311,7 +721,7 @@ namespace Hyperwsn.Protocol
         /// <param name="StartIndex"></param>
         public void SetSoftwareRevision(byte[] SrcData, UInt16 StartIndex)
         {
-            SwRevisionS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 2);
+            SwRevisionS = CommArithmetic.ByteBuf_to_HexString(SrcData, StartIndex, 2);
 
             SwRevisionV = (UInt16)(SrcData[StartIndex] * 256 + SrcData[StartIndex + 1]);
         }
@@ -322,7 +732,7 @@ namespace Hyperwsn.Protocol
         /// <param name="deviceType"></param>
         public void SetDeviceCustomer(byte[] SrcData, UInt16 StartIndex)
         {
-            CustomerS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 2);
+            CustomerS = CommArithmetic.ByteBuf_to_HexString(SrcData, StartIndex, 2);
 
             CustomerV = (UInt16)(SrcData[StartIndex] * 256 + SrcData[StartIndex + 1]);
         }
@@ -334,7 +744,7 @@ namespace Hyperwsn.Protocol
         /// <param name="StartIndex"></param>
         public void SetDebug(byte[] SrcData, UInt16 StartIndex)
         {
-            DebugS = CommArithmetic.ByteArrayToHexString(SrcData, StartIndex, 2);
+            DebugS = CommArithmetic.ByteBuf_to_HexString(SrcData, StartIndex, 2);
 
             DebugV = (UInt16)(SrcData[StartIndex] * 256 + SrcData[StartIndex + 1]);
         }

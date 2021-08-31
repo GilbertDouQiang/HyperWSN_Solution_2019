@@ -236,7 +236,7 @@ namespace Hyperwsn.Protocol
 
                 DataRow row = dt.NewRow();
                 row["通道号"] = Current + 1;
-                row["设备编号"] = CommArithmetic.ByteArrayToHexString(SrcBuf, (UInt16)(iX + 13), 4);
+                row["设备编号"] = CommArithmetic.ByteBuf_to_HexString(SrcBuf, (UInt16)(iX + 13), 4);
 
                 error = ReadPayload(SrcBuf, iX, row);
                 if (error < 0)

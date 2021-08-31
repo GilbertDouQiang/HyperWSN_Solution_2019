@@ -188,7 +188,7 @@ namespace Hyperwsn.SerialPortLibrary
         /// <param name="Len"></param>
         private void AddLog(string tip, byte[] Buf, int StartIndex, int Len)
         {
-            Logger.AddLogAutoTime(tip + ":\t\t" + CommArithmetic.ByteArrayToHexString(Buf, (UInt16)StartIndex, (UInt16)Len));
+            Logger.AddLogAutoTime(tip + ":\t\t" + CommArithmetic.ByteBuf_to_HexString(Buf, (UInt16)StartIndex, (UInt16)Len));
         }
 
         private void AddLog(string tip, byte[] Buf)

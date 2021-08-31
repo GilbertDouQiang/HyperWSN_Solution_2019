@@ -11,7 +11,9 @@ namespace Hyperwsn.Protocol
 
         public DateTime SensorCollectTime { get; set; }
        
-        public DateTime SensorTransforTime { get; set; }
+        public DateTime SensorTransferTime { get; set; }
+
+        public DateTime SensorCurrentTime { get; set; }
 
         public Int16 RSSI { get; set; }
 
